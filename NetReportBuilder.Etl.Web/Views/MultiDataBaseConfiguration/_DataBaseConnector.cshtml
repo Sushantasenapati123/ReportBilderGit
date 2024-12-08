@@ -1,0 +1,148 @@
+﻿
+
+
+
+@{
+    ViewData["Title"] = "Api Connector";
+    Layout = null;
+
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+@*<style>
+
+    .hidden {
+        display: none;
+    }
+
+    .modal_custom .modal-dialog {
+        max-width: 800px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin-left: 0;
+        width: 100%;
+    }
+</style>*@
+
+<div class="container mt-8">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">ADD</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="code-tab" data-toggle="tab" href="#code" role="tab" aria-controls="code" aria-selected="false">VIEW</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- API Interface Tab -->
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="form-group" style="width:100%;height:auto;" align="center">
+                <form id="databaseForm">
+                    <div class="row">
+                        <div class="form-group mb-3 col-xl-4">
+                            <label for="DatabaseType">Database Type:</label>
+                            <select id="DatabaseType" name="DatabaseType" class="form-select">
+                                <option value="Select Database">~Select Database~</option>
+                                <option value="SqlServer">SqlServer</option>
+                                <option value="Oracle">Oracle</option>
+                                <option value="MySQL">MySQL</option>
+                                <option value="Postgre">Postgre</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-xl-4">
+                            <label for="DataBase">Database Name:</label>
+                            <input type="text" id="DataBase" name="DataBase" class="form-control">
+                        </div>
+                        <div class="form-group mb-3 col-xl-4">
+                            <label for="Host">Host Name:</label>
+                            <input type="text" id="Host" name="Host" class="form-control">
+                        </div>
+                      
+                    </div>
+                    <div class="row">
+                        <div class="form-group mb-3 col-xl-4">
+                            <label for="AuthenticationLbl">Authentication:</label>
+                            <select id="Authentication" name="Authentication" class="form-select form-control" onchange="ManagePassword()">
+                                <option value="Select Authentication">~Select Authentication~</option>
+                                <option value="Password">Password</option>
+                                @*<option value="Integrated Security">Integrated Security</option>*@
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-xl-4">
+                            <label for="UserId">User Name:</label>
+                            <input type="text" id="UserId" name="UserId" class="form-control">
+                        </div>
+                        <div class="form-group mb-3 col-xl-4">
+                            <label for="Password">Password:</label>
+                            <input type="password" id="Password" name="Password" class="form-control">
+                        </div>
+                      
+                    </div>
+                    <div class="row">
+                        <div class="form-group mb-3 col-xl-4">
+                            <label for="Port">Port:</label>
+                            <input type="text" id="Port" name="Port" class="form-control">
+                        </div>
+                        <div class="form-check mb-3 col-xl-2">
+
+                            @*<label for="Port"> &nbsp; </label>*@
+                            <label for="RememberPassword" class="form-check-label">Remember Password</label>
+                            <div>
+                                <input type="checkbox" id="RememberPassword" name="RememberPassword" class="form-check-input">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="tableviewDiv" hidden>
+
+                        <div class="form-group mb-3 col-xl-4">
+                            <label for="table">Table:</label>
+                            <select id="ddltable" name="table" class="form-select form-control">
+                                <option value="Select Authentication">~Select Table~</option>
+
+
+                            </select>
+                        </div>
+                        <div class="form-group mb-3 col-xl-4" hidden>
+                            <label for="view">View:</label>
+                            <select id="ddlView" name="View" class="form-select form-control">
+                                <option value="Select Authentication">~Select View~</option>
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <button id="testConnectionButton" style="margin-left: 844px; " class="btn btn-primary" type="button" onclick="connectDatabase()">Test Connection</button>
+                    <button id="connectButton" style="padding-left: 20px; padding-right: 20px;" class="btn btn-success" type="button" onclick="saveDatabase()">Save</button>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- Code Editor Tab -->
+        <div class="tab-pane fade" id="code" role="tabpanel" aria-labelledby="code-tab">
+            <div class="form-group mt-3">
+                <textarea id="codeEditor" class="form-control" rows="10" placeholder="Write your code here..."></textarea>
+            </div>
+            <button type="button" class="btn btn-danger mb-3" id="btnSave" onclick="SaveDataBaseConfiguration(0)">Save</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+

@@ -1,0 +1,238 @@
+﻿
+<style>
+    /*Data Configuration css*/
+    .modal_custom .modal-dialog {
+        max-width: 800px;
+    }
+
+    .modal_custom-content {
+        background-color: #fefefe;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .highlight_custom {
+        border: 2px solid red;
+    }
+
+    .card_bg_custom {
+        background: #f2f2f2;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .text_left_custom {
+        text-align: left;
+    }
+
+    .basic_control_settings_custom {
+        font-family: Verdana;
+        font-size: medium;
+        text-align: left;
+        vertical-align: middle;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .bold_setting_custom {
+        font-weight: bold;
+    }
+
+    .normal_setting_custom {
+        font-weight: normal;
+    }
+
+    .div_border_style_custom {
+        border-style: solid;
+        border-color: lightgray;
+        border-width: 2px;
+    }
+</style>
+<div class="form-group" style="width:100%;height:auto;" align="center">
+
+    <div class="row" style="width:100%;height:auto;margin-left:70px;" align="center">
+
+        <form id="pipelineFormCustom">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-4 text_left_custom">
+                        <label for="pipelineNameCustom" class="basic_control_settings_custom bold_setting_custom">Pipeline Name:</label>
+                    </div>
+                    <div class="col-sm-8 text_left_custom">
+                        <input type="text" id="pipelineNameCustom" value="@ViewBag.PipelineName" class="form-control basic_control_settings_custom normal_setting_custom" readonly />
+                    </div>
+                </div>
+
+                <div class="row" hidden>
+                    <div class="col-sm-4 text_left_custom">
+                        <label for="dataSourceTypeCustom" class="basic_control_settings_custom bold_setting_custom">DataSource Type:</label>
+                    </div>
+                    <div class="col-sm-8 text_left_custom">
+                        <input type="text" id="dataSourceTypeCustom" value="@ViewBag.DataSourceType" class="form-control basic_control_settings_custom normal_setting_custom" readonly />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 text_left_custom">
+                        <label for="dataSyncModesCustom" class="basic_control_settings_custom bold_setting_custom">DataSync Mode:</label>
+                    </div>
+                    <div class="col-sm-8 text_left_custom">
+                        <select id="dataSyncModesCustom" required class="form-select form-control basic_control_settings_custom normal_setting_custom">
+                            @*<option value="">Select</option>
+                            <option value="0">New</option>*@
+
+                            @foreach (var item in ViewBag.DataSyncModes)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 text_left_custom">
+                        <label for="executionModeCustom" class="basic_control_settings_custom bold_setting_custom">Execution Mode:</label>
+                    </div>
+                    <div class="col-sm-8 text_left_custom">
+                        <select id="executionModeCustom" required onchange="changeExecutionModeCustom(this)" class="form-select form-control basic_control_settings_custom normal_setting_custom">
+                            @*<option value="0">Daily</option>
+                            <option value="1">Weekly</option>
+                            <option value="2">Hourly</option>
+                            <option value="3">Monthly</option>
+                            <option value="4">Minutely</option>*@
+                            <option value="">Select</option>
+                            @foreach (var item in ViewBag.ExecutionModes)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="div_border_style_custom card_bg_custom" style="display: none;" id="hiddenDivCustom">
+                    <div class="col-xl-12">
+                        <div class="row">
+                            <h3 class="basic_control_settings_custom bold_setting_custom">Execution Parameters</h3>
+                        </div>
+                        <div class="row hidden" id="scheduledMinutesCustom" style="display: none;">
+                            <div class="col-sm-4 text_left_custom">
+                                <label for="selectedScheduledMinuteCustom" class="basic_control_settings_custom bold_setting_custom">Interval in Minutes:</label>
+                            </div>
+                            <div class="col-sm-8 text_left_custom">
+                                <select id="selectedScheduledMinuteCustom" class="form-select form-control basic_control_settings_custom normal_setting_custom">
+                                    <option value="">Select</option>
+                                    @foreach (var item in ViewBag.ScheduledMinutes)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row hidden" id="dayCustom" style="display: none;">
+                            <div class="col-sm-4 text_left_custom">
+                                <label for="selectedDayCustom" class="basic_control_settings_custom bold_setting_custom">Day:</label>
+                            </div>
+                            <div class="col-sm-8 text_left_custom">
+                                <select id="selectedDayCustom" class="form-select form-control basic_control_settings_custom normal_setting_custom">
+                                    <option value="">Select</option>
+                                    @foreach (var item in ViewBag.Days)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row hidden" id="weekDayCustom" style="display: none;">
+                        <div class="col-sm-4 text_left_custom">
+                            <label for="selectedWeekDayCustom" class="basic_control_settings_custom bold_setting_custom">Week Day:</label>
+                        </div>
+                        <div class="col-sm-8 text_left_custom">
+                            <select id="selectedWeekDayCustom" class="form-select form-control basic_control_settings_custom normal_setting_custom">
+                                <option value="">Select</option>
+                                @foreach (var item in ViewBag.WeekDays)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row hidden" id="scheduledHourCustom" style="display: none;">
+                        <div class="col-sm-4 text_left_custom">
+                            <label for="selectedScheduledHourCustom" class="basic_control_settings_custom bold_setting_custom">Interval in Hours:</label>
+                        </div>
+                        <div class="col-sm-8 text_left_custom">
+                            <select id="selectedScheduledHourCustom" class="form-select form-control basic_control_settings_custom normal_setting_custom">
+                                <option value="">Select</option>
+                                @foreach (var item in ViewBag.ScheduledHours)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="row hidden" id="hourCustom" style="display: none;">
+                        <div class="col-sm-4 text_left_custom">
+                            <label for="selectedHourCustom" class="basic_control_settings_custom bold_setting_custom">Hour:</label>
+                        </div>
+                        <div class="col-sm-8 text_left_custom">
+                            <select id="selectedHourCustom" class="form-select form-control basic_control_settings_custom normal_setting_custom">
+                                <option value="">Select</option>
+                                @foreach (var item in ViewBag.Hours)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row hidden" id="minuteCustom" style="display: none;">
+                        <div class="col-sm-4 text_left_custom">
+                            <label for="selectedMinuteCustom" class="basic_control_settings_custom bold_setting_custom">Minute:</label>
+                        </div>
+                        <div class="col-sm-8 text_left_custom">
+                            <select id="selectedMinuteCustom" class="form-select form-control basic_control_settings_custom normal_setting_custom">
+                                <option value="">Select</option>
+                                @foreach (var item in ViewBag.Minutes)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 text_left_custom">
+                        <label for="descriptionCustom" class="basic_control_settings_custom bold_setting_custom">Description:</label>
+                    </div>
+                    <div class="col-sm-8 text_left_custom">
+                        <textarea id="descriptionCustom" required class="form-control basic_control_settings_custom normal_setting_custom"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-4">
+                        <button type="button" id="btnSavePipelineConfigurationCustom" onclick="savePipelineConfigurationCustom()" class="btn btn-primary mb-1">Save</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-primary mb-1" id="btnClosePipelineConfigurationCustom" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

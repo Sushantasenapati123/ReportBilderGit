@@ -1,0 +1,22 @@
+﻿[
+  {
+    "DatabaseType": "SqlServer",
+    "DataBase": "CachDB10",
+    "Authentication": "Password",
+    "Host": "server6",
+    "Port": 0,
+    "UserId": "user10",
+    "Password": "csmpl@132",
+    "Query": null
+  },
+  {
+    "DatabaseType": "SqlServer",
+    "DataBase": "CachDB10",
+    "Authentication": "Password",
+    "Host": "server6",
+    "Port": 0,
+    "UserId": "user10",
+    "Password": "csmpl@132",
+    "Query": null
+  }
+]

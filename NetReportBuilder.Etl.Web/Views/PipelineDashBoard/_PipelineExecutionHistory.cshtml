@@ -1,0 +1,43 @@
+﻿@model IEnumerable<NetReportBuilder.Etl.Model.PipelineModel>
+@{
+    int slNo = 1; // Initialize serial number
+}
+<head>
+
+</head>
+<table id="tbl" class="table table-striped">
+
+   
+    <thead style="background-color: #dfdddd;">
+        <tr style="background-color:lightblue;color:black;font-family:Arial;font-size:18px;font-weight:bold;">
+            <th>SL.</th>
+            <th>Pipeline Name</th>
+            <th>LastExecutedOn</th>
+            <th>Status</th>
+
+            <th>Status Message</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model) // Assuming you're passing a list of PipelineModel to the view
+        {
+            <tr>
+                <td>@slNo</td>
+                <td>@item.FileName</td>
+                <td>@item.LastExecutedOn</td>
+                <td>@item.StatusLabel</td> <!-- Assuming you want to display the Status as a label -->
+                @if (@item.StatusLabel == "Failed")
+                {
+                    <td style="color:red">@item.StatusMessage</td>
+                }
+                else
+                {
+                    <td style="color:green">@item.StatusMessage</td>
+                }
+
+            </tr>
+            slNo++;
+        }
+    </tbody>
+</table>

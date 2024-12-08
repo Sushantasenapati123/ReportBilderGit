@@ -1,0 +1,169 @@
+﻿@{
+    ViewData["Title"] = "MultiDataBaseConfiguration";
+    // Layout = "_LayoutDBConfiguration";
+}
+
+
+@{
+    ViewData["Title"] = "DB Conifguration";
+
+}
+<head>
+    <style>
+        #content {
+            display: block;
+            width: 70%;
+            margin-left: 277px;
+            background-color: #637a8745;
+            padding-left: 9px;
+            padding-right: 9px;
+            padding-bottom: 30px;
+            padding-top: 10px;
+        }
+
+    </style>
+</head>
+<div id="content">
+    <div class="row">
+        @Html.AntiForgeryToken()
+        @*Write code here*@
+    </div>
+    <div>
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+            <a class="nav-item nav-link " asp-controller="MultiDataBaseConfiguration" asp-action="AddConnection">Add</a>
+            <a class="nav-item nav-link active" asp-controller="MultiDataBaseConfiguration" asp-action=ViewConnection>View</a>
+        </ul>
+    </div>
+    
+    <div>
+
+        <br />
+        <table class="table table-bordered" id="tbl">
+            <thead class="border-2">
+                <tr>
+                    <th>
+                        SL.
+                    </th>
+                    <th>
+                        Databasetype
+                    </th>
+                    <th>
+                        Databasename
+                    </th>
+                    <th>
+                        Hostname
+                    </th>
+                    <th>
+                        Authentication
+                    </th>
+                    <th>
+                        Username
+                    </th>
+                    @*<th>
+                            Password
+                        </th>*@
+
+
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <script>
+$(document).ready(function(){
+	Get_tbl_AddDatabaseConfigurationsPipeline();
+	});
+    function encryptData(data) {
+        // Convert the integer data to a string
+        var dataString = String(data);
+
+        // Encrypt the data using CryptoJS
+        var encryptedData = CryptoJS.AES.encrypt(JSON.stringify({ data: dataString }), 'secret_key').toString();
+
+        return encryptedData;
+    }
+	function Get_tbl_AddDatabaseConfigurationsPipeline() {
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        data: {},
+        url: "@Url.Action("Get_tbl_AddDatabaseConfigurationsPipeline", "MultiDataBaseConfiguration")",
+        success: function (result) {
+            var data1 = JSON.parse(result);
+            if (data1.length > 0) {
+                $('#tbl tbody').empty(); // Correct selector to target tbody
+                var serialNumber = 1; // Initialize serial number counter
+                $.each(data1, function (i, data) {
+                    var encryptedID = encryptData(data.Id);
+                    var trows = "<tr>";
+
+                    // Add serial number in the first column
+                    trows += "<td>" + serialNumber + "</td>";
+                    trows += "<td>" + data.DatabaseType + "</td>";
+                    trows += "<td>" + data.DatabaseName + "</td>";
+                    trows += "<td>" + data.HostName + "</td>";
+                    trows += "<td>" + data.Authentication + "</td>";
+                    trows += "<td>" + data.UserName + "</td>";
+                  /*  trows += "<td>" + data.Password + "</td>";*/
+
+                    // Add Edit and Delete buttons
+                    trows += "<td><a class='btn btn-primary' href='/MultiDataBaseConfiguration/AddConnection?strid=" + encryptedID + "'>Edit</a>&nbsp;<button class='btn btn-danger' onclick='Delete_tbl_AddDatabaseConfigurationsPipeline(" + data.Id + ")'>Delt</button></td>";
+                    trows += "</tr>";
+
+                    // Append the row to the table
+                    $('#tbl tbody').append(trows);
+
+                    serialNumber++; // Increment serial number for the next row
+                });
+            }
+        },
+        error: function (Message) {
+            alert(Message);
+        }
+    });
+}
+
+
+     function Delete_tbl_AddDatabaseConfigurationsPipeline(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                  $.ajax({
+                    type: "Delete",
+                    dataType: "json",
+                    url: "@Url.Action("Delete_tbl_AddDatabaseConfigurationsPipeline", "MultiDataBaseConfiguration")",
+
+                    data: { "Id": id },
+                      success: function (response) {
+                          Swal.fire(
+                              'Deleted!',
+                              'Data Deleted Successfully!',
+                              'success'
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                location.href = "/MultiDataBaseConfiguration/ViewConnection";
+                            }
+                            else if (result.isDenied) {
+                                Swal.fire('Changes are not saved', '', 'info')
+                            }
+                        })
+                    }
+                });
+
+            }
+            return false;
+        })
+    }
+    </script>

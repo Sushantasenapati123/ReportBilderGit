@@ -1,0 +1,267 @@
+/* Scss variable  Created By Bikash on 21-Jan-2019 */
+/* GRADIENT LISTS
+============================================= */
+.top-portlets {
+  margin: 0.5rem 0; }
+
+.cyan {
+  background-color: #00bcd4 !important; }
+
+.cyan-dark {
+  background-color: #00acc1 !important; }
+
+.red {
+  background-color: #ff5252 !important; }
+
+.red-dark {
+  background-color: #f44336 !important; }
+
+.orange {
+  background-color: #ffa726 !important; }
+
+.orange-dark {
+  background-color: #ff9800 !important; }
+
+.green {
+  background-color: #66bb6a !important; }
+
+.green-dark {
+  background-color: #4caf50 !important; }
+
+.sea-blue {
+  background-color: #13c5c2 !important; }
+
+.portlets__card {
+  margin-bottom: 1rem; }
+  .portlets__card__content {
+    text-align: center;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    border-radius: 3px 3px 0 0; }
+    .portlets__card__content p {
+      margin-bottom: 0.5rem; }
+  .portlets__card__charts {
+    border-radius: 0 0 3px 3px;
+    padding: 0.5rem 1rem;
+    color: #fff; }
+    .portlets__card__charts .charts__content {
+      height: 45px; }
+      .portlets__card__charts .charts__content .ct-series-a .ct-bar, .portlets__card__charts .charts__content .ct-series-a .ct-line, .portlets__card__charts .charts__content .ct-series-a .ct-point, .portlets__card__charts .charts__content .ct-series-a .ct-slice-donut {
+        stroke: #fff;
+        stroke-width: .6rem; }
+      .portlets__card__charts .charts__content .ct-series-b .ct-bar, .portlets__card__charts .charts__content .ct-series-b .ct-line, .portlets__card__charts .charts__content .ct-series-b .ct-point, .portlets__card__charts .charts__content .ct-series-b .ct-slice-donut {
+        stroke: #ececec;
+        stroke-width: .6rem; }
+
+.dashboard-portlet {
+  height: 350px;
+  position: relative;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.03), 0 3px 1px -2px rgba(0, 0, 0, 0.05), 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #fff; }
+  .dashboard-portlet.fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 9999;
+    bottom: 0;
+    height: auto;
+    border-radius: 0; }
+  .dashboard-portlet__header {
+    position: relative; }
+    .dashboard-portlet__header h5 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem; }
+      .dashboard-portlet__header h5 .more-links {
+        font-size: 120%;
+        color: #6b6b6b; }
+    .dashboard-portlet__header.active .more-links-list {
+      display: block; }
+  .dashboard-portlet__content {
+    padding: 0.5rem 0; }
+    .dashboard-portlet__content__chart {
+      height: 260px; }
+      .dashboard-portlet__content__chart .ct-chart-donut .ct-label {
+        color: #fff;
+        fill: #fff; }
+      .dashboard-portlet__content__chart .ct-series-a .ct-line {
+        stroke: #0288d1; }
+      .dashboard-portlet__content__chart .ct-series-a .ct-point {
+        stroke: #0288d1; }
+      .dashboard-portlet__content__chart .ct-series-a .ct-bar {
+        stroke: #009688; }
+      .dashboard-portlet__content__chart .ct-series-a .ct-slice-donut {
+        stroke: #f58900; }
+      .dashboard-portlet__content__chart .ct-series-a .ct-area {
+        stroke: #0288d1;
+        fill: #0288d1; }
+      .dashboard-portlet__content__chart .ct-series-a .ct-slice-pie {
+        stroke: #f58900; }
+      .dashboard-portlet__content__chart .ct-series-a .ct-slice-donut-solid {
+        fill: #ff5252; }
+      .dashboard-portlet__content__chart .ct-series-b .ct-line {
+        stroke: #13c5c2; }
+      .dashboard-portlet__content__chart .ct-series-b .ct-point {
+        stroke: #13c5c2; }
+      .dashboard-portlet__content__chart .ct-series-b .ct-bar {
+        stroke: #9bafd4; }
+      .dashboard-portlet__content__chart .ct-series-b .ct-slice-donut {
+        stroke: #f48fb1; }
+      .dashboard-portlet__content__chart .ct-series-b .ct-area {
+        stroke: #009688;
+        fill: #009688; }
+      .dashboard-portlet__content__chart .ct-series-b .ct-slice-pie {
+        stroke: #ff5252; }
+      .dashboard-portlet__content__chart .ct-series-b .ct-slice-donut-solid {
+        fill: #13c5c2; }
+      .dashboard-portlet__content__chart .ct-series-c .ct-line {
+        stroke: #009688; }
+      .dashboard-portlet__content__chart .ct-series-c .ct-point {
+        stroke: #009688; }
+      .dashboard-portlet__content__chart .ct-series-c .ct-bar {
+        stroke: #13c5c2; }
+      .dashboard-portlet__content__chart .ct-series-c .ct-slice-donut {
+        stroke: #009688; }
+      .dashboard-portlet__content__chart .ct-series-c .ct-area {
+        stroke: #6b6b6b;
+        fill: #6b6b6b; }
+      .dashboard-portlet__content__chart .ct-series-c .ct-slice-pie {
+        stroke: #26c6da; }
+      .dashboard-portlet__content__chart .ct-series-c .ct-slice-donut-solid {
+        fill: #26c6da; }
+      .dashboard-portlet__content__chart .ct-series-d .ct-line {
+        stroke: #f48fb1; }
+      .dashboard-portlet__content__chart .ct-series-d .ct-point {
+        stroke: #f48fb1; }
+      .dashboard-portlet__content__chart .ct-series-d .ct-bar {
+        stroke: #ff5252; }
+      .dashboard-portlet__content__chart .ct-series-d .ct-slice-donut {
+        stroke: #ff5252; }
+      .dashboard-portlet__content__chart .ct-series-d .ct-area {
+        stroke: #003ba7;
+        fill: #003ba7; }
+      .dashboard-portlet__content__chart .ct-series-d .ct-slice-pie {
+        stroke: #009688; }
+      .dashboard-portlet__content__chart .ct-series-d .ct-slice-donut-solid {
+        fill: #003ba7; }
+      .dashboard-portlet__content__chart .ct-series-e .ct-line {
+        stroke: #26c6da; }
+      .dashboard-portlet__content__chart .ct-series-e .ct-point {
+        stroke: #26c6da; }
+      .dashboard-portlet__content__chart .ct-series-e .ct-bar {
+        stroke: #26c6da; }
+      .dashboard-portlet__content__chart .ct-series-e .ct-slice-donut {
+        stroke: #9bafd4; }
+      .dashboard-portlet__content__chart .ct-series-e .ct-area {
+        stroke: #13c5c2;
+        fill: #13c5c2; }
+      .dashboard-portlet__content__chart .ct-series-e .ct-slice-pie {
+        stroke: #f48fb1; }
+      .dashboard-portlet__content__chart .ct-series-e .ct-slice-donut-solid {
+        fill: #f58900; }
+      .dashboard-portlet__content__chart .ct-series-f .ct-line {
+        stroke: #13c5c2; }
+      .dashboard-portlet__content__chart .ct-series-f .ct-point {
+        stroke: #13c5c2; }
+      .dashboard-portlet__content__chart .ct-series-f .ct-bar {
+        stroke: #009688; }
+      .dashboard-portlet__content__chart .ct-series-f .ct-slice-donut {
+        stroke: #26c6da; }
+      .dashboard-portlet__content__chart .ct-series-f .ct-area {
+        stroke: #ff5252;
+        fill: #ff5252; }
+      .dashboard-portlet__content__chart .ct-series-f .ct-slice-pie {
+        stroke: #26c6da; }
+      .dashboard-portlet__content__chart .ct-series-f .ct-slice-donut-solid {
+        fill: #9bafd4; }
+    .dashboard-portlet__content__details {
+      height: 260px;
+      overflow: hidden; }
+
+.filter-section {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: #fff;
+  padding: 2rem 3rem;
+  opacity: 0;
+  backface-visibility: hidden;
+  transition: all .2s ease-in-out;
+  z-index: -1; }
+  .filter-section.show {
+    opacity: 1;
+    z-index: 1; }
+  .filter-section .filter__close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 120%; }
+
+.more-links-list {
+  position: absolute;
+  right: 2rem;
+  top: -1px;
+  text-align: center;
+  transition: all .2s ease-in-out;
+  background: #fff;
+  border-radius: 2px;
+  display: none; }
+  .more-links-list ul {
+    margin: 0; }
+    .more-links-list ul li {
+      display: inline-block; }
+      .more-links-list ul li a {
+        display: block;
+        padding: 0.2rem 0.5rem;
+        color: #6b6b6b; }
+
+.dashboard-portlet.filled {
+  color: #fff; }
+  .dashboard-portlet.filled .dashboard-portlet__header {
+    color: #fff; }
+    .dashboard-portlet.filled .dashboard-portlet__header h5 .more-links {
+      color: #fff; }
+  .dashboard-portlet.filled .more-links-list {
+    background: transparent; }
+    .dashboard-portlet.filled .more-links-list a {
+      color: #fff; }
+  .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-label {
+    color: #fff;
+    fill: #fff; }
+  .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-a .ct-line, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-a .ct-point, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-a .ct-bar, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-a .ct-area {
+    stroke: #ffffff; }
+  .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-b .ct-line, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-b .ct-point, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-b .ct-bar, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-b .ct-area {
+    stroke: rgba(255, 255, 255, 0.75); }
+  .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-c .ct-line, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-c .ct-point, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-c .ct-bar, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-c .ct-area {
+    stroke: rgba(255, 255, 255, 0.5); }
+  .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-d .ct-line, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-d .ct-point, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-d .ct-bar, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-d .ct-area {
+    stroke: rgba(52, 58, 64, 0.15); }
+  .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-e .ct-line, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-e .ct-point, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-e .ct-bar, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__chart .ct-series-e .ct-area {
+    stroke: rgba(52, 58, 64, 0.3); }
+  .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__details table tr td, .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__details table tr th {
+    color: #fff;
+    border-top: 1px solid rgba(255, 255, 255, 0.2); }
+  .dashboard-portlet.filled .dashboard-portlet__content .dashboard-portlet__content__details table tr th {
+    background: transparent;
+    border-bottom-color: rgba(255, 255, 255, 0.2); }
+
+@media screen and (min-width: 992px) {
+  .dashboard-portlet {
+    margin-bottom: 1rem; }
+    .dashboard-portlet.fixed {
+      left: 275px;
+      top: 85px;
+      right: 1rem; } }
+@media screen and (min-width: 1440px) {
+  .dashboard-portlet {
+    margin-bottom: 1.5rem; }
+    .dashboard-portlet.fixed {
+      left: 280px;
+      right: 1.5rem; } }
+
+/*# sourceMappingURL=dashboard.css.map */

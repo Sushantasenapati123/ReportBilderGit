@@ -1,0 +1,314 @@
+﻿
+
+@model NetReportBuilder.Etl.Model.ConnectApiViewModel
+
+@{
+    ViewData["Title"] = "Api Connector";
+    Layout = null;
+
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<style>
+    .highlight {
+        border: 2px solid red;
+    }
+
+    .report-group {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        margin-top: 20px;
+    }
+
+    .report-block {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Ensure maximum 3 blocks per row */
+        gap: 10px;
+    }
+
+    .report-item {
+        border: 1px solid #ddd;
+        border-color: darkslategray;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #fff;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .report-item img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .report-item h3 {
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .report-item:hover {
+            background-color: antiquewhite;
+        }
+
+    table td {
+        border: 1px solid black;
+        padding: 4px 12px;
+    }
+
+    .scrollable-textarea {
+        width: 100%;
+        height: 200px;
+        overflow: auto;
+        resize: none;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .control-label {
+        display: inline-block;
+        margin-bottom: .5rem;
+        font-weight: 600;
+    }
+
+    .text-danger {
+        color: red;
+    }
+
+    .btn-primary {
+        background-color: green;
+        border-color: green;
+    }
+
+    .btn-danger {
+        background-color: blue;
+        border-color: blue;
+    }
+
+    #dataGridViewContainer {
+        width: 100%; /* Adjust as needed */
+        height: 200px; /* Adjust as needed */
+        overflow: auto;
+        border: 1px solid #252525;
+        /* Optional: add a border */
+    }
+
+    #dataGridview {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        #dataGridview th, #dataGridview td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+</style>
+<style>
+    .hidden {
+        display: none;
+    }
+
+    .TextLeft {
+        text-align: left;
+    }
+
+    .BasicControlSettings {
+        font-family: Verdana;
+        font-size: medium;
+        text-align: left;
+        vertical-align: middle;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .BoldSetting {
+        font-weight: bold;
+    }
+
+    .NormalSetting {
+        font-weight: normal;
+    }
+
+
+
+    div.DivBorderStyle {
+        border-style: solid;
+        border-color: lightgray;
+        border-width: 2px;
+    }
+</style>
+<style>
+    #tblParameters {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        padding: 5px;
+    }
+
+        #tblParameters td, #tblParameters th {
+            border: 1px solid #ddd;
+            padding: 5px;
+            width: 33%;
+        }
+
+        #tblParameters tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #tblParameters tr:hover {
+            background-color: #ddd;
+        }
+
+        #tblParameters th {
+            padding: 5px;
+            text-align: left;
+            background-color: gray;
+            color: white;
+            width: auto;
+            height: auto;
+        }
+</style>
+
+<div class="container mt-4">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">API Interface</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="code-tab" data-toggle="tab" href="#code" role="tab" aria-controls="code" aria-selected="false">Code Editor</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <!-- API Interface Tab -->
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="form-group" style="width:100%;height:auto;" align="center">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="card border-0">
+                            <div class="row">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-xl-4 col-lg-4 TextLeft">
+                                                <label class="BasicControlSettings BoldSetting">
+                                                    Http Method
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <select id="ddlMethodtype" class="form-control BasicControlSettings NormalSetting">
+                                                    <option value="Select">Select</option>
+                                                    @foreach (var method in Model.MethodTypes)
+                                                    {
+                                                        <option value="@method">@method</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-xl-4 col-lg-4 TextLeft">
+                                                <label class="BasicControlSettings BoldSetting">
+                                                    End Point
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" id="txtendpoint" class="form-control BasicControlSettings NormalSetting">
+                                            </div>
+                                            <div class="col-xl-4 col-lg-4 TextLeft">
+                                                <label class="BasicControlSettings BoldSetting">
+                                                    Parameter Type
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <select id="ddlaitype" onchange="ParamTypeChange()" class="form-control BasicControlSettings NormalSetting">
+                                                    <option value="Select">Select</option>
+                                                    @foreach (var apitype in Model.ApiTypes)
+                                                    {
+                                                        <option value="@apitype">@apitype</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-12 mt-3 mt-2 TextLeft">
+                                                <button type="button" class="btn btn-success mb-3" id="btnSend" onclick="Send()">Check</button>
+                                                <button type="button" class="btn btn-danger mb-3" id="btnSave" onclick="SaveAPI(1)">Save</button>
+                                            </div>
+                                        </div>
+
+                                        <div id="RequestSection" class="row hidden">
+                                            <div class="col-xl-12 col-lg-12 TextLeft" id="ParameterSection">
+                                                <label id="lblParameters" class="BasicControlSettings BoldSetting">
+                                                    Parameters
+                                                </label>
+                                                <div id="bindparameters">
+                                                    <table id="tblParameters" class="table table-bordered w-100" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Key</th>
+                                                                <th>Value</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbody"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 TextLeft hidden" id="BodySection">
+                                                <label id="lblBody" class="BasicControlSettings BoldSetting" style="display:none">
+                                                    Body
+                                                </label>
+                                                <textarea id="textareaParameters" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="rows" style="display:none" id="APIresults">
+                                            <div class="col-xl-12 col-lg-12">
+                                                <label id="lblBody" class="BasicControlSettings BoldSetting">
+                                                    Result
+                                                </label>
+                                                <div id="dataGridViewContainer">
+                                                    <table id="dataGridview" class="table table-bordered">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="pagination"></div>
+                                                <textarea hidden class="form-control" disabled id="apiresult"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Editor Tab -->
+        <div class="tab-pane fade" id="code" role="tabpanel" aria-labelledby="code-tab">
+            <div class="form-group mt-3">
+                <textarea id="codeEditor" class="form-control" rows="10" placeholder="Write your code here..."></textarea>
+            </div>
+            <button type="button" class="btn btn-danger mb-3" id="btnSave" onclick="SaveAPI(0)">Save</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+

@@ -1,0 +1,109 @@
+﻿@model NetReportBuilder.ReportUI.Models.ReportConfigurationModel.ReportTypes
+@{
+    var IconList = ViewBag.Icons as List<string>;
+    var gridhtml = ViewBag.GridHTML as string;
+    var ResultData = ViewBag.Result as List<NetReportBuilder.ReportUI.Models.DashboardDetail>;
+}
+
+<!-- left side  -->
+<div class="col-xs-2 ScrollStyle">
+    <ul>
+        <li class="grid__list  clock"   data-chart-type="clock">
+            <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Clock" onclick="GetClockGauge()">
+                <div class="icon__graph">
+                    <img src="~/images/Clock.png" alt="Clock Icon">
+                </div>
+                <label> Clock </label>
+            </a>
+        </li>&nbsp;
+        <li class="grid__list speedometer" data-chart-type="speedometer">
+            <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Speedometer" onclick="GetSpeedometerGauge()">
+                <div class="icon__graph">
+                    <img src="~/images/Speedometer.png" alt="Speedometer Icon">
+                </div>
+                <label> Speedometer </label>
+            </a>
+        </li>&nbsp;
+        <li class="grid__list  solidgauge"  data-chart-type="solidgauge">
+            <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Multi KPI" onclick="GetMultiKPIGauge()">
+                <div class="icon__graph">
+                    <img src="~/images/MultiKPIGauge.png" alt="Multi KPI Icon">
+                </div>
+                <label> MultiKPI </label>
+            </a>
+        </li>&nbsp;
+        <li class="grid__list solidgaugekpi" data-chart-type="solidgaugekpi">
+            <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Solid" onclick="GetSolidGauge()">
+                <div class="icon__graph">
+                    <img src="~/images/SolidGuage.png" alt="Solid Icon">
+                </div>
+                <label> Solid </label>
+            </a>
+        </li>&nbsp;
+    </ul>
+</div>
+<!-- left side  -->
+<!--  middle -->
+<div class="card-body row">
+    <div class="col-lg-5 col-md-5 col-12">
+        <h3><b>Gauge  Configuration</b></h3>
+        <div class="form-group">
+            @*TableName*@
+            <div id="TableData" class="form-group"  style="display:none;">
+                <label class="control-label">Data Source<span class="text-danger">*</span></label>
+                <select id="ddlDataSourceForWizget" class="form-select" onchange="GetColumnsByTableforwiz()" asp-items="@(new SelectList(ViewBag.DataSource, "order", "name"))">
+                    <option value="0">Select Data Source</option>
+                </select>
+            </div>
+            @*Title*@
+            <div class="form-group ">
+                <label class="control-label">Title<span class="text-danger">*</span></label>
+                <input type="text" id="txtGaugeTitle" class="form-control">
+            </div>
+            @*DataColumn(Table Column Name)*@
+            <div class="form-group "   style="display:none;">
+                <label class="control-label">DataColumn<span class="text-danger">*</span></label>
+                <select id="ddlDataColumn" class="form-select">
+                    <option value="0" selected>Select Data  Column</option>
+                </select>
+            </div>
+            @*Percentage(Table Column Name)*@
+            <div class="form-group "    style="display:none;">
+                <label class="control-label">Percentage<span class="text-danger">*</span></label>
+                <select id="ddlPercentage" class="form-select">
+                    <option value="0" selected>Select Percentage</option>
+                </select>
+            </div>
+            @*Hidden Potlate Height & Width*@
+            <div class="form-group row" style="display:none">
+                <div class="col-xs-6 col-md-3 col-xl-3">
+                    <label class="control-label" for="portletHeight">Portlet Height:</label>
+                    <input type="text" id="portletHeight" readonly />
+                </div>
+                <div class="col-xs-6 col-md-3 col-xl-3">
+                    <label class="control-label" for="portletWidth">Portlet Width:</label>
+                    <input type="text" id="portletWidth" readonly />
+                </div>
+            </div>
+            @*BUTTONS*@
+            <div class="form-group row"   style="display:none;">
+                <div class="col-6 col-md-6 col-xl-6">
+                    <div class="col-md-6 mt-3">
+                        <button class="btn btn-primary mb-1 me-2" id="btnApplyWizard">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--  right -->
+    <div class="col-lg-7 col-md-7 col-12">
+        <center><h3><b>Preview</b></h3></center>
+        <figure class="highcharts-figure">
+            <div id="containers" style=" height: 400px;" class="chart_fix"></div>
+            @*<div id="container-speed" style=" height: 400px;" class="chart-container"></div>*@
+        </figure>
+    </div>
+    <!--  right -->
+</div>
+<!--  middle -->

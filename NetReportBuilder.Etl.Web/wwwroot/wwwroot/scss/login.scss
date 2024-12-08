@@ -1,0 +1,159 @@
+/* Scss variable  Created By Bikash on 21-Jan-2019 */
+
+@import 'variables';
+@import 'mixins';
+
+body{
+	background: #0288d1;
+	background-image: -webkit-linear-gradient(left, #85e3b8 ,#3dd2c9, #0cc7d5);
+
+}
+a{
+	transition: all .2s ease-in-out;
+	color:#0cc7d5;
+	&:hover,&:focus{
+		color: $black;
+		text-decoration: none;
+	}
+}
+
+%commom-style{
+	display: flex;
+	flex-wrap: wrap;
+	flex-flow: column;
+	padding:$s4;
+	
+	align-items: $center;
+	justify-content: $center;
+	transition: all .4s ease-in-out;
+	overflow:hidden;
+	border-radius: 5px;
+}
+.login{
+	width: 100%;
+	
+	height: 100vh;
+	&__front{
+		@extend %commom-style; 
+		position: $absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		z-index: 1;
+		background-image: -webkit-linear-gradient(left, #85e3b8 ,#3dd2c9, #0cc7d5);
+		&--hide{
+			opacity: 0;
+			z-index: 0;
+		}
+
+	}
+	&__back{
+		@extend %commom-style; 
+		background:$white url(../images/clip.png) no-repeat;
+		position: $relative;
+		z-index: 0;
+		height: 100vh;
+		background-size: 100%;
+		background-position: 20px -60px;
+		
+		&__content{
+			text-align: $center;
+			min-width: 280px;
+
+		}
+	}
+
+	img{
+		height: 38px;
+		margin-bottom: $s12;
+	}
+	p{margin-bottom: $s1;}
+	.log-link{
+		display: $inline-block;
+		min-width: 170px;
+		border-radius: 2px;
+		margin-bottom: $s1;
+		font-size: 130%;
+		text-align: $center;
+		padding: .4rem $s2;
+		text-transform: uppercase;
+		box-shadow: 1px 2px 5px #00c0ce;
+		color: #19cad2;
+		border-radius: 40px;
+		background: $white;
+		&:hover{
+			color: $white;
+			background: $bg-theme-sky;
+			
+		}
+		&.active{
+			color: $white;
+			background: #009da9;
+			
+			&:hover{
+				color: $white;
+				background: $bg-theme-sky;
+				
+
+			}	
+		}
+	}
+	.form-group{margin-bottom: $s4;}
+	.form-control{
+		border: 0;
+		border-bottom: 2px solid #dedede;
+		border-radius:0;
+		background: $trans;
+		font-size: 110%;
+		&:focus{
+			box-shadow: none;
+			border-color:#0cc7d5;
+		}
+	}
+	.input-group-text{
+		background: $trans;
+		border: 0;
+		border-bottom: 2px solid #dedede;
+		border-radius:0;
+		
+	}
+	.login-btn{
+		background: #0cc7d5;
+		display: $inline-block;
+		padding: .4rem $s2;
+		text-transform: uppercase;
+		font-size: 120%;
+		min-width: 170px;
+		border-radius: 30px;
+		color: $white;
+		&:hover{
+			
+		}
+	}
+}
+@media screen and (min-width:$break-width575) {
+	.login {
+		
+		width: 400px;
+		height: auto;
+		min-height: 500px;
+		margin: 10% auto 0px;
+		box-shadow: 0px 1px 10px #02a2ab;
+		.login__back {
+			background-size: 70%;
+			background-position: right top;
+
+			height: auto;
+			min-height: 500px;
+		}
+	}
+}
+@media screen and (min-width:$break-tab) {
+	.login {
+		.login__front{
+			display: none;
+		}
+	}
+
+}

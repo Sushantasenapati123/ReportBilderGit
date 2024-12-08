@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Name": "NetReportBuilder.ReportSource\\NetReportBuilder.ReportSource.Api\\NetReportBuilder.ReportSource.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Name": "NetReportBuilder.Etl.Web\\NetReportBuilder.Etl.Web.csproj",
+        "Action": "Start"
+      },
+      {
+        "Name": "NetReportBuilder.ReportUI\\NetReportBuilder.ReportUI.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

@@ -1,0 +1,2475 @@
+﻿
+@{
+    Layout = null;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ETL Dashboard</title>
+
+
+
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow@0.0.48/dist/drawflow.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/beautiful.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>*@
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+
+
+
+
+
+
+    <script src="~/js/ConnectAPI.js"></script>
+    <script src="~/js/SaveConfiguration.js"></script>
+    <script src="~/js/CustomeCodeEditor.js"></script>
+    <script src="~/js/JoinDataTransform.js"></script>
+    <script src="~/js/ConditionControl.js"></script>
+    <script src="~/js/DataBaseConfiguration.js"></script>
+    <script src="~/js/GroupByFilter.js"></script>
+    <script src="~/js/LoadExcel.js"></script>
+    <script src="~/js/ETLDashBoard.js"></script>
+
+    <header>
+        <h2>
+            ETL Dashboard
+            <span style="font-weight: normal; display: inline-block;" id="mainsessionSpan" hidden>
+                
+                <span style="text-decoration: underline; font-size: x-large; color: #007bff; margin-left: 1000px;" id="sessionId"></span><span style="font-size: medium"> Pipeline</span>
+            </span>
+        </h2>
+
+
+
+        <div class="them-edit-link">
+
+
+            <a href="/pipelinedashboard/Index" title="GoTo PipeLine DashBoard"><img style="height: 38px; background: #164f81; border-radius: 16px; margin-bottom: 21px; " src="~/images/Transfermation.png" /></a>
+        </div>
+        @*<div class="github-link"><a href="https://github.com/jerosoler/Drawflow" target="_blank"><i class="fab fa-github fa-3x"></i></a></div>
+        <div class="them-edit-link"><a href="https://jerosoler.github.io/drawflow-theme-generator/" target="_blank">🎨</a></div>*@
+        <style>
+            #overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+                z-index: 1050; /* Higher than modal */
+                display: flex; /* Center the loader */
+                justify-content: center;
+                align-items: center;
+            }
+
+            #loaderIndex {
+                z-index: 1060; /* Ensure loader is above overlay */
+            }
+
+            .modal {
+                z-index: 1040; /* Ensure modal is below overlay */
+            }
+        </style>
+    </header>
+
+
+    <div id="overlay" style="display:none;">
+        <div id="loaderIndex">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="myModal" class="modal">
+        <div class="modal-header">
+            <span class="close" onclick="ClosePopup()">&times;</span>
+        </div>
+        <iframe id="EtlFrame" name="EtlFrame" src="" style="height:100%;width:100%;padding:10px;margin:10px;" title="ETL Process">
+        </iframe>
+    </div>
+
+    <div class="wrapper">
+        <div class="col">
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="api">
+                <img src='/images/APIConnector.png' style="width:30px" />  <span> API Connector</span>
+            </div>
+
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="oracle">
+                <img src='/images/oracle.png' style="width:30px" /><span> Oracle Connector</span>
+            </div>
+
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="sqlserver">
+                <img src='/images/mssql.jpg' style="width:30px" /><span> SqL Server Connector</span>
+            </div>
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="mysql">
+                <img src='/images/mysql.png' style="width:30px" /> <span> My SqL Connector</span>
+            </div>
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="excel">
+                <img src='/images/excel.png' style="width:30px" /> <span> Excel File</span>
+            </div>
+            @*<div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="PostgreSQL">
+                    <img src='/images/PostgreSql.png' style="width:30px" /> <span> PostgreSQL Connector</span>
+                </div>*@
+
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="Jointransformation">
+                <img src='/images/Transfermation.png' style="width:30px" /><span>Join Transformation</span>
+            </div>
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="Filter">
+                <img src='/images/filter-icon.png' style="width:30px" /><span>Filter</span>
+            </div>
+
+
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="GroupBY">
+                <img src='/images/GroupBy.png' style="width:30px" /><span>GroupBY</span>
+            </div>
+
+
+
+
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="datamapper">
+                <img src='/images/datamapping.png' style="width:30px" /><span>Data Mapper</span>
+            </div>
+            <div class="drag-drawflow" draggable="true" ondragstart="drag(event)" data-node="saveconfiguration">
+                <img src='/images/saveconfiguration.png' style="width:30px" /><span>Save Configuration</span>
+            </div>
+        </div>
+        <div class="col-right">
+
+            <div id="drawflow" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+                <div hidden class="btn-export" @*onclick="Swal.fire({ title: 'Json Code',
+                     html: '<pre><code>' +JSON.stringify(editor.export(), null,4)+'</code></pre>'
+        })"*@ onclick="ExportJson()">Save</div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <input id="hdn_DatabaseConfigurationsPipelineId" hidden />
+
+    <!--API/JoinCondition Use This Modal Templates -->
+
+    <div class="modal fade" id="APIModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered " role="document">
+            @*<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">*@
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><b></b></h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="APIModalBody">
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--Save Congigurations  Modal -->
+
+    <div class="modal fade" id="SaveConfigurationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #dddfe6">
+                    <h5 class="modal-title" id="exampleModalLabel"><b>Save Configuration</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0" id="SaveConfigurationModalBody">
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--Mapping The Modal -->
+
+    <div class="modal fade" id="MappingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #dddfe6">
+                    <h5 class="modal-title" id="exampleModalLabel"><b>Mapping Data</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="MappingModalBody">
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--Join TransformData The Modal -->
+
+    <div class="modal fade" id="JoinTransformDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #dddfe6">
+                    <h5 class="modal-title" id="exampleModalLabel"><b>Transform Data-Join</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="JoinTransformDataModalBody">
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    @*Set Url For Access by JS File*@
+    <script>
+   var getDatabaseConfigurationsByDbTypeUrl ='@Url.Action("Get_tbl_AddDatabaseConfigurationsPipelineByDBType", "MultiDataBaseConfiguration")' ;
+         var loadPipelineConfigUrl = '@Url.Action("LoadPipeLineConfigDesign", "ETLDashboard")';
+    </script>
+
+
+
+    @*Modal SCrpit*@
+    <script>
+        $(document).on('show.bs.modal', '.modal', function () {
+            var zIndex = 1040 + (10 * $('.modal:visible').length);
+            $(this).css('z-index', zIndex);
+            setTimeout(function () {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+            }, 0);
+        });
+
+        $(document).on('hidden.bs.modal', '.modal', function () {
+            if ($('.modal:visible').length > 0) {
+                // Restore focus to the last opened modal
+                $('body').addClass('modal-open');
+            }
+        });
+
+        function removeConnection(connection) {
+            alert(connection.output_id + "To be Delete");
+            // Assuming connection object has output_id, input_id, output_class, and input_class
+            editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+        }
+
+    </script>
+
+    @*All Editor Node Event*@
+    <script>
+
+
+        var Count_ConnectionForJointransformation = 0;
+        var CurrentAPIDivId = "";
+        var CurrentFilterDivId = "";
+        var CurrentGroupByDivId = "";
+        var CurrentDataBase = "";
+        var CurrentExcel = "";
+        var id = document.getElementById("drawflow");
+        const editor = new Drawflow(id);
+        editor.reroute = true;
+
+        editor.start();
+
+
+
+
+        var nodeDetails = {}; // To store node details before removal
+        // Events!
+        editor.on('nodeCreated', function (id) {
+            console.log("Node created " + id);
+        })
+
+        editor.on('nodeRemoved', function (id) {
+
+
+
+            const nodes = currentTemplate.drawflow.Home.data;
+
+            // Find the node with the specified ID
+            const node = nodes[id];
+
+            // Check if the node exists and return its HTML design
+            if (node) {
+
+                // Create a temporary DOM element to parse the HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = node.html;
+
+                // Retrieve all elements with class 'blockydiv'
+                const blockyDivs = tempDiv.getElementsByClassName('blockydiv');
+
+                // Loop through the elements to find the one with the specific styles
+                let innerDivContent = null;
+                for (let div of blockyDivs) {
+                    const style = div.style;
+                    if (style.fontWeight === 'bolder' && style.fontStyle === 'italic') {
+                        innerDivContent = div.innerText;
+                        break; // Exit loop once the desired div is found
+                    }
+                }
+
+                if (innerDivContent != null) {
+                    RemoveEntityFromJsonSourceList(innerDivContent);
+                }
+                else {//FOR datamapper and saveconfiguration
+                    RemoveEntityFromJsonSourceList(node.name);
+                }
+
+
+
+            }
+
+
+
+
+            // Retrieve the stored node type
+            var nodeType = nodeDetails[id];
+
+            if (nodeType == 'datamapper') {
+                MapperNodeCount--;
+                // alert(MapperNodeCount);
+                //alert("NodeRemove " + id + " - Type: " + nodeType);
+                console.log("Node removed " + id + " - Type: " + nodeType);
+            }
+            if (nodeType == 'saveconfiguration') {
+                SaveConfigurationNodeCount--;
+                //  alert(SaveConfigurationNodeCount);
+                //alert("NodeRemove " + id + " - Type: " + nodeType);
+                console.log("Node removed " + id + " - Type: " + nodeType);
+            }
+
+
+            // Clean up the stored details after removal
+            delete nodeDetails[id];
+
+            console.log("Node removed " + id);
+        })
+
+        editor.on('nodeSelected', function (id) {
+            // Find the node element by id
+            var nodeElement = document.getElementById('node-' + id);
+
+            // Check if the node exists
+            if (nodeElement) {
+                // Retrieve and store the class 'api' from the node's classList
+                if (nodeElement.classList.contains('datamapper')) {
+                    nodeDetails[id] = 'datamapper';
+                }
+                if (nodeElement.classList.contains('saveconfiguration')) {
+                    nodeDetails[id] = 'saveconfiguration';
+                }
+
+            }
+            console.log("Node selected " + id);
+        })
+
+        editor.on('moduleCreated', function (name) {
+            console.log("Module Created " + name);
+        })
+
+        editor.on('moduleChanged', function (name) {
+            console.log("Module Changed " + name);
+        })
+
+        editor.on('connectionCreated', function (connection) {
+
+
+
+
+
+
+            var primaryNode = editor.getNodeFromId(connection.output_id);
+            var foreignNode = editor.getNodeFromId(connection.input_id);
+
+            // Create a temporary DOM element to parse the HTML string
+            var primarytempDiv = document.createElement('div');
+            var foreigntempDiv = document.createElement('div');
+            primarytempDiv.innerHTML = primaryNode.html;
+            foreigntempDiv.innerHTML = foreignNode.html;
+
+            // Find the specific div with class 'blockydiv'
+            var primarytargetDiv = primarytempDiv.querySelector('.blockydiv');
+            var foreigntargetDiv = foreigntempDiv.querySelector('.blockydiv');
+
+            var id = getUrlVars()["strid"];
+
+            if (id != undefined) {//Update
+
+                if (primarytargetDiv.id != '' && foreigntargetDiv.id != '') {
+                    if ($('#' + primarytargetDiv.id).html() != '' && $('#' + foreigntargetDiv.id).html() != '') {
+
+                        ReOrderingListOfSource($('#' + primarytargetDiv.id).html(), $('#' + foreigntargetDiv.id).html());
+                    }
+                }
+            }
+
+            if (foreigntargetDiv.id.includes('Filter')) {
+
+
+                // Retrieve the foreignNode data from the editor
+                var foreignNodeData = editor.drawflow.drawflow.Home.data[foreignNode.id];
+
+                // Check if the foreignNode already has any connections on its input port
+                if (foreignNodeData && foreignNodeData.inputs["input_1"].connections.length > 1) {
+                    alert("Filter Can Only Apply On Ona DataSource At a Time");
+                    // Optionally remove the connection just created
+                    editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                    return;
+                }
+            }
+            if (foreigntargetDiv.id.includes('GroupBY')) {
+
+
+                // Retrieve the foreignNode data from the editor
+                var foreignNodeData = editor.drawflow.drawflow.Home.data[foreignNode.id];
+
+                // Check if the foreignNode already has any connections on its input port
+                if (foreignNodeData && foreignNodeData.inputs["input_1"].connections.length > 1) {
+                    alert("GroupBY Can Only Apply On Ona DataSource At a Time");
+                    // Optionally remove the connection just created
+                    editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                    return;
+                }
+            }
+            if (foreignNode.class.includes('datamapper')) {
+
+
+                // Retrieve the foreignNode data from the editor
+                var foreignNodeData = editor.drawflow.drawflow.Home.data[foreignNode.id];
+
+                // Check if the foreignNode already has any connections on its input port
+                if (foreignNodeData && foreignNodeData.inputs["input_1"].connections.length > 1) {
+                   
+                    Swal.fire({
+                        icon: "warning",
+                      
+                        text: "Only One Input Connection Can be add For DataMapping!",
+                       
+                    });
+                    editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                    return;
+                }
+            }
+            if (foreignNode.class.includes('saveconfiguration')) {
+
+
+                // Retrieve the foreignNode data from the editor
+                var foreignNodeData = editor.drawflow.drawflow.Home.data[foreignNode.id];
+
+                // Check if the foreignNode already has any connections on its input port
+                if (foreignNodeData && foreignNodeData.inputs["input_1"].connections.length > 1) {
+                    Swal.fire({
+                        icon: "warning",
+
+                        text: "Only One Input Connection Can be add For SaveConifguration!",
+
+                    });
+                   
+                    editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                    return;
+                }
+            }
+
+
+
+
+
+            if (primarytargetDiv) {
+                var primaryblockydivId = primarytargetDiv.id;
+                CurrentAPIDivId = primaryblockydivId;
+                //alert(document.getElementById(blockydivId).innerHTML);
+            }
+            if (foreigntargetDiv) {
+                var ForeignblockydivId = foreigntargetDiv.id;
+
+            }
+            if (primaryblockydivId != '') {
+                if (document.getElementById(primaryblockydivId).innerHTML == "") {
+                    let blockyDiv = $('#' + primaryblockydivId);
+
+                    // Traverse up to the parent 'drawflow_content_node' and then find the 'apiconnectorStatusId' div
+                    let apiConnectorText = blockyDiv.closest('.drawflow_content_node').find('#apiconnectorStatusId').text();
+
+
+
+                    let sqlConnectorText = blockyDiv.closest('.drawflow_content_node').find('#sqlserverconnectorStatusId').text();
+
+
+                    let mysqlConnectorText = blockyDiv.closest('.drawflow_content_node').find('#mysqlconnectorStatusId').text();
+
+                    let excelConnectorText = blockyDiv.closest('.drawflow_content_node').find('#excelconnectorStatusId').text();
+
+
+                    let oracleConnectorText = blockyDiv.closest('.drawflow_content_node').find('#oracleconnectorStatusId').text();
+
+
+
+                    let DataMapperConnectorText = blockyDiv.closest('.drawflow_content_node').find('#JoinDataTransformationStatusId-' + primaryblockydivId.split("-")[1]).text();
+
+
+
+                    let FilterConnectorText = blockyDiv.closest('.drawflow_content_node').find('#FilterTransformationStatusId-' + primaryblockydivId.split("-")[1]).text();
+
+
+
+                    if (apiConnectorText.includes("API")) {
+                        Swal.fire({
+                            icon: "warning",
+                            text: "Please Set the API configuration First!",
+                        });
+                        editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                        return;
+                    }
+                    if (sqlConnectorText.includes("sql")) {
+                        Swal.fire({
+                            icon: "warning",
+                            text: "Please Set the SqlServer configuration First!",
+                        });
+                        editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                        return;
+                    }
+                    if (mysqlConnectorText.includes("mysql")) {
+                        Swal.fire({
+                            icon: "warning",
+                            text: "Please Set the Mysql configuration First!",
+                        });
+                        editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                        return;
+                    }
+                    if (excelConnectorText.includes("excel")) {
+                        Swal.fire({
+                            icon: "warning",
+                            text: "Please Set the Excel configuration First!",
+                        });
+                        editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                        return;
+                    }
+
+                    if (oracleConnectorText.includes("oracle")) {
+                        Swal.fire({
+                            icon: "warning",
+                            text: "Please Set the Oracle configuration First!",
+                        });
+                        editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                        return;
+                    }
+                    if (DataMapperConnectorText.includes("JoinData Transformation")) {
+
+                        Swal.fire({
+                            icon: "warning",
+                            text: "Please Set JoinConfiguration First!",
+                        });
+                        editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                        return;
+                    }
+                    if (FilterConnectorText.includes("Filter")) {
+
+                        Swal.fire({
+                            icon: "warning",
+                            text: "Please Set FilterConfiguration First!",
+                        });
+                        editor.removeSingleConnection(connection.output_id, connection.input_id, connection.output_class, connection.input_class);
+                        return;
+                    }
+
+                }
+            }
+
+
+            if (primaryNode.class === 'api' && foreignNode.class == 'datamapper') {
+                MappingData();
+            }
+
+            if (primaryNode.class === 'mysql' && foreignNode.class == 'datamapper') {
+                MappingData();
+            }
+            if (primaryNode.class === 'excel' && foreignNode.class == 'datamapper') {
+                MappingData();
+            }
+
+
+            if (primaryNode.class === 'sqlserver' && foreignNode.class == 'datamapper') {
+                MappingData();
+            }
+            if (primaryNode.class === 'oracle' && foreignNode.class == 'datamapper') {
+                MappingData();
+            }
+            if (primaryNode.class === 'api' && foreignNode.class == 'Filter') {
+
+                OpenConditionModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'api' && foreignNode.class == 'GroupBY') {
+
+                OpenGroupModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'Jointransformation' && foreignNode.class == 'Filter') {
+                OpenConditionModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'Jointransformation' && foreignNode.class == 'GroupBY') {
+                OpenGroupModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            //mysql//Jointransformation//sqlserver//oracle
+            if (primaryNode.class === 'mysql' && foreignNode.class == 'Filter') {
+                OpenConditionModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'excel' && foreignNode.class == 'Filter') {
+                OpenConditionModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'mysql' && foreignNode.class == 'GroupBY') {
+                OpenGroupModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'excel' && foreignNode.class == 'GroupBY') {
+                OpenGroupModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'sqlserver' && foreignNode.class == 'Filter') {
+                OpenConditionModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'sqlserver' && foreignNode.class == 'GroupBY') {
+                OpenGroupModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+
+            if (primaryNode.class === 'oracle' && foreignNode.class == 'Filter') {
+                OpenConditionModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'oracle' && foreignNode.class == 'GroupBY') {
+                OpenGroupModal(document.getElementById(primaryblockydivId).innerHTML, ForeignblockydivId, ForeignblockydivId);
+
+
+                //set entityname to the filter div
+                $('#SourceDT_' + ForeignblockydivId.split('-')[1]).html($('#' + primaryblockydivId).html());
+
+            }
+            if (primaryNode.class === 'Filter' && foreignNode.class == 'Jointransformation') {
+
+
+                Count_ConnectionForJointransformation++;
+
+                if (id != undefined) {//Update
+                    if (foreigntargetDiv.id != '') {
+                        JoinTransformData(foreigntargetDiv.id, "NA");
+                    }
+                }
+
+                setTimeout(function () {
+                    Call_AddDiv_and_BindColumn_By_FilterDiv($('#' + primaryblockydivId).html(), $('#SourceDT_' + primaryblockydivId.split('-')[1]).html(), ForeignblockydivId);
+                    StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+                }, 1000);  // 5000 milliseconds = 5 seconds
+
+
+
+
+
+
+            }
+            if (primaryNode.class === 'Filter' && foreignNode.class == 'GroupBY') {
+
+
+                Count_ConnectionForJointransformation++;
+                // addBlockyDivId(primaryblockydivId);
+                Call_AddDiv_and_BindColumn_By_FilterDiv($('#' + primaryblockydivId).html(), $('#SourceDT_' + primaryblockydivId.split('-')[1]).html(), ForeignblockydivId);
+                StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+
+
+
+            }
+            if (primaryNode.class === 'GroupBY' && foreignNode.class == 'Jointransformation') {
+
+                Count_ConnectionForJointransformation++;
+                // addBlockyDivId(primaryblockydivId);
+                if (id != undefined) {//Update
+                    if (foreigntargetDiv.id != '') {
+                        JoinTransformData(foreigntargetDiv.id, "NA");
+                    }
+                }
+
+                setTimeout(function () {
+                    Call_AddDiv_and_BindColumn_By_FilterDiv($('#' + primaryblockydivId).html(), $('#SourceDT_' + primaryblockydivId.split('-')[1]).html(), ForeignblockydivId);
+                    StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+                }, 1000);  // 5000 milliseconds = 5 seconds
+
+                //Call_AddDiv_and_BindColumn_By_FilterDiv($('#' + primaryblockydivId).html(), $('#SourceDT_' + primaryblockydivId.split('-')[1]).html(), ForeignblockydivId);
+                //StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+
+
+
+
+            }
+
+            if (primaryNode.class === 'api' && foreignNode.class == 'Jointransformation') {
+                Count_ConnectionForJointransformation++;
+                // addBlockyDivId(primaryblockydivId);
+                JoinTransformData(primaryblockydivId, ForeignblockydivId);
+                StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+
+            }
+
+            if (primaryNode.class === 'mysql' && foreignNode.class == 'Jointransformation') {
+                Count_ConnectionForJointransformation++;
+                // addBlockyDivId(primaryblockydivId);
+                JoinTransformData(primaryblockydivId, ForeignblockydivId);
+                StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+
+            }
+            if (primaryNode.class === 'excel' && foreignNode.class == 'Jointransformation') {
+                Count_ConnectionForJointransformation++;
+                // addBlockyDivId(primaryblockydivId);
+                JoinTransformData(primaryblockydivId, ForeignblockydivId);
+                StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+
+            }
+            if (primaryNode.class === 'sqlserver' && foreignNode.class == 'Jointransformation') {
+                Count_ConnectionForJointransformation++;
+                // addBlockyDivId(primaryblockydivId);
+                JoinTransformData(primaryblockydivId, ForeignblockydivId);
+                StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+
+            }
+            if (primaryNode.class === 'oracle' && foreignNode.class == 'Jointransformation') {
+                Count_ConnectionForJointransformation++;
+                // addBlockyDivId(primaryblockydivId);
+                JoinTransformData(primaryblockydivId, ForeignblockydivId);
+                StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+
+            }
+
+            if (primaryNode.class === 'Jointransformation' && foreignNode.class == 'Jointransformation') {
+                Count_ConnectionForJointransformation++;
+                // addBlockyDivId(primaryblockydivId);
+                JoinTransformData(primaryblockydivId, ForeignblockydivId);
+                StoreSourceEntityInTransformationDiv(primaryblockydivId, ForeignblockydivId);
+
+            }
+
+
+            if (primaryNode.class === 'customcode' && foreignNode.class == 'datamapper') {
+                MappingData();
+            }
+            if (primaryNode.class === 'datamapper' && foreignNode.class === 'saveconfiguration') {
+                OpenSaveConfigurationView();
+            }
+            console.log('Connection created');
+            console.log(connection);
+        })
+
+        editor.on('connectionRemoved', function (connection) {
+            //alert("connectionRemoved 364: " + connection);
+            var primaryNode = editor.getNodeFromId(connection.output_id);
+            var foreignNode = editor.getNodeFromId(connection.input_id);
+
+            // Create a temporary DOM element to parse the HTML string
+            var primarytempDiv = document.createElement('div');
+            var foreigntempDiv = document.createElement('div');
+            primarytempDiv.innerHTML = primaryNode.html;
+            foreigntempDiv.innerHTML = foreignNode.html;
+
+            // Find the specific div with class 'blockydiv'
+            var primarytargetDiv = primarytempDiv.querySelector('.blockydiv');
+            var foreigntargetDiv = foreigntempDiv.querySelector('.blockydiv');
+
+            if (primarytargetDiv.id != '' && foreigntargetDiv.id != '') {
+
+                if (foreignNode.name == "Jointransformation") {
+
+                    RemoveEntityFromSourceList(foreigntargetDiv.id, primarytargetDiv.id);
+                }
+
+
+
+            }
+
+            console.log('Connection removed');
+            console.log(connection);
+        })
+
+        editor.on('mouseMove', function (position) {
+            console.log('Position mouse x:' + position.x + ' y:' + position.y);
+        })
+
+        editor.on('nodeMoved', function (id) {
+            console.log("Node moved " + id);
+        })
+
+        editor.on('zoom', function (zoom) {
+            console.log('Zoom level ' + zoom);
+        })
+
+        editor.on('translate', function (position) {
+            console.log('Translate x:' + position.x + ' y:' + position.y);
+        })
+
+        editor.on('addReroute', function (id) {
+            console.log("Reroute added " + id);
+        })
+
+        editor.on('removeReroute', function (id) {
+            alert("removeReroute 392 " + removeReroute);
+            console.log("Reroute removed " + id);
+        })
+
+        /* DRAG EVENT */
+
+        /* Mouse and Touch Actions */
+
+        var elements = document.getElementsByClassName('drag-drawflow');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].addEventListener('touchend', drop, false);
+            elements[i].addEventListener('touchmove', positionMobile, false);
+            elements[i].addEventListener('touchstart', drag, false);
+        }
+
+        var mobile_item_selec = '';
+        var mobile_last_move = null;
+        function positionMobile(ev) {
+            mobile_last_move = ev;
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+
+            if (ev.type === "touchstart") {
+                mobile_item_selec = ev.target.closest(".drag-drawflow").getAttribute('data-node');
+            } else {
+                ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
+            }
+        }
+
+        function drop(ev) {
+
+            if (ev.type === "touchend") {
+                var parentdrawflow = document.elementFromPoint(mobile_last_move.touches[0].clientX, mobile_last_move.touches[0].clientY).closest("#drawflow");
+                if (parentdrawflow != null) {
+                    addNodeToDrawFlow(mobile_item_selec, mobile_last_move.touches[0].clientX, mobile_last_move.touches[0].clientY);
+                }
+                mobile_item_selec = '';
+            } else {
+                ev.preventDefault();
+                var data = ev.dataTransfer.getData("node");
+                addNodeToDrawFlow(data, ev.clientX, ev.clientY);
+            }
+
+        }
+        let apiNodeCount = 0;  // Initialize count variable
+        let oracleNodeCount = 0;  // Initialize count variable
+
+        let PostgreSQLNodeCount = 0;  // Initialize count variable
+        let sqlserverNodeCount = 0;  // Initialize count variable
+        let mysqlNodeCount = 0;  // Initialize count variable
+        let excelNodeCount = 0;  // Initialize count variable
+
+        let JoinNodeCount = 0;  // Initialize count variable
+        let FilterNodeCount = 0;  // Initialize count variable
+        let MapperNodeCount = 0;  // Initialize count variable
+        let SaveConfigurationNodeCount = 0;  // Initialize count variable
+        let GroupBYNodeCount = 0;
+        function addNodeToDrawFlow(name, pos_x, pos_y) {
+            var id = getUrlVars()["strid"];
+
+            if (id != undefined) {//Update
+                // Convert object to array using Object.values
+                const dataArray = Object.values(currentTemplate.drawflow.Home.data);
+
+                mysqlNodeCount = dataArray.filter(item => item.name === 'mysql').length;
+                apiNodeCount = dataArray.filter(item => item.name === 'api').length;
+                oracleNodeCount = dataArray.filter(item => item.name === 'oracle').length;
+                PostgreSQLNodeCount = dataArray.filter(item => item.name === 'PostgreSQL').length;
+                excelNodeCount = dataArray.filter(item => item.name === 'excel').length;
+
+                JoinNodeCount = dataArray.filter(item => item.name === 'Jointransformation').length;
+                FilterNodeCount = dataArray.filter(item => item.name === 'Filter').length;
+                GroupBYNodeCount = dataArray.filter(item => item.name === 'GroupBY').length;
+
+                SaveConfigurationNodeCount = dataArray.filter(item => item.name === 'saveconfiguration').length;
+                MapperNodeCount = dataArray.filter(item => item.name === 'datamapper').length;
+
+            }
+
+
+
+
+            if (editor.editor_mode === 'fixed') {
+                return false;
+            }
+            pos_x = pos_x * (editor.precanvas.clientWidth / (editor.precanvas.clientWidth * editor.zoom)) - (editor.precanvas.getBoundingClientRect().x * (editor.precanvas.clientWidth / (editor.precanvas.clientWidth * editor.zoom)));
+            pos_y = pos_y * (editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom)) - (editor.precanvas.getBoundingClientRect().y * (editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom)));
+
+
+            switch (name) {
+
+                case 'api':
+
+                    apiNodeCount++;  // Increment count variable
+                    //  alert("apiCount " + apiNodeCount);
+                    CurrentAPIDivId = "blockydivApi-" + apiNodeCount;
+
+
+                    var api = `<div class='blockyleft'></div><div id='apiconnectorStatusId' class='blockyright' hidden>API Connector</div><div class='blockydiv' style=" margin-left: 10px; tex: Red; color: #35aeb3; font-weight: bolder; font-style: italic;" id='blockydivApi-${apiNodeCount}'></div><div class='blockyinfo' style='margin:25px;'><a href='#' onclick='ConnectApi("blockydivApi-${apiNodeCount}")'><img src='/images/APIConnector.png' width='100px'/></a></div>`;
+
+                    editor.addNode('api', 0, 1, pos_x, pos_y, 'api', { type: api }, api);
+                    break;
+                case 'customcode':
+
+                    var customcode = "<div  class='blockyleft'></div><div class='blockyright'>Custom Code</div><div class='blockydiv'></div><div class='blockyinfo' style='margin:25px;'><a href='#'  onclick='OpenCustomeCodeView()'><img src='/images/codeeditor.png' width='100px'/></a></div>";
+                    editor.addNode('customcode', 0, 1, pos_x, pos_y, 'customcode', { type: customcode }, customcode);
+                    break;
+
+                case 'oracle':
+                    oracleNodeCount++;  // Increment count variable
+                    //  alert("apiCount " + apiNodeCount);
+                    CurrentDataBase = 'blockydivOracle-' + oracleNodeCount;
+                    var oracle = ` <div  class='blockyleft'></div><div class='blockyright' id='oracleconnectorStatusId' hidden>oracle</div><div class='blockydiv' style=" margin-left: 10px; tex: Red; color: #35aeb3; font-weight: bolder; font-style: italic;" id='blockydivOracle-${oracleNodeCount}'></div><div class='blockyinfo' style='margin:25px;'><a href='#' onclick='OpenOracleModal("blockydivOracle-${oracleNodeCount}","oracle")'><img src='/images/oracle.png' width='100px'/></a></div>`;
+                    editor.addNode('oracle', 0, 1, pos_x, pos_y, 'oracle', {}, oracle);
+                    break;
+
+                case 'sqlserver':
+                    sqlserverNodeCount++;  // Increment count variable
+                    //  alert("apiCount " + apiNodeCount);
+                    CurrentDataBase = 'blockydivSqlServer-' + sqlserverNodeCount;
+                    var sqlserver = `<div  class='blockyleft'></div><div class='blockyright' id='sqlserverconnectorStatusId' hidden>sql</div><div class='blockydiv' style=" margin-left: 10px; tex: Red; color: #35aeb3; font-weight: bolder; font-style: italic;" id='blockydivSqlServer-${sqlserverNodeCount}'></div><div class='blockyinfo' style='margin:25px;'><a href='#' onclick='OpenSqlServerModal("blockydivSqlServer-${sqlserverNodeCount}","sqlserver")'><img src='/images/mssql.jpg' width='100px'/></a></div>`;
+
+
+                    editor.addNode('sqlserver', 0, 1, pos_x, pos_y, 'sqlserver', {}, sqlserver);
+                    break;
+                case 'mysql':
+                    mysqlNodeCount++;  // Increment count variable
+
+                    CurrentDataBase = 'blockydivMysql-' + mysqlNodeCount;
+                    var mysql = `<div  class='blockyleft'></div><div class='blockyright' id='mysqlconnectorStatusId' hidden>mysql</div><div class='blockydiv' style=" margin-left: 10px; tex: Red; color: #35aeb3; font-weight: bolder; font-style: italic;" id='blockydivMysql-${mysqlNodeCount}'></div><div class='blockyinfo' style='margin:25px;'><a href='#' onclick='OpenmysqlModal("blockydivMysql-${mysqlNodeCount}","mysql")'><img src='/images/mysql.png' width='100px'/></a></div>`;
+
+
+                    editor.addNode('mysql', 0, 1, pos_x, pos_y, 'mysql', {}, mysql);
+                    break;
+                case 'excel':
+                    excelNodeCount++;  // Increment count variable
+
+                    CurrentExcel = 'blockydivexcel-' + excelNodeCount;
+                    var excel = `<div  class='blockyleft'></div><div class='blockyright' id='excelconnectorStatusId' hidden>excel</div><div class='blockydiv' style=" margin-left: 10px; tex: Red; color: #29831e; font-weight: bolder; font-style: italic;" id='blockydivexcel-${excelNodeCount}'></div><div class='blockyinfo' style='margin:25px;'><a href='#' onclick='OpenexcelModal("blockydivexcel-${excelNodeCount}","excel")'><img src='/images/excel.png' width='100px'/></a></div>`;
+
+
+                    editor.addNode('excel', 0, 1, pos_x, pos_y, 'excel', {}, excel);
+                    break;
+                case 'PostgreSQL':
+                    PostgreSQLNodeCount++;  // Increment count variable
+
+                    CurrentDataBase = 'blockydivPostgreSQL-' + PostgreSQLNodeCount;
+                    var PostgreSQL = `<div  class='blockyleft'></div><div class='blockyright'></div><div class='blockydiv' style=" margin-left: 10px; tex: Red; color: #35aeb3; font-weight: bolder; font-style: italic;" id='blockydivPostgreSQL-${PostgreSQLNodeCount}'></div><div class='blockyinfo' style='margin:25px;'><a href='#' onclick='OpenPostgreSQLModal("blockydivPostgreSQL-${PostgreSQLNodeCount}","PostgreSQL")'><img src='/images/PostgreSql.png' width='100px'/></a></div>`;
+
+
+                    editor.addNode('PostgreSQL', 0, 1, pos_x, pos_y, 'PostgreSQL', {}, PostgreSQL);
+                    break;
+                case 'Filter':
+                    FilterNodeCount++;
+                    CurrentFilterDivId == "blockydivFilter-" + FilterNodeCount;
+
+                    var Filter = `<div  id="FilterTransformationStatusId-${FilterNodeCount}" hidden="">Filter</div> <div class='blockyleft'></div><div id='SourceDT_${FilterNodeCount}' class='blockyright' hidden></div><div class='blockydiv' style=" margin-left: 10px; tex: Red; color: #535362; font-weight: bolder; font-style: italic;" id='blockydivFilter-${FilterNodeCount}'></div><div class='blockyinfo' style='margin:25px;'><a href='#' onclick='OpenConditionModal(document.getElementById("SourceDT_${FilterNodeCount}").innerHTML,document.getElementById("blockydivFilter-${FilterNodeCount}").innerHTML,"blockydivFilter-${FilterNodeCount}")'><img src='/images/filter-icon.png' width='100px'/></a></div>`;
+                    //editor.addNode('Filter', 1, 1, pos_x, pos_y, 'Filter', { type: Filter }, Filter);
+                    editor.addNode('Filter', 1, 1, pos_x, pos_y, 'Filter', {}, Filter);
+                    break;
+
+                case 'GroupBY':
+                    GroupBYNodeCount++;
+                    CurrentGroupByDivId == "blockydivGroupBY-" + GroupBYNodeCount;
+
+                    var GroupBY = `<div  id="GroupBYTransformationStatusId-${GroupBYNodeCount}" hidden="">GroupBY</div> <div class='blockyleft'></div><div id='SourceDT_${GroupBYNodeCount}' class='blockyright' hidden></div><div class='blockydiv' style=" margin-left: 10px; tex: Red; color: #535362; font-weight: bolder; font-style: italic;" id='blockydivGroupBY-${GroupBYNodeCount}'></div><div class='blockyinfo' style='margin:25px;'><a href='#' onclick='OpenGroupModal(document.getElementById("SourceDT_${GroupBYNodeCount}").innerHTML,document.getElementById("blockydivGroupBY-${GroupBYNodeCount}").innerHTML,"blockydivGroupBY-${GroupBYNodeCount}")'><img src='/images/GroupBy.png' width='100px'/></a></div>`;
+                    //editor.addNode('Filter', 1, 1, pos_x, pos_y, 'Filter', { type: Filter }, Filter);
+                    editor.addNode('GroupBY', 1, 1, pos_x, pos_y, 'GroupBY', {}, GroupBY);
+                    break;
+
+
+                case 'Jointransformation':
+                    JoinNodeCount++;
+                    var Jointransformation = `
+                                                                                                                                 <div class='blockyleft' id='JoinDataTransformationStatusId-${JoinNodeCount}' hidden>JoinData Transformation</div>
+                                                                                                                                 <div class='blockyright' id='SourceListEntity-${JoinNodeCount}' hidden></div>
+                                                                                                                                 <div class='blockydiv' style='margin-left: 10px; color: #e7026d; font-weight: bolder; font-style: italic;' id='blockydivJoinDT-${JoinNodeCount}'></div>
+                                                                                                                                 <div class='blockyinfo' style='margin: 25px;'>
+                                                                                                                                     <a href='#' onclick="JoinTransformData('blockydivJoinDT-${JoinNodeCount}','NA')">
+                                                                                                                                         <img src='/images/Transfermation.png' width='100px'/>
+                                                                                                                                     </a>
+                                                                                                                                 </div>
+                                                                                                                             `;
+
+
+                    editor.addNode('Jointransformation', 1, 1, pos_x, pos_y, 'Jointransformation', {}, Jointransformation);
+                    break;
+
+
+                    editor.addNode('Jointransformation', 1, 1, pos_x, pos_y, 'Jointransformation', {}, Jointransformation);
+                    break;
+                case 'datamapper':
+
+
+                    if (MapperNodeCount > 0) {
+                        break;
+                    }
+
+
+                    var datamapper = "<div  class='blockyleft'></div><div class='blockyright' id='DataMapperStatusId'>Data Mapping</div><div class='blockydiv'></div><div class='blockyinfo' style='margin:25px;'><a href='#'  onclick='MappingData()'><img src='/images/datamapping.png' width='100px'/></a></div>";
+
+
+                    editor.addNode('datamapper', 1, 1, pos_x, pos_y, 'datamapper', { type: datamapper }, datamapper);
+                    MapperNodeCount++;
+                    break;
+
+                case 'saveconfiguration':
+
+                    if (SaveConfigurationNodeCount > 0) {
+                        break;
+                    }
+                    var saveconfiguration = "<div  class='blockyleft'></div><div class='blockyright'>Save Configuration</div><div class='blockydiv'></div><div class='blockyinfo' style='margin:25px;'><a href='#'  onclick='OpenSaveConfigurationView()'><img src='/images/saveconfiguration.png' width='100px'/></a></div>";
+
+
+
+
+
+
+                    editor.addNode('saveconfiguration', 1, 0, pos_x, pos_y, 'saveconfiguration', { type: saveconfiguration }, saveconfiguration);
+                    SaveConfigurationNodeCount++;
+                    break;
+                default:
+            }
+        }
+
+        var transform = '';
+        function showpopup(e) {
+            e.target.closest(".drawflow-node").style.zIndex = "9999";
+            e.target.children[0].style.display = "block";
+            //document.getElementById("modalfix").style.display = "block";
+
+            //e.target.children[0].style.transform = 'translate('+translate.x+'px, '+translate.y+'px)';
+            transform = editor.precanvas.style.transform;
+            editor.precanvas.style.transform = '';
+            editor.precanvas.style.left = editor.canvas_x + 'px';
+            editor.precanvas.style.top = editor.canvas_y + 'px';
+            console.log(transform);
+
+            //e.target.children[0].style.top  =  -editor.canvas_y - editor.container.offsetTop +'px';
+            //e.target.children[0].style.left  =  -editor.canvas_x  - editor.container.offsetLeft +'px';
+            editor.editor_mode = "fixed";
+
+        }
+
+        function closemodal(e) {
+            e.target.closest(".drawflow-node").style.zIndex = "2";
+            e.target.parentElement.parentElement.style.display = "none";
+            //document.getElementById("modalfix").style.display = "none";
+            editor.precanvas.style.transform = transform;
+            editor.precanvas.style.left = '0px';
+            editor.precanvas.style.top = '0px';
+            editor.editor_mode = "edit";
+        }
+
+        function changeModule(event) {
+            var all = document.querySelectorAll(".menu ul li");
+            for (var i = 0; i < all.length; i++) {
+                all[i].classList.remove('selected');
+            }
+            event.target.classList.add('selected');
+        }
+
+        function changeMode(option) {
+
+            //console.log(lock.id);
+            if (option == 'lock') {
+                lock.style.display = 'none';
+                unlock.style.display = 'block';
+            } else {
+                lock.style.display = 'block';
+                unlock.style.display = 'none';
+            }
+
+        }
+
+    </script>
+
+
+    @*OPEN Modal ALl Method Call*@
+    <script>
+
+
+
+
+
+
+
+        function ConnectApi(CurrentAPIDivIdd) {
+
+            CurrentAPIDivId = CurrentAPIDivIdd;
+            let DataTableName = document.getElementById(CurrentAPIDivIdd).innerHTML;
+
+
+            $('#APIModal').modal('show');
+            $('#exampleModalLabel').html('<b>API CONNECTOR</b>');
+            // alert("CorrentAPIDivId :" + CurrentAPIDivId);
+
+            $.ajax({
+                url: '/ETLDashboard/ConnectApi', // Replace with your controller and action
+                type: 'GET',
+                success: function (result) {
+                    let modalBody = document.getElementById("APIModalBody");
+                    modalBody.innerHTML = result;
+
+                    lblbind();
+                    addRow();
+
+                    bindTableEvents();
+                    // Show loader
+
+
+                    if (DataTableName != '')//Only Open API Connector
+                    {
+                        BindAPI_Modal(DataTableName);
+                    }
+
+                    //   // Call this after BindAPI_Modal is done
+
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading partial view:', error);
+                }
+            });
+
+
+
+
+
+        }
+
+        function BindAPI_Modal(TableName) {
+            var SaveType = "Insert";
+
+            var id = getUrlVars()["strid"];
+
+            if (id != undefined) {//Update
+
+                SaveType = "Update";
+            }
+
+            $('#overlay').show();
+            $.ajax({
+                url: '/ETLDashboard/FetchConfigurationByTableName', // Replace with your actual endpoint
+                type: 'GET',
+                data: {
+                    entityName: TableName, SaveType: SaveType
+                }, // Pass the table name in the URL
+
+                success: function (response1) {
+                    if (response1.isSuccess != undefined) {
+
+
+                        if (!response1.isSuccess) {
+                            const errorMsg = response1.errorMsg.replace(/\n/g, '<br/>');
+
+                            Swal.fire({
+                                icon: "error",
+                                /*text: JSON.parse(response1).ErrorMsg,*/
+                                html: errorMsg,
+
+                            });
+                            $('#overlay').hide();
+                            return;
+                        }
+                    }
+
+                    let dataSource1 = JSON.parse(response1.configuration); // Parse the JSON string
+                    if (!dataSource1) {
+                        alert('No Configuration Found');
+                        $('#overlay').hide();
+                        return;
+                    }
+
+                    // Bind the MethodType, EndPoint, and ParameterType to the respective elements
+                    document.getElementById("ddlMethodtype").value = JSON.parse(response1.configuration).MethodType;
+                    document.getElementById("txtendpoint").value = JSON.parse(response1.configuration).EndPoint;
+                    document.getElementById("ddlaitype").value = JSON.parse(response1.configuration).ParameterType;
+                    document.getElementById("codeEditor").value = response1.sourceCode;
+
+
+                    SToreResultData = JSON.parse(response1.output);
+                    bindDataGridViewPaging(SToreResultData, currentPage, pageSize); // Pass the current page and page size
+                    setupPagination(SToreResultData.length);
+
+                    $('#APIresults').show();
+
+
+
+                    $('#overlay').hide();
+
+                },
+                error: function (xhr, status, error) {
+                    alert('Error fetching data sources:', error);
+                    console.error('Error fetching data sources:', error);
+                    $('#overlay').hide();
+                }
+            });
+        }
+
+        function OpenSaveConfigurationView() {
+            var id = getUrlVars()["strid"];
+            $('#SaveConfigurationModal').modal('show');
+            /*  if ($('#SavelinkBtn').text() == ' Save?') {*/
+
+            $.ajax({
+                url: '/ETLDashboard/SaveConfiguration', // Replace with your controller and action
+                type: 'GET',
+                success: function (result) {
+                    let modalBody = document.getElementById("SaveConfigurationModalBody");
+                    modalBody.innerHTML = result;
+
+
+                    if (id != undefined) {//Update
+                        BindSaveConfigurationModalForEdit(id);
+                    }
+
+
+
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: "warning",
+                        text: "Error loading partial view!",
+                    });
+                    console.error('Error loading partial view:', error);
+                }
+            });
+
+        }
+
+
+        function OpenCustomeCodeView() {
+            $('#CustomModal').modal('show');
+
+            //  if ($('#CustomeCodelinkBtn').text() == 'Code?') {
+
+            $.ajax({
+                url: '/ETLDashboard/CustomCodeEditor', // Replace with your controller and action
+                type: 'GET',
+                success: function (result) {
+                    let modalBody = document.getElementById("CustomModalBody");
+                    modalBody.innerHTML = result;
+
+
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading partial view:', error);
+                }
+            });
+
+            //}
+        }
+
+        function MappingData() {
+            var id = getUrlVars()["strid"];
+
+            $('#MappingModal').modal('show');
+
+            if ($('#DataMapperStatusId').text() == 'Data Mapping') {//Insert
+                //   $('#DataMapperStatusId').html('DataMapping');
+
+                $.ajax({
+                    url: '/ETLDashboard/MappingData', // Replace with your controller and action
+                    type: 'GET',
+                    success: function (result) {
+                        let modalBody = document.getElementById("MappingModalBody");
+                        modalBody.innerHTML = result;
+
+
+
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error loading partial view:', error);
+                    }
+                });
+            }
+            else if ($('#DataMapperStatusId').text() != 'Data Mapping' && id != undefined) {//Update
+                $.ajax({
+                    url: '/ETLDashboard/MappingData', // Replace with your controller and action
+                    type: 'GET',
+                    success: function (result) {
+                        let modalBody = document.getElementById("MappingModalBody");
+                        modalBody.innerHTML = result;
+
+                        BindMappingModalForEdit(id);
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error loading partial view:', error);
+                    }
+                });
+
+            }
+
+        }
+
+        // var blockyDivIds = []; // Array to store blockydiv IDs
+        var CurrentClickedJoinTransformationDivId = '';
+        // Function to add a new blockydiv ID to the array
+        //function addBlockyDivId(id) {
+        //    blockyDivIds.push(id);
+        //    blockyDivIds.sort(); // Ensure the array is sorted
+        //}
+        var EnityListOfJoinTransformation = "";
+
+        function JoinTransformData(primaryblockydiv, Foreignblockydiv) {
+
+            if ($('#SourceListEntity-' + primaryblockydiv.split('-')[1]).html() == "") {
+                Swal.fire({
+                    icon: "warning",
+                    text: "Please Set Source Table For Join Process!",
+                });
+                return;
+            }
+
+
+            if (joinTransformModel.ListOfJoinConditions.length > 0) {
+
+                // alert("ListOfJoinConditions is not empty.");
+                joinTransformModel.ListOfJoinConditions = [];
+                // Add your desired code here
+            }
+
+
+            if (Foreignblockydiv == 'NA')//true when i click on joinTransform Div
+            {
+
+
+                // alert("Source Entity is=" + $('#SourceListEntity-' + primaryblockydiv.split('-')[1]).html())
+                CurrentClickedJoinTransformationDivId = primaryblockydiv;
+
+                document.getElementById("JoinTransformDataModalBody").innerHTML = "";
+                //Load Join Modal
+                $.ajax({
+                    url: '/ETLDashboard/JoinTransformData', // Replace with your controller and action
+                    type: 'GET',
+                    success: function (result) {
+                        let modalBody = document.getElementById("JoinTransformDataModalBody");
+                        modalBody.innerHTML = result;
+
+
+                        $('#JoinDataTransformationStatusId').html('Join DataTransformation');
+
+                        // Get the inner HTML of the dynamic div
+                        let sourceEntityHtml = $('#SourceListEntity-' + primaryblockydiv.split('-')[1]).html();
+
+
+                        EnityListOfJoinTransformation = sourceEntityHtml;
+
+                        // Split the result by '|'
+                        let sourceEntities = sourceEntityHtml.split('|');
+
+                        if (sourceEntities.length > 1) {
+                            $('#btnRelation').removeAttr('hidden');
+                        }
+
+                        // Loop through each source entity and call the methods
+                        sourceEntities.forEach(function (entity) {
+                            AddDiv(entity.trim()); // Call AddDiv with each entity
+                            bindColumns(entity.trim(), "chkleftcolumns_" + entity.trim()); // Call bindColumns with each entity
+                        });
+
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error loading partial view:', error);
+                    }
+                });
+
+
+
+                if ($('#' + primaryblockydiv).html() != "") {
+
+                    BindJoinResult_For_Entity($('#' + primaryblockydiv).html());
+                }
+
+
+
+                $('#JoinTransformDataModal').modal('show');
+
+                return;
+            }
+
+        }
+        //chkleftcolumns_dT_515966
+        function bindColumns(entityName, checkboxContainerId) {
+            //  alert("Inside bindColumns method entityName=" + entityName + "and checkboxContainerId=" + checkboxContainerId)
+
+            //Inside bindColumns method entityName=dT_648539and checkboxContainerId=chkleftcolumns_dT_648539
+
+
+            // Fetch columns for the entity via AJAX
+            $.ajax({
+                url: '/ETLDashboard/FetchDataSources', // Replace with your actual endpoint
+                type: 'GET',
+                data: { entityName: entityName }, // Pass the entity name in the URL
+                success: function (response) {
+
+                    let dataSource = JSON.parse(response); // Parse the JSON string
+                    if (!dataSource || !dataSource.Columns) {
+                        console.error('No columns found for the entity:', entityName);
+                        return;
+                    }
+
+                    let container = $('#' + checkboxContainerId);
+                    container.empty(); // Clear existing checkboxes
+
+                    dataSource.Columns.forEach(column => {
+
+                        let checkbox = `
+                                                                                                                <div class="custom-control custom-checkbox" style="margin-left: 10px; font-weight: bold;">
+                                                                                                                    <input type="checkbox" class="custom-control-input" id="${column.Value}_${checkboxContainerId.split('_')[2]}" name="columns" value="${column.Value}">
+                                                                                                                    <label class="custom-control-label" for="${column.Value}_${checkboxContainerId.split('_')[2]}">${column.Text}</label>
+                                                                                                                </div><br>`;
+
+
+                        container.append(checkbox);
+                    });
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching data sources:', error);
+                    alert('Error fetching data sources:', error);
+                }
+            });
+        }
+
+
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* Data Mapping Script *@
+
+@*Show Hide Div and Set Tab*@
+<script>
+
+    function OpenOutputTab() {
+        //open Output Tab
+        var outputTabButton = document.querySelector("button[onclick=\"openTab(event, 'data-Output')\"]");
+        outputTabButton.click();
+    }
+
+
+    function ShowHideExistingDiv() {
+        var SaveType = "Insert";
+
+        var id = getUrlVars()["strid"];
+
+        if (id != undefined) {//Update
+
+            SaveType = "Update";
+        }
+
+
+
+        var TableNameDiv = document.getElementById('DivTableName');
+        var parentDiv = document.getElementById('ExpertForm');
+        var newInsertOptions = document.getElementById('newInsertOptions');
+        var existingExportOptions = document.getElementById('existingExportOptions');
+
+        var selectedInsertType = document.querySelector('input[name="insertType"]:checked').value;
+
+        if (selectedInsertType === 'Existing') {
+            const form = document.getElementById('ExpertForm');
+            if (form) {
+                const formData = new FormData(form);
+                formData.append('input', "");
+                formData.append('SaveType', SaveType);
+
+                processJsonData(formData);
+
+            }
+
+            parentDiv.style.display = 'block';
+            existingExportOptions.style.display = 'block';
+            newInsertOptions.style.display = 'none';
+            TableNameDiv.style.display = 'none';
+        } else {
+
+
+            const form = document.getElementById('ExpertForm');
+            if (form) {
+                const formData = new FormData(form);
+                formData.append('input', "");
+                formData.append('SaveType', SaveType);
+                processJsonData(formData);
+
+
+
+            }
+
+            else {
+                console.error('Form with id "ExpertForm" not found.');
+            }
+
+
+
+            TableNameDiv.style.display = 'block';
+            parentDiv.style.display = 'block';
+            existingExportOptions.style.display = 'none';
+            newInsertOptions.style.display = 'block';
+        }
+    }
+
+
+</script>
+
+@*Table Bind*@
+<script>
+
+
+    var tableDropdownData = null;
+
+
+        function processJsonData(formData) {
+                                    fetch('@Url.Action("GetJsonData", "DataMapping")', {
+                                        method: 'POST',
+                                        body: formData
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+
+                                        var IsSuccessful = data.isSuccessfullyCompile;
+                                        if (IsSuccessful)
+                                        {
+                                            let dataMapping = document.getElementById("DataMapping");
+                                            if (dataMapping != null && dataMapping != undefined) {
+                                                dataMapping.disabled = false;
+                                            }
+
+                                            // Check if ListOfProperty is defined and is an array
+                                            const listOfProperty = data.listOfProperty;
+                                            if (Array.isArray(listOfProperty)) {
+                                                const sourceGridBody = document.querySelector("#SourceGrid tbody");
+                                                const NewGridBody = document.querySelector("#NewGrid tbody");
+
+                                                sourceGridBody.innerHTML = ""; // Clear previous content
+                                                NewGridBody.innerHTML = "";
+
+                                                listOfProperty.forEach(property => {
+                                                    const row = document.createElement("tr");
+                                                    const rowNewExport = document.createElement("tr");
+
+                                                    const columnNameCell = document.createElement("td");
+                                                    columnNameCell.textContent = property.column_Name;
+
+                                                    const columnTypeCell = document.createElement("td");
+                                                    // Create an input element of type text
+                                                    const inputElement = document.createElement("input");
+                                                    inputElement.type = "text";
+                                                    inputElement.value = property.column_Type;
+                                                    inputElement.classList.add("form-control");
+
+
+                                                    columnTypeCell.appendChild(inputElement);
+
+
+
+                                                    const tableNameCell = document.createElement("td");
+                                                    const tableDropdown = document.createElement("select");
+                                                    // tableDropdown.classList.add("form-control");
+
+                                                    const tableConstraintTypeCell = document.createElement("td");
+                                                    // Create checkboxes
+                                                    // Create checkboxes
+                                                    const isNullCheckbox = document.createElement("input");
+                                                    isNullCheckbox.type = "checkbox";
+                                                    isNullCheckbox.name = "Null";
+                                                  //  isNullCheckbox.classList.add("form-check-input", "me-2");
+                                                    isNullCheckbox.style.marginLeft = "-30px"; // Add custom style
+
+
+                                                    const isIdentityCheckbox = document.createElement("input");
+                                                    isIdentityCheckbox.type = "checkbox";
+                                                    isIdentityCheckbox.name = "Identity";
+                                                    //isIdentityCheckbox.classList.add("form-check-input", "me-2");
+                                                    isIdentityCheckbox.style.marginLeft = "-30px"; // Add custom style
+
+                                                    const isPrimaryCheckbox = document.createElement("input");
+                                                    isPrimaryCheckbox.type = "checkbox";
+                                                    isPrimaryCheckbox.name = "Primary";
+                                                    //isPrimaryCheckbox.classList.add("form-check-input", "me-2");
+                                                    isPrimaryCheckbox.style.marginLeft = "-30px"; // Add custom style
+
+                                                    // Add click event listener
+                                                    isPrimaryCheckbox.addEventListener('click', function () {
+
+                                                        validatePrimaryKeyAndIdentityColumns();
+                                                    });
+                                                    const isIdentityLabel = document.createElement("label");
+                                                    isIdentityLabel.textContent = "Is Identity";
+                                                    isIdentityLabel.classList.add("form-check-label", "me-3");
+                                                    isIdentityLabel.insertBefore(isIdentityCheckbox, isIdentityLabel.firstChild);
+                                                    isIdentityLabel.style.marginLeft = "120px";
+                                                    // Add click event listener
+                                                    isIdentityLabel.addEventListener('click', function () {
+
+                                                        if (!validatePrimaryKeyAndIdentityColumns()) {
+                                                            event.target.checked = !event.target.checked;
+                                                        }
+                                                    });
+
+
+                                                    // Create labels for checkboxes
+                                                    const isNullLabel = document.createElement("label");
+                                                    isNullLabel.textContent = "Is Null";
+                                                    isNullLabel.classList.add("form-check-label", "me-3");
+                                                    isNullLabel.insertBefore(isNullCheckbox, isNullLabel.firstChild);
+                                                    isNullLabel.style.marginLeft = "120px";
+                                                    // Add click event listener
+                                                    isNullLabel.addEventListener('click', function () {
+
+                                                        if (!validatePrimaryKeyAndIdentityColumns()) {
+                                                            event.target.checked = !event.target.checked;
+                                                        }
+                                                    });
+
+
+
+                                                    const isPrimaryLabel = document.createElement("label");
+                                                    isPrimaryLabel.textContent = "Is Primary";
+                                                    isPrimaryLabel.classList.add("form-check-label", "me-3", "gap-3");
+                                                    isPrimaryLabel.insertBefore(isPrimaryCheckbox, isPrimaryLabel.firstChild);
+                                                    isPrimaryLabel.style.marginLeft = "120px";
+                                                    // Add click event listener
+                                                    isPrimaryLabel.addEventListener('change', function () {
+
+                                                        if (!validatePrimaryKeyAndIdentityColumns()) {
+                                                            event.target.checked = !event.target.checked;
+                                                        }
+                                                    });
+
+                                                    // Create a div to hold the checkboxes and labels in a single line
+                                                    const checkboxContainer = document.createElement("div");
+                                                    checkboxContainer.classList.add("d-flex", "align-items-center");
+                                                    checkboxContainer.appendChild(isNullLabel);
+                                                    checkboxContainer.appendChild(isIdentityLabel);
+                                                    checkboxContainer.appendChild(isPrimaryLabel);
+
+                                                    // Append the container to the table cell
+                                                    tableConstraintTypeCell.appendChild(checkboxContainer);
+
+                                                    // Append checkboxes and labels to the table cell
+
+
+
+                                                    // Append the dropdown to the table cell
+                                                    tableNameCell.appendChild(tableDropdown);
+
+
+                                                    const tableColumnCelltxt = document.createElement("td");
+                                                    const textBox = document.createElement("input");
+                                                    textBox.value = property.column_Name;
+
+                                                    //tableDropdown.classList.add("form-control");
+                                                    textBox.classList.add("form-control");
+
+                                                    tableNameCell.appendChild(tableDropdown);
+
+                                                    tableColumnCelltxt.appendChild(textBox);
+
+
+                                                    const columnDropdownCell = document.createElement("td");
+                                                    const columnDropdown = document.createElement("select");
+                                                    //columnDropdown.classList.add("column-dropdown");
+                                                    columnDropdown.classList.add("form-control");
+
+                                                    //tableDropdown.classList.add("form-control");
+                                                    columnDropdownCell.appendChild(columnDropdown);
+
+                                                    // Append cells to the row
+                                                    row.appendChild(columnNameCell);
+                                                    row.appendChild(columnTypeCell);
+                                                    row.appendChild(tableNameCell);
+                                                    row.appendChild(columnDropdownCell);
+
+                                                    rowNewExport.appendChild(columnNameCell);
+                                                    rowNewExport.appendChild(columnTypeCell);
+                                                    rowNewExport.appendChild(tableColumnCelltxt);
+                                                    rowNewExport.appendChild(tableConstraintTypeCell);
+
+                                                    sourceGridBody.appendChild(row);
+                                                    NewGridBody.appendChild(rowNewExport);
+
+                                                    // Event listener for table dropdown change
+                                                    tableDropdown.addEventListener('change', function () {
+                                                        const selectedTable = this.value;
+                                                        fetchColumnsByTable(selectedTable, columnDropdown);
+                                                    });
+                                                });
+                                            } else {
+                                                console.error('listOfProperty is not an array:', listOfProperty);
+                                            }
+
+                                            // Dynamically add rows to the destination grid
+                                            populateDestinationGrid(data.listOfProperty);
+
+                                            // Populate table name dropdowns
+                                            populateTableDropdowns(data.listOfTable);
+
+                                            // Store data.listOfTable in the variable
+                                            tableDropdownData = data.listOfTable;
+
+                                            document.getElementById('InsertButton').hidden = false;
+                                            document.getElementById('InsertButtonSave').hidden = false;
+                                            document.getElementById('NewGrid').hidden = false;
+
+                                            document.getElementById('loader').hidden = true;
+                                            //InsertButton
+                                           // document.getElementById('InsertButton').disabled = 'false';
+
+                                        }
+
+                                        else {
+                                            Swal.fire({
+                                                icon: "error",
+                                                title: "Oops...",
+                                                text: data.messages
+
+                                            });
+                                            document.getElementById('existingExportOptions').style.display = 'none'; // or 'none' to hide it initially
+                                        }
+                                       // document.getElementById("compileButton").disabled = false;
+                                    })
+                                    .catch(error => console.error('Error:', error));
+}
+
+
+
+
+</script>
+
+@*Validation On New Table*@
+<script>
+    let primaryIdentityKeyChecked = true;
+
+
+    function validatePrimaryKeyAndIdentityColumns() {
+        const newGridTable = document.getElementById('NewGrid');
+        const rows = newGridTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        let primaryKeyCount = 0;
+        let identityColumnCount = 0;
+        let primaryKeyChecked = false;
+        let identityColumnChecked = false;
+
+        for (let row of rows) {
+
+            const isNullCheckbox = row.querySelector('input[name="Null"]');
+            const isIdentityCheckbox = row.querySelector('input[name="Identity"]');
+            const isPrimaryCheckbox = row.querySelector('input[name="Primary"]');
+
+            if (isIdentityCheckbox && isIdentityCheckbox.checked) {
+                identityColumnCount++;
+                identityColumnChecked = true;
+                if (isNullCheckbox && isNullCheckbox.checked) {
+                    // alert("An identity column cannot be marked as Null.");
+                    return false;
+                }
+            }
+
+            if (isPrimaryCheckbox && isPrimaryCheckbox.checked) {
+                primaryKeyCount++;
+                primaryKeyChecked = true;
+                if (isNullCheckbox && isNullCheckbox.checked) {
+                    // alert("A primary key column cannot be marked as Null.");
+                    return false;
+                }
+            }
+
+
+
+        }
+
+        // Validation for only one primary key and one identity column
+        if (primaryKeyCount > 1) {
+            // alert("Only one primary key is allowed.");
+            return false;
+        }
+
+        // Check if at least one primary key or identity key is checked
+        if (!primaryKeyChecked && !identityColumnChecked) {
+            primaryIdentityKeyChecked = false;
+            return false;
+        }
+        else {
+            primaryIdentityKeyChecked = true;
+        }
+
+
+        if (identityColumnCount > 1) {
+            //alert("Only one identity column is allowed.");
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+
+@*Data Push To DataBase*@
+<script>
+    function validateTableExisting() {
+        const table = document.getElementById("SourceGrid");
+        const rows = table.querySelectorAll("tbody tr");
+        let isValid = true;
+
+        rows.forEach(row => {
+            const tableDropdown = row.querySelector("td:nth-child(3) select");
+            if (tableDropdown.value === "") {
+                isValid = false;
+                tableDropdown.classList.add("is-invalid");
+            } else {
+                tableDropdown.classList.remove("is-invalid");
+            }
+        });
+
+        if (!isValid) {
+            Swal.fire({
+                icon: "warning",
+                text: "Please select All TableName!",
+            });
+
+        }
+
+        return isValid;
+    }
+
+    function ExportDataInsert(status)//0:GetCode    1:Save Code
+    {
+
+
+        var selectElement = document.querySelector('input[name="insertType"]:checked').value;
+        // const selectElement = document.getElementById('InsertType');
+        if (selectElement !== 'Existing') {
+            if (document.getElementById('txtTable').value == "") {
+                //alert("Please Write Table Name");
+                Swal.fire({
+                    icon: "warning",
+                    text: "Please Write Table Name!",
+                });
+                $('#txtTable').addClass('highlight');
+                return;
+            }
+            else {
+                $('#txtTable').removeClass('highlight');
+            }
+        }
+        const dataToSend = {};
+        var columnNames = "";
+        if (selectElement === 'Existing') {
+
+            if (!validateTableExisting()) {
+                return;
+            }
+
+
+
+            // Function to get data from SourceGrid
+            function getSourceGridData() {
+                const sourceGrid = document.getElementById('SourceGrid').getElementsByTagName('tbody')[0];
+                const rows = sourceGrid.getElementsByTagName('tr');
+                let sourceData = [];
+                for (let row of rows) {
+                    const cells = row.getElementsByTagName('td');
+                    sourceData.push({
+                        fieldName: cells[0].innerText,
+                        dataType: cells[1].innerText
+                    });
+                }
+                return sourceData;
+            }
+
+            // Function to get data from DestinationGrid
+            function getDestinationGridData() {
+                const destinationGrid = document.getElementById('SourceGrid').getElementsByTagName('tbody')[0];
+                const rows = destinationGrid.getElementsByTagName('tr');
+                let destinationData = [];
+                for (let row of rows) {
+                    const cells = row.getElementsByTagName('td');
+
+                    const tableNameCell = cells[2];
+                    let tableName;
+                    const tableSelectElement = tableNameCell.querySelector('select');
+                    if (tableSelectElement) {
+                        tableName = tableSelectElement.value;
+                    } else {
+                        tableName = tableNameCell.innerText.trim();
+                    }
+
+                    const columnNameCell = cells[3];
+                    let columnName;
+                    const columnSelectElement = columnNameCell.querySelector('select');
+                    if (columnSelectElement) {
+                        columnName = columnSelectElement.value;
+                    } else {
+                        columnName = columnNameCell.innerText.trim();
+                    }
+
+                    destinationData.push({
+                        tableName: tableName,
+                        columnName: columnName
+                    });
+                }
+                return destinationData;
+            }
+
+            // Collect data from both tables
+            const sourceData = getSourceGridData();
+            const destinationData = getDestinationGridData();
+
+            // Ensure both grids have the same number of rows
+            if (sourceData.length !== destinationData.length) {
+                alert('The number of rows in SourceGrid and DestinationGrid do not match.');
+                return;
+            }
+
+            // Create a mapping
+            let mapping = [];
+            for (let i = 0; i < sourceData.length; i++) {
+                mapping.push({
+                    source: sourceData[i],
+                    destination: destinationData[i]
+                });
+            }
+
+
+            const tableName = document.getElementById('txtTable').value;
+
+            // Construct data to send
+            dataToSend.mapping = mapping;
+
+            dataToSend.TableName = tableName;
+
+        }
+
+        else {
+            // Handle other cases as needed
+            // const inputValue = document.getElementById('Input').value;
+            const tableName = document.getElementById('txtTable').value;
+            // const databaseType = document.getElementById('DataBaseType').value;
+
+            // dataToSend.inputValue = inputValue;
+            dataToSend.TableName = tableName;
+            //  dataToSend.DatabaseType = databaseType;
+
+            if (getTextboxValuesFromNewGrid().length == 0) {
+                return;
+            }
+
+            dataToSend.List_NewColumnNameWithType = getTextboxValuesFromNewGrid();
+
+            dataToSend.SourceCode = $('#codeEditorMapping').val();
+
+
+        }
+
+        // Store the mapping (here we simply log it to the console)
+        console.log('Data to send:', dataToSend);
+
+        if (!primaryIdentityKeyChecked) {
+            //Swal.fire({
+            //    icon: "warning",
+            //    text: "please Select Primary OR IdentityKey For a Table!",
+            //});
+
+            //return;
+        }
+
+        if (status == 1) {//Save  Mapping Data
+
+            fetch('/DataMapping/PostMappingData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            })
+                .then(response => response.text())  // Get the response text
+                .then(data => {
+                    console.log('Response:', data);
+
+                    $('#codeEditorMapping').val(JSON.parse(data).Code);
+                    if (status == 1) {
+                        if (JSON.parse(data).Message === "Success") {
+                            Swal.fire({
+                                title: "Success!",
+                                text: "The Mapping was successfully configured",
+                                icon: "success"
+                            });
+                            // alert("The Mapping was successfully configured");
+                            $('#DataMapperStatusId').html('DataMapping');
+
+                            $('#MappingModal').modal('hide');
+
+
+                        }
+                        else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: JSON.parse(data).Message,
+
+                            });
+
+
+                        }
+                    }
+
+
+                })
+                .catch((error) => {
+                    console.error('Fetch error:', error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: 'Network error: ' + error.message,
+                        footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    // alert('Network error: ' + error.message);
+                    document.getElementById('InsertButton').disabled = false;
+                    document.getElementById('InsertButtonSave').disabled = false;
+                });
+
+        }
+        else if (status == 0) {//Get Mapping SourceCode
+
+            fetch('/DataMapping/GetPostMappingDataSourceCode', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSend)
+            })
+                .then(response => response.text())  // Get the response text
+                .then(data => {
+                    console.log('Response:', data);
+
+                    $('#codeEditorMapping').val(JSON.parse(data).Code);
+
+                    if (JSON.parse(data).Message === "Success") {
+
+
+
+
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Code Generate Successsfully",
+
+                        });
+
+
+                        $("#InsertButtonSave").prop("disabled", false); // Enable the button
+                        $("#InsertButtonCode").prop("disabled", false); // Enable the button
+
+                        // alert("The Mapping was successfully configured");
+                        $('#DataMapperStatusId').html('DataMapping');
+
+
+
+
+                    }
+                    else {
+                        $("#InsertButtonSave").prop("disabled", true); // Enable the button
+                        $("#InsertButtonCode").prop("disabled", true); // Enable the button
+
+                        alert("The Datamapping process was failed.");
+
+                    }
+
+
+
+                })
+                .catch((error) => {
+                    console.error('Fetch error:', error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: 'Network error: ' + error.message,
+                        footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    $("#InsertButtonSave").prop("disabled", true); // Enable the button
+                    $("#InsertButton").prop("disabled", true); // Enable the button
+
+                    // alert('Network error: ' + error.message);
+                    document.getElementById('InsertButtonCode').disabled = false;
+                    document.getElementById('InsertButtonSave').disabled = false;
+                });
+
+        }
+
+
+
+
+    }
+
+
+
+
+    function getTextboxValuesFromNewGrid() {
+
+        let hasIntColumnType = false;
+
+
+        if (!validatePrimaryKeyAndIdentityColumns()) {
+            //Swal.fire({
+            //    icon: "warning",
+            //    text: "please Select Primary OR IdentityKey For a Table!",
+            //});
+
+            //return [];
+        }
+
+
+
+
+        const newGridTable = document.getElementById('NewGrid');
+        const rows = newGridTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        const columnDetailsList = [];
+
+
+        for (let row of rows) {
+            // Access the input element in the third column (index 2) cell
+            // const columnNameTextbox = row.getElementsByTagName('td')[2].getElementsByTagName('input')[0];
+
+            const columnTypeCell = row.getElementsByTagName('td')[1].getElementsByTagName('input')[0]; //row.getElementsByTagName('td')[1];
+
+            const columnNameTextbox = row.getElementsByTagName('td')[2].getElementsByTagName('input')[0];
+
+            const Original_FieldName = row.getElementsByTagName('td')[0];
+
+            // Get checkbox values
+            const isNullCheckbox = row.querySelector('input[name="Null"]');
+            const isIdentityCheckbox = row.querySelector('input[name="Identity"]');
+            const isPrimaryCheckbox = row.querySelector('input[name="Primary"]');
+
+            // Concatenate checkbox values
+            let constraints = '';
+            if (isNullCheckbox && isNullCheckbox.checked) {
+                constraints += 'Null ';
+            }
+            if (isIdentityCheckbox && isIdentityCheckbox.checked) {
+                constraints += 'Identity ';
+            }
+            if (isPrimaryCheckbox && isPrimaryCheckbox.checked) {
+                constraints += 'Primary ';
+            }
+            constraints = constraints.trim(); // Remove trailing space
+
+
+
+
+            if (columnTypeCell && columnNameTextbox) {
+                const columnType = columnTypeCell.value;
+
+
+
+
+                const columnName = columnNameTextbox.value;
+                const OriginalColumnNmae = Original_FieldName.textContent.trim();
+
+                // Check for 'int' in columnType
+                if (columnType.toLowerCase() === 'int') {
+                    hasIntColumnType = true;
+                }
+
+                const Source = {
+                    Original_FieldName: OriginalColumnNmae,
+                    FieldName: columnName,
+                    DataType: columnType,
+                    constraints: constraints
+
+                };
+                columnDetailsList.push(Source);
+            }
+        }
+
+        // If no 'int' column type found, show alert and return an empty array
+        if (!hasIntColumnType) {
+
+
+            //alert("Please Write Table Name");
+            Swal.fire({
+                icon: "warning",
+                text: "At least one column must have the data type 'int' !",
+            });
+
+            return [];
+        }
+
+        return columnDetailsList;
+    }
+
+</script>
+
+
+
+
+<script>
+    function populateDestinationGrid(listOfProperty) {
+        const destinationGridBody = document.querySelector("#SourceGrid tbody");
+        destinationGridBody.innerHTML = ""; // Clear previous content
+
+        listOfProperty.forEach(property => {
+            const row = document.createElement("tr");
+
+            // Create cell for field name
+            const fieldNameCell = document.createElement("td");
+            fieldNameCell.textContent = property.column_Name;
+            row.appendChild(fieldNameCell);
+
+            // Create cell for data type
+            const dataTypeCell = document.createElement("td");
+
+
+            const tableColumnCelltxt = document.createElement("td");
+            const textBox = document.createElement("input");
+            textBox.value = property.column_Type;
+            textBox.classList.add("form-control");
+            dataTypeCell.appendChild(textBox);
+
+
+            //dataTypeCell.textContent = property.column_Type;
+            row.appendChild(dataTypeCell);
+
+            // Create cell for table name dropdown
+            const tableNameCell = document.createElement("td");
+            const tableDropdown = document.createElement("select");
+            tableDropdown.classList.add("table-dropdown");
+            tableDropdown.classList.add("form-control");
+
+
+
+            tableNameCell.appendChild(tableDropdown);
+
+
+            // Append table name cell to the row
+            row.appendChild(tableNameCell);
+
+            // Create cell for column name dropdown
+            const columnNameCell = document.createElement("td");
+            const columnDropdown = document.createElement("select");
+            columnDropdown.classList.add("column-dropdown");
+
+            columnDropdown.classList.add("form-control"); columnNameCell.appendChild(columnDropdown);
+
+            // Append column name cell to the row
+            row.appendChild(columnNameCell);
+
+            // Append row to the destination grid body
+            destinationGridBody.appendChild(row);
+
+            // Event listener for table dropdown change
+            tableDropdown.addEventListener('change', function () {
+                const selectedTable = this.value;
+                fetchColumnsByTable(selectedTable, columnDropdown);
+            });
+        });
+    }
+
+    function populateTableDropdowns(tables) {
+        const tableDropdowns = document.querySelectorAll("#SourceGrid tbody tr td:nth-child(3) select");
+
+        tableDropdowns.forEach(dropdown => {
+            // Clear previous options
+            dropdown.innerHTML = "";
+
+            // Create default 'Select' option
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Select"; // Change text as needed
+            dropdown.appendChild(defaultOption);
+
+            // Populate table options
+            tables.forEach(table => {
+                const option = document.createElement("option");
+                option.value = table.name;
+                option.textContent = table.name;
+                dropdown.appendChild(option);
+            });
+
+            // Add event listener for onchange event
+            dropdown.addEventListener('change', function () {
+                const selectedTable = this.value;
+                fetchColumnsByTable(selectedTable, this);
+            });
+        });
+    }
+
+
+
+
+    function fetchColumnsByTable(order, tableDropdown) {
+        fetch(`/DataMapping/Get_ColumnsByTable?TableName=${order}`)
+            .then(response => response.json())
+            .then(data => {
+                const columns = data;
+                populateColumnDropdown(columns, tableDropdown);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function populateColumnDropdown(columns, tableDropdown) {
+        const columnDropdown = tableDropdown.parentElement.nextElementSibling.querySelector('select');
+        columnDropdown.innerHTML = ""; // Clear previous options
+        columns.forEach(column => {
+            const option = document.createElement("option");
+            option.value = column.name;
+            option.textContent = column.name;
+            columnDropdown.appendChild(option);
+        });
+    }
+
+
+</script>

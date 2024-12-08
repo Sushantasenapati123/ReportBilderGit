@@ -1,0 +1,1307 @@
+﻿@{
+    ViewData["Title"] = "Preview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/layout.css" rel="stylesheet" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.15.6/apexcharts.min.js"></script>
+
+@* --custom css for Widgetdesign-- *@
+<link href="~/customcss/widget.css" rel="stylesheet" />
+@* --custom css for Widgetdesign end-- *@
+
+
+<div class="page-title mb-3 mt-2 px-4">
+    <div class="title-details">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb p-0 mb-0 bg-transparent" id="navigation">
+                <li class="breadcrumb-item"><a href="#" title="Home"><i class="fa fa-home"></i></a></li>
+                <li class='breadcrumb-item'><b><span id="lbl_dashname"></span></b></li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="container-fluid  ">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="grid-stack"></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/gridstack/js/gridstack-all.js"></script>
+<script src="~/gridstack/js/gridstack-poly.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+
+@*Load Dashboard*@
+<script>
+    $(document).ready(function () {
+        let grid = GridStack.init({
+            cellHeight: 70,
+        });
+        LoadDashboard();
+    });
+    function LoadDashboard() {
+        let Data = new FormData();
+        Data.append("EncId", "@ViewBag.ID");
+        $.ajax({
+            url: '@Url.Action("GetPageDetails", "ReportBuilderUI")',
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: Data,
+            success: function (response) {
+
+                // response = JSON.parse(response);
+                if (response.status == 'success')
+                {
+                    let grid = GridStack.init
+                    (
+                        {
+                        cellHeight: 70,
+                        }
+                    );
+                    let data = response.data;
+                    let items = new Array();
+                    $('#lbl_dashname').html(data.PageName);
+                    let layouts = JSON.parse(data.PageLayout);
+                    layouts.map(function (i) {
+                        items.push({ x: i.x, y: parseFloat(i.y), w: i.w, h: i.h, noMove: true, noResize: true, locked: true, content: i.content });
+                    });
+                    grid.load(items);
+                    let contents = JSON.parse(data.PageContent);
+                    let sortedconts = contents.sort(i => i.dsid);
+                    for (var i = 0; i < sortedconts.length; i++)
+                    {
+                        let designtype = sortedconts[i].designtype;
+                        //Chart
+                        if (designtype === 'tab2')
+                        {
+                            /*    BindChart(sortedconts[i], items[i].h);*/
+                            BindChart(sortedconts[i], sortedconts[i].height);
+                            //let portlet = $('#colorDiv' + sortedconts[i].portletId);
+                            //portlet.data('chartType', sortedconts[i].chartType);
+                            //portlet.data('title', sortedconts[i].title);
+                            //portlet.data('xaxis', sortedconts[i].xaxis);
+                            //portlet.data('xtitle', sortedconts[i].xtitle);
+                            //portlet.data('yaxis', sortedconts[i].yaxis);
+                            //portlet.data('ytitle', sortedconts[i].ytitle);
+                            //portlet.data('dataSource', sortedconts[i].dataSource);
+                            //portlet.data('portletId', sortedconts[i].portletId);
+                            //portlet.data('activeTabId', sortedconts[i].activeTabId);
+                            //portlet.data('designtype', designtype);
+                        }
+                        //Widget
+                        else if (designtype === 'tab1')
+                        {
+                            let chartType = sortedconts[i].charttype; // Get chartType from contents
+                            let titlewidget = sortedconts[i].title;
+                            let datacolumnwidget = sortedconts[i].datacolumnwidget;
+                            let percentagewidget = sortedconts[i].percentagewidget;
+                            let faicon = sortedconts[i].faicon;
+                            let portletId = sortedconts[i].portletid;
+                            let layout = layouts[i];
+                            let height = sortedconts[i].height;
+                            let width = sortedconts[i].width;
+                            let dataSource = sortedconts[i].datasource;
+
+                            // Check if chartType is not null or empty
+                            if (chartType && chartType.trim() !== "")
+                            {
+                                renderWidgetByType(chartType, titlewidget, datacolumnwidget, percentagewidget, portletId, layout, width, height, dataSource, faicon);
+                            }
+                            else
+                            {
+                                console.log("ChartType is empty or null. Skipping rendering for portlet: " + portletId);
+                            }
+                        }
+                        //Gauge
+                        else if (designtype === 'tab3') {
+                            debugger;
+                            let charttype = sortedconts[i].charttype;
+                            let titlegauge = sortedconts[i].title;
+                            let portletId = sortedconts[i].portletid;
+                            let layout = layouts[i];
+                            let height = sortedconts[i].height;
+                            let width = sortedconts[i].width;
+                            let activeTabId = sortedconts[i].designtype;
+
+                            // Check if gaugeType is not null or empty
+                            if (charttype && charttype.trim() !== "") {
+                                renderGaugeByType(charttype, titlegauge, portletId, layout, width, height);
+                            } else {
+                                console.log("GaugeType is empty or null. Skipping rendering for portlet: " + portletId);
+                            }
+                        }
+                        else if (designtype === 'tab4') {
+                            BindGrid(sortedconts[i].datasource, sortedconts[i].portletid, sortedconts[i].charttype, sortedconts[i].height, sortedconts[i].title, sortedconts[i].width);
+                        }
+                    }
+                    $(".btnadd").hide();
+                }
+            },
+            error: function (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!!',
+                    text: error
+                });
+            }
+        });
+    }
+</script>
+@*Table Render*@
+<script>
+    function BindChart(obj, height) {
+        if (obj.datasource != undefined) {
+            $.ajax({
+                url: "/ReportBuilderUI/TableDetail?DataSource=" + obj.datasource,
+                type: "GET",
+                success: function (result) {
+                    var response = JSON.parse(result);
+                    let contentdetails = obj;
+                    console.log(response.tbody);
+                    let data = response.tbody;
+                    let xcat = data.map(i => i[contentdetails.xaxis]);
+                    let keys = Object.keys(data[0]);
+                    let sdata1 = convertToCommaArray(data, keys.filter(obj => obj.name !== contentdetails.xaxis));
+                    let sdata = data.map(i => i[contentdetails.yaxis]);
+                    genericchart(contentdetails.charttype.toLowerCase(), contentdetails.title, contentdetails.xaxis, contentdetails.xtitle, contentdetails.yaxis, contentdetails.ytitle, sdata1, xcat, contentdetails.portletid, height);
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("Error : " + jsonValue);
+                }
+            });
+        }
+    }
+    function convertToCommaArray(jsonArray, properties) {
+        return jsonArray.map(obj => properties.map(prop => obj[prop]));
+    }
+    function BindGrid(DataSource, id, tabletype, height, title, width) {
+        /* $("#BindTable" + id).css("height", parseFloat(height * 70) *//*parseFloat(350)*//*)*/
+        $("#BindTable" + id).css("height", parseFloat(height - 50))
+        $("#BindTable" + id).css("overflow", "auto")
+        $(".card" + id).append("<div class='card-header card_new' style='height:50px' >" + title + "</div>");
+        $.ajax({
+            url: "/ReportBuilderUI/TableDetail?DataSource=" + DataSource,
+            type: "GET",
+            success: function (result) {
+                if (tabletype == "FirstTable") {
+                    var response = JSON.parse(result);
+                    var tablehead = $("#dataGrid" + id + " thead");
+                    tablehead.empty(); // Clear the table head
+                    var rowHeaderhtml = '<tr style="font-weight:bold;border: 1px solid black; background-color: #EEE;">';
+                    for (var i = 0; i < response.thead.length; i++) {
+                        rowHeaderhtml += '<th>' + response.thead[i] + '</th>';
+                    }
+                    var rowHeaderhtml = rowHeaderhtml + '</tr>';
+                    tablehead.append(rowHeaderhtml);
+
+                    var tablebody = $("#dataGrid" + id + " tbody");
+                    tablebody.empty(); // Clear the table head
+                    for (var j = 0; j < response.tbody.length; j++) {
+                        var rowBodyhtml = '<tr>';
+                        for (var i = 0; i < response.thead.length; i++) {
+                            if (i == 0) {
+                                rowBodyhtml += '<th>' + response.tbody[j][response.thead[i]] + '</th>';
+                            }
+                            else {
+                                rowBodyhtml += '<td>' + response.tbody[j][response.thead[i]] + '</td>';
+                            }
+                        }
+                        var rowBodyhtml = rowBodyhtml + '</tr>';
+                        tablebody.append(rowBodyhtml);
+                    }
+                }
+                else {
+                    var response = JSON.parse(result);
+                    var tablehead = $("#dataGrid" + id + " thead");
+                    tablehead.empty(); // Clear thead
+                    var rowHeaderhtml = '<tr style="font-weight:bold;border: 1px solid black; color: white; background-color:darkblue;"><th></th>';
+
+
+                    for (var j = 0; j < response.tbody.length; j++) {
+                        rowHeaderhtml += '<th>' + response.tbody[j][response.thead[0]] + '</th>';
+                    }
+                    rowHeaderhtml += '</tr>';
+                    tablehead.append(rowHeaderhtml);
+
+                    var tablebody = $("#dataGrid" + id + " tbody");
+                    tablebody.empty(); // Clear tbody
+                    for (var i = 1; i < response.thead.length; i++) {
+                        var rowBodyhtml = '<tr>';
+                        rowBodyhtml += '<th>' + response.thead[i] + '</th>';
+
+                        for (var j = 0; j < response.tbody.length; j++) {
+                            rowBodyhtml += '<td>' + response.tbody[j][response.thead[i]] + '</td>';
+                        }
+                        rowBodyhtml += '</tr>';
+                        tablebody.append(rowBodyhtml);
+                    }
+                }
+            },
+            error: function (error) {
+                jsonValue = jQuery.parseJSON(error.responseText);
+                alert("Error : " + jsonValue);
+            }
+        });
+    }
+</script>
+@*Chart Render*@
+<script>
+    function genericchart(charttype, charttitle, xaxis, xaxistitle, yaxis, yaxistitle, seriesData, Xcatagories, id, height) {
+
+        /* $("#container" + id).css("height", parseFloat(height * 70)-80 *//*parseFloat(330)*//*)*/
+        $("#container" + id).css("height", parseFloat(height - 50))
+        $(".card" + id).append("<div class='card-header card_new' style='height:50px' >" + charttitle + "</div>");
+        if (charttype === 'donut') {
+            let chart = Highcharts.chart('container' + id, {
+                chart: {
+                    type: 'pie'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: "",
+                    align: 'center'
+                },
+                subtitle: {
+                    text: ''
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },
+                plotOptions: {
+                    series: {
+                        innerSize: '75%',
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        borderRadius: 8,
+                        dataLabels: [{
+                            enabled: true,
+                            distance: 20,
+                            format: '{point.name}'
+                        }, {
+                            enabled: true,
+                            distance: -15,
+                            format: '{point.percentage:.0f}%',
+                            style: {
+                                fontSize: '0.9em'
+                            }
+                        }],
+                        showInLegend: true
+                    }
+                },
+                xAxis: {
+                    categories: xaxis,
+                    type: xaxis,
+                    title: {
+                        text: xaxistitle
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    type: yaxis,
+                    title: {
+                        text: yaxistitle
+                    }
+                },
+                series: [{
+                    name: xaxis,
+                    data: seriesData
+                },
+                ]
+            });
+        }
+        else if (charttype === 'pie') {
+            let chart = Highcharts.chart('container' + id, {
+                chart: {
+                    type: 'pie'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: "",
+                    align: 'center'
+                },
+                subtitle: {
+                    text: ''
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },
+                plotOptions: {
+                    series: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: [{
+                            enabled: true,
+                            distance: 20
+                        }, {
+                            enabled: true,
+                            distance: -40,
+                            format: '{point.percentage:.1f}%',
+                            style: {
+                                fontSize: '1.2em',
+                                textOutline: 'none',
+                                opacity: 0.7
+                            },
+                            filter: {
+                                operator: '>',
+                                property: 'percentage',
+                                value: 10
+                            }
+                        }]
+                    }
+                },
+                xAxis: {
+                    categories: xaxis,
+                    type: xaxis,
+                    title: {
+                        text: xaxistitle
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    type: yaxis,
+                    title: {
+                        text: yaxistitle
+                    }
+                },
+                series: [{
+                    name: xaxis,
+                    data: seriesData
+                },
+                ]
+            });
+        }
+        else {
+            let chart = Highcharts.chart('container' + id, {
+                chart: {
+                    type: charttype
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: "",
+                    align: 'center'
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: xaxis,
+                    type: xaxis,
+                    title: {
+                        text: xaxistitle
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    type: yaxis,
+                    title: {
+                        text: yaxistitle
+                    }
+                },
+                series: [{
+                    name: xaxis,
+                    data: seriesData
+                },
+                ]
+            });
+
+        }
+    //    let chart = Highcharts.chart('container' + id, {
+    //        chart: {
+    //            type: charttype
+    //        },
+    //        credits: {
+    //            enabled: false
+    //        },
+    //        title: {
+    //            text: "",
+    //            align: 'center'
+    //        },
+    //        subtitle: {
+    //            text: ''
+    //        },
+    //        xAxis: {
+    //            categories: xaxis,
+    //            type: xaxis,
+    //            title: {
+    //                text: xaxistitle
+    //            }
+    //        },
+    //        yAxis: {
+    //            allowDecimals: false,
+    //            type: yaxis,
+    //            title: {
+    //                text: yaxistitle
+    //            }
+    //        },
+    //        series: [{
+    //            name: xaxis,
+    //            data: seriesData
+    //        },
+    //        ]
+    //    });
+    }
+</script>
+@*Widget Render*@
+<script>
+    //Widget Render
+    function renderWidgetByType(widgetType, titlewidget, datacolumnwidget, percentagewidget, portletId, layout, width, height
+        , dataSource, faicon) {
+        let widgetHtml = '';
+        if (widgetType === 'Widget1')
+        {
+            widgetHtml = `
+                                        <div id="apexWidget${portletId}">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="circle-icon">
+                                                             <i class="${faicon}" aria-hidden="true"></i>
+                                                    </div>
+                                                    <div class="widget-data">
+                                                        <div class="font-18">${datacolumnwidget || '2020'}</div>
+                                                        <div class="weight-500">${titlewidget || 'Contact'}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="progress-data">
+                                                    <div id="chart${portletId}"></div>
+                                                </div>
+                                            </div>
+                                        </div>`;
+        }
+        else
+        {
+            widgetHtml = `
+                                                <div class="" id="apexWidget${portletId}">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+
+                                                    <div class="widget-data">
+                                                                <div class="weight-800 font-24">${datacolumnwidget || '11,020'}</div>
+                                                                <div class="weight-500 font-18">${titlewidget || 'Online Signups'}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="progress-data">
+                                                        <div id="chart${portletId}"></div>
+                                                </div>
+                                            </div>
+                                        </div>`;
+        }
+        // Append the widget HTML to the grid container
+        $("#apexChartContainer" + portletId).html(widgetHtml);
+        // Render Apex chart for the widget (if applicable)
+        if (widgetType !== "Widget3") {
+            genericApexChart(widgetType, titlewidget, datacolumnwidget, percentagewidget, portletId, width, height, dataSource
+            );
+        }
+    }
+    function genericApexChart(widgetType, titlewidget, datacolumnwidget, percentagewidget, containerid, width, height, dataSource) {
+        let chartInstance;
+        // Before rendering a new chart, destroy the existing one (if any)
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+        // If dataSource is null or empty, use the selected value from #ddlDataSource
+        // dataSource = dataSource || $('#ddlDataSource option:selected').text();
+        // Create chart options
+        switch (widgetType) {
+            case 'Widget1':
+                var options = {
+                    series: [percentagewidget],
+                    grid: {
+                        padding: {
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0
+                        },
+                    },
+                    chart: {
+                        height: 100,
+                        width: 70,
+                        type: 'radialBar',
+                    },
+                    plotOptions: {
+                        radialBar: {
+                            hollow: {
+                                size: '50%',
+                            },
+                            dataLabels: {
+                                name: {
+                                    show: false,
+                                    color: '#fff'
+                                },
+                                value: {
+                                    show: true,
+                                    color: '#333',
+                                    offsetY: 5,
+                                    fontSize: '15px'
+                                }
+                            }
+                        }
+                    },
+                    colors: ['#ecf0f4'],
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shade: 'dark',
+                            type: 'diagonal1',
+                            shadeIntensity: 0.8,
+                            gradientToColors: ['#1b00ff'],
+                            inverseColors: false,
+                            opacityFrom: [1, 0.2],
+                            opacityTo: 1,
+                            stops: [0, 100],
+                        }
+                    },
+                    states: {
+                        normal: {
+                            filter: {
+                                type: 'none',
+                                value: 0,
+                            }
+                        },
+                        hover: {
+                            filter: {
+                                type: 'none',
+                                value: 0,
+                            }
+                        },
+                        active: {
+                            filter: {
+                                type: 'none',
+                                value: 0,
+                            }
+                        },
+                    }
+                };
+                break;
+            case 'Widget2':
+                var options = {
+                    series: [{
+                        name: 'series1',
+                        data: [30, 50, 70, 65, 80, 90]
+                    }],
+                    chart: {
+                        height: 110,
+                        type: 'area',
+                        toolbar: {
+                            show: false,
+                        },
+                        sparkline: {
+                            enabled: true
+                        }
+                    },
+                    grid: {
+                        show: false,
+                        padding: {
+                            left: 0,
+                            right: 0
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'smooth'
+                    },
+                    xaxis: {
+                        type: 'numeric',
+                        lines: {
+                            show: false,
+                        },
+                        axisBorder: {
+                            show: false,
+                        },
+                        labels: {
+                            show: false,
+                        },
+                    },
+                    yaxis: {
+                        labels: {
+                            show: false,
+                        },
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                    },
+                    tooltip: {
+                        x: {
+                            show: false,
+                            format: 'dd/MM/yy HH:mm'
+                        },
+                    },
+                };
+                break;
+            case 'Widget4':
+                var options = {
+                    series: [{
+                        name: 'series1',
+                        data: [150, 650, 450, 650, 350, 480, 900]
+                    }],
+                    chart: {
+                        height: 110,
+                        type: 'line',
+                        toolbar: {
+                            show: false,
+                        },
+                        sparkline: {
+                            enabled: true
+                        }
+                    },
+                    grid: {
+                        show: false,
+                        padding: {
+                            left: 0,
+                            right: 0
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    xaxis: {
+                        type: 'numeric',
+                        lines: {
+                            show: false,
+                        },
+                        axisBorder: {
+                            show: false,
+                        },
+                        labels: {
+                            show: false,
+                        },
+                    },
+                    yaxis: [{
+                        y: 0,
+                        offsetX: 0,
+                        offsetY: 0,
+                        labels: {
+                            show: false,
+                        },
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                    }],
+                    tooltip: {
+                        x: {
+                            show: false,
+                            format: 'dd/MM/yy HH:mm'
+                        },
+                    },
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.7,
+                            opacityTo: 0.9,
+                            colorStops: [
+                                {
+                                    offset: 0,
+                                    color: "#EB656F",
+                                    opacity: 1
+                                },
+                                {
+                                    offset: 20,
+                                    color: "#FAD375",
+                                    opacity: 1
+                                },
+                                {
+                                    offset: 60,
+                                    color: "#61DBC3",
+                                    opacity: 1
+                                },
+                                {
+                                    offset: 100,
+                                    color: "#95DA74",
+                                    opacity: 1
+                                }
+                            ]
+                        }
+                    },
+                };
+                break;
+            case 'Widget5':
+                var options = {
+                    series: [{
+                        data: [21, 22, 10, 28, 16, 21, 13, 30]
+                    }],
+                    chart: {
+                        height: 110,
+                        type: 'bar',
+                        toolbar: {
+                            show: false,
+                        },
+                        sparkline: {
+                            enabled: true
+                        },
+                        events: {
+                            click: function (chart, w, e) {
+                            }
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            columnWidth: '20px',
+                            distributed: true,
+                            endingShape: 'rounded',
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    legend: {
+                        show: false
+                    },
+                    xaxis: {
+                        type: 'numeric',
+                        lines: {
+                            show: false,
+                        },
+                        axisBorder: {
+                            show: false,
+                        },
+                        labels: {
+                            show: false,
+                        },
+                    },
+                    yaxis: [{
+                        y: 0,
+                        offsetX: 0,
+                        offsetY: 0,
+                        labels: {
+                            show: false,
+                        },
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                    }],
+                };
+                break;
+            case 'Widget6':
+                var options = {
+                    series: [{
+                        name: 'series1',
+                        data: [41, 50, 38, 61, 42, 70, 100]
+                    }, {
+                        name: 'series2',
+                        data: [21, 42, 55, 32, 34, 92, 41]
+                    }],
+                    chart: {
+                        height: 110,
+                        type: 'area',
+                        toolbar: {
+                            show: false,
+                        },
+                        sparkline: {
+                            enabled: true
+                        }
+                    },
+                    grid: {
+                        show: false,
+                        padding: {
+                            left: 0,
+                            right: 0
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: false,
+                        curve: 'smooth'
+                    },
+                    xaxis: {
+                        type: 'numeric',
+                        lines: {
+                            show: false,
+                        },
+                        axisBorder: {
+                            show: false,
+                        },
+                        labels: {
+                            show: false,
+                        },
+                    },
+                    yaxis: [{
+                        y: 0,
+                        offsetX: 0,
+                        offsetY: 0,
+                        labels: {
+                            show: false,
+                        },
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                    }],
+                    tooltip: {
+                        x: {
+                            show: false,
+                            format: 'dd/MM/yy HH:mm'
+                        },
+                    },
+                };
+                break;
+            case 'Widget7':
+                var options = {
+                    series: [73],
+                    chart: {
+                        height: 350,
+                        type: 'radialBar',
+                        offsetY: 0
+                    },
+                    colors: ['#0B132B', '#222222'],
+                    plotOptions: {
+                        radialBar: {
+                            startAngle: -135,
+                            endAngle: 135,
+                            dataLabels: {
+                                name: {
+                                    fontSize: '16px',
+                                    color: undefined,
+                                    offsetY: 120
+                                },
+                                value: {
+                                    offsetY: 76,
+                                    fontSize: '22px',
+                                    color: undefined,
+                                    formatter: function (val) {
+                                        return val + "%";
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shade: 'dark',
+                            shadeIntensity: 0.15,
+                            inverseColors: false,
+                            opacityFrom: 1,
+                            opacityTo: 1,
+                            stops: [0, 50, 65, 91]
+                        },
+                    },
+                    stroke: {
+                        dashArray: 4
+                    },
+                    labels: ['Achieve Goals'],
+                };
+                break;
+        }
+        // Create and render the Apex chart
+        var chartContainer = `#chart${containerid}`;
+        chartInstance = new ApexCharts(document.querySelector(chartContainer), options);
+        chartInstance.render();
+    }
+</script>
+@*Gauge Render*@
+<script>
+    function renderGaugeByType(gaugeType, titlegauge, id, seriesData,width, height, Xcatagories) {
+        debugger;
+        //$("#container" + id).css("height", parseFloat(height * 70) - 80)
+        $("#containers" + id).css("height", parseFloat(height - 50))
+        $(".card" + id).append("<div class='card-header card_new' style='height:50px' >" + titlegauge + "</div>");
+        switch (gaugeType) {
+            case 'clock':
+                const getNow = () => {
+                    const now = new Date();
+                    return {
+                        date: now,
+                        hours: now.getHours() + now.getMinutes() / 60,
+                        minutes: now.getMinutes() * 12 / 60 + now.getSeconds() * 12 / 3600,
+                        seconds: now.getSeconds() * 12 / 60
+                    };
+                };
+                let now = getNow();
+                gaugeOptions = {
+                    chart: {
+                        type: 'gauge',
+                        plotBackgroundColor: null,
+                        plotBackgroundImage: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false,
+                        height: '80%'
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    pane: {
+                        background: [{
+                            // default background
+                        }, {
+                            backgroundColor: Highcharts.svg ? {
+                                radialGradient: {
+                                    cx: 0.5,
+                                    cy: -0.4,
+                                    r: 1.9
+                                },
+                                stops: [
+                                    [0.5, 'rgba(255, 255, 255, 0.2)'],
+                                    [0.5, 'rgba(200, 200, 200, 0.2)']
+                                ]
+                            } : null
+                        }]
+                    },
+                    yAxis: {
+                        labels: {
+                            distance: -23,
+                            style: {
+                                fontSize: '18px'
+                            }
+                        },
+                        min: 0,
+                        max: 12,
+                        lineWidth: 0,
+                        showFirstLabel: false,
+                        minorTickInterval: 'auto',
+                        minorTickWidth: 3,
+                        minorTickLength: 5,
+                        minorTickPosition: 'inside',
+                        minorGridLineWidth: 0,
+                        minorTickColor: '#666',
+                        tickInterval: 1,
+                        tickWidth: 4,
+                        tickPosition: 'inside',
+                        tickLength: 10,
+                        tickColor: '#666',
+                        title: {
+                            text: 'Powered by<br/>Highcharts',
+                            style: {
+                                color: '#BBB',
+                                fontWeight: 'normal',
+                                fontSize: '10px',
+                                lineHeight: '10px'
+                            },
+                            y: 10
+                        }
+                    },
+                    tooltip: {
+                        format: '{series.chart.tooltipText}'
+                    },
+                    series: [{
+                        data: [{
+                            id: 'hour',
+                            y: now.hours,
+                            dial: {
+                                radius: '60%',
+                                baseWidth: 4,
+                                baseLength: '95%',
+                                rearLength: 0
+                            }
+                        }, {
+                            id: 'minute',
+                            y: now.minutes,
+                            dial: {
+                                baseLength: '95%',
+                                rearLength: 0
+                            }
+                        }, {
+                            id: 'second',
+                            y: now.seconds,
+                            dial: {
+                                radius: '100%',
+                                baseWidth: 1,
+                                rearLength: '20%'
+                            }
+                        }],
+                        animation: false,
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }]
+                };
+                setInterval(function () {
+                    now = getNow();
+                    if (Highcharts.charts.length) { // check if chart exists
+                        const chart = Highcharts.charts[0]; // assuming it's the first chart
+                        const hour = chart.get('hour'),
+                            minute = chart.get('minute'),
+                            second = chart.get('second');
+
+                        // Cache the tooltip text
+                        chart.tooltipText = Highcharts.dateFormat('%H:%M:%S', now.date);
+
+                        hour.update(now.hours, true, false);
+                        minute.update(now.minutes, true, false);
+
+                        if (now.seconds === 0) {
+                            second.update(-0.2, true, false); // Move to 59 sec without animation
+                        }
+                        second.update(now.seconds, true, { easing: 'easeOutBounce' }); // Bounce to next second
+                    }
+                }, 1000);
+                break;
+            case 'speedometer':
+                gaugeOptions = {
+                    chart: {
+                        type: 'gauge',
+                        plotBackgroundColor: null,
+                        plotBackgroundImage: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false,
+                        height: '80%'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    pane: {
+                        startAngle: -90,
+                        endAngle: 89.9,
+                        background: null,
+                        center: ['50%', '75%'],
+                        size: '110%'
+                    },
+                    yAxis: {
+                        min: 0,
+                        max: 200,
+                        tickPixelInterval: 72,
+                        tickPosition: 'inside',
+                        tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+                        tickLength: 20,
+                        tickWidth: 2,
+                        minorTickInterval: null,
+                        labels: {
+                            distance: 20,
+                            style: {
+                                fontSize: '14px'
+                            }
+                        },
+                        lineWidth: 0,
+                        plotBands: [{
+                            from: 0,
+                            to: 130,
+                            color: '#55BF3B', // green
+                            thickness: 20
+                        }, {
+                            from: 150,
+                            to: 200,
+                            color: '#DF5353', // red
+                            thickness: 20
+                        }, {
+                            from: 120,
+                            to: 160,
+                            color: '#DDDF0D', // yellow
+                            thickness: 20
+                        }]
+                    },
+                    series: [{
+                        name: 'Speed',
+                        data: [80],
+                        tooltip: {
+                            valueSuffix: ' km/h'
+                        },
+                        dataLabels: {
+                            format: '{y} km/h',
+                            borderWidth: 0,
+                            color: Highcharts.defaultOptions.title?.style?.color || '#333333',
+                            style: {
+                                fontSize: '16px'
+                            }
+                        },
+                        dial: {
+                            radius: '80%',
+                            backgroundColor: 'gray',
+                            baseWidth: 12,
+                            baseLength: '0%',
+                            rearLength: '0%'
+                        },
+                        pivot: {
+                            backgroundColor: 'gray',
+                            radius: 6
+                        }
+                    }]
+                };
+                setInterval(() => {
+                    const chart = Highcharts.charts[0];
+                    if (chart && !chart.renderer.forExport) {
+                        const point = chart.series[0].points[0],
+                            inc = Math.round((Math.random() - 0.5) * 20);
+                        let newVal = point.y + inc;
+                        if (newVal < 0 || newVal > 200) {
+                            newVal = point.y - inc;
+                        }
+                        point.update(newVal);
+                    }
+                }, 3000);
+                break;
+            case 'solidgaugekpi':
+                function renderIcons() {
+                    this.series.forEach(series => {
+                        if (!series.icon) {
+                            series.icon = this.renderer
+                                .text(
+                                    `<i class="fa fa-${series.options.custom.icon}"></i>`,
+                                    0,
+                                    0,
+                                    true
+                                )
+                                .attr({
+                                    zIndex: 10
+                                })
+                                .css({
+                                    color: series.options.custom.iconColor,
+                                    fontSize: '1.5em'
+                                })
+                                .add(this.series[2].group);
+                        }
+                        series.icon.attr({
+                            x: this.chartWidth / 2 - 15,
+                            y: this.plotHeight / 2 -
+                                series.points[0].shapeArgs.innerR -
+                                (
+                                    series.points[0].shapeArgs.r -
+                                    series.points[0].shapeArgs.innerR
+                                ) / 2 +
+                                8
+                        });
+                    });
+                }
+                const trackColors = Highcharts.getOptions().colors.map(color =>
+                    new Highcharts.Color(color).setOpacity(0.3).get()
+                );
+                gaugeOptions = {
+                    chart: {
+                        type: 'solidgauge',
+                        events: {
+                            render: renderIcons
+                        }
+                    },
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        borderWidth: 0,
+                        backgroundColor: 'none',
+                        shadow: false,
+                        style: {
+                            fontSize: '16px'
+                        },
+                        valueSuffix: '%',
+                        pointFormat: '{series.name}<br>' +
+                            '<span style="font-size: 2em; color: {point.color}; ' +
+                            'font-weight: bold">{point.y}</span>',
+                        positioner: function (labelWidth) {
+                            return {
+                                x: (this.chart.chartWidth - labelWidth) / 2,
+                                y: (this.chart.plotHeight / 2) + 15
+                            };
+                        }
+                    },
+                    pane: {
+                        startAngle: 0,
+                        endAngle: 360,
+                        background: [{ // Track for Conversion
+                            outerRadius: '112%',
+                            innerRadius: '88%',
+                            backgroundColor: trackColors[0],
+                            borderWidth: 0
+                        }, { // Track for Engagement
+                            outerRadius: '87%',
+                            innerRadius: '63%',
+                            backgroundColor: trackColors[1],
+                            borderWidth: 0
+                        }, { // Track for Feedback
+                            outerRadius: '62%',
+                            innerRadius: '38%',
+                            backgroundColor: trackColors[2],
+                            borderWidth: 0
+                        }]
+                    },
+                    yAxis: {
+                        min: 0,
+                        max: 100,
+                        lineWidth: 0,
+                        tickPositions: []
+                    },
+                    plotOptions: {
+                        solidgauge: {
+                            dataLabels: {
+                                enabled: false
+                            },
+                            linecap: 'round',
+                            stickyTracking: false,
+                            rounded: true
+                        }
+                    },
+                    series: [{
+                        name: 'Conversion',
+                        data: [{
+                            color: Highcharts.getOptions().colors[0],
+                            radius: '112%',
+                            innerRadius: '88%',
+                            y: 80
+                        }],
+                        custom: {
+                            icon: 'filter',
+                            iconColor: '#303030'
+                        }
+                    }, {
+                        name: 'Engagement',
+                        data: [{
+                            color: Highcharts.getOptions().colors[1],
+                            radius: '87%',
+                            innerRadius: '63%',
+                            y: 65
+                        }],
+                        custom: {
+                            icon: 'comments-o',
+                            iconColor: '#ffffff'
+                        }
+                    }, {
+                        name: 'Feedback',
+                        data: [{
+                            color: Highcharts.getOptions().colors[2],
+                            radius: '62%',
+                            innerRadius: '38%',
+                            y: 50
+                        }],
+                        custom: {
+                            icon: 'commenting-o',
+                            iconColor: '#303030'
+                        }
+                    }]
+                };
+                //Highcharts.chart(getContainerId(containerid), gaugeOptions);
+                break;
+        }
+        const targetContainer = id ? `containers${id}` : 'containers';
+        Highcharts.chart(targetContainer, gaugeOptions); // append to the correct container
+    }
+</script>
+
+
+
+
+
+
+
+
+
+

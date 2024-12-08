@@ -1,0 +1,65 @@
+@mixin transition($what: all, $time: 0.2s, $how: ease-in-out) {
+  -webkit-transition: $what $time $how;
+  -moz-transition:    $what $time $how;
+  -ms-transition:     $what $time $how;
+  -o-transition:      $what $time $how;
+  transition:         $what $time $how;
+}
+
+
+
+/* GRADIENT LISTS
+============================================= */
+$list0: $gradientone, $gradientone; 
+$list1: $gradientone, $gradienttwo; 
+$list2: $gradientone 0%,$gradientone 33%,$gradientone 33%,$gradientone 66%, $gradienttwo 66%, $gradienttwo 100%; 
+$list3: $blue 0%,$blue 10%,$green 25%,$green 39%,$orange 79%,$orange 100%; 
+$list4: $blue, $green, $orange, $blue, $green, $orange, $blue, $green, $orange; 
+
+@mixin gradient($direction, $list) { 
+  background-image: -webkit-linear-gradient($direction, $list);
+  background-image: -moz-linear-gradient($direction, $list);
+  background-image: -o-linear-gradient($direction, $list);
+  background-image: linear-gradient($direction, $list);  
+}
+
+
+@mixin gradient-border($color1, $color2, $border-width, $direction) {
+  border: none;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(#{$direction}, $color1 0%, $color2 100%), 
+  linear-gradient(#{$direction}, $color1 0%, $color2 100%);
+  
+  @if $direction == 'to right' or $direction == 'to left' {
+    @if $direction == 'to right' {
+      border-left: $border-width solid $color1;
+      border-right: $border-width solid $color2;
+      } @else {
+        border-left: $border-width solid $color2;
+        border-right: $border-width solid $color1;
+      }
+      background-position: 0 0, 0 100%;
+      background-size: 100% $border-width;
+    }
+    
+    @if $direction == 'to top' or $direction == 'to bottom' {
+      @if $direction == 'to top' {
+        border-top: $border-width solid $color2;
+        border-bottom: $border-width solid $color1;
+        } @else {
+          border-top: $border-width solid $color1;
+          border-bottom: $border-width solid $color2;
+        }
+        background-position: 0 0, 100% 0;
+        background-size: $border-width 100%;
+      }
+    }
+
+    @mixin gradient-text($angle: 45deg, $color: $purple, $amount: 35%) {
+      color: $color;
+      background: -webkit-linear-gradient($angle, $color, adjust-hue($color, $amount));
+      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text;
+      display: inline-block;
+    }
+    

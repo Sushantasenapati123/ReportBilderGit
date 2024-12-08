@@ -1,0 +1,159 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+.header_new {
+  position: relative;
+  display: flex;
+  background: #006096;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.header_new .container-fluid {
+  padding: 0;
+}
+
+.logo_head{
+  padding: 0 15px;
+}
+
+a{
+  text-decoration: none;
+}
+
+
+
+
+.dropdown__custom .dropdown-menu li i{
+  padding-right: 7px;
+}
+
+
+.dropdown__custom .dropdown-menu {
+  display: none;
+  background-color: #fff; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  padding: 10px;
+  position: absolute;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  top: 48px;
+  min-width: 100%;
+  right: 0;
+}
+
+.dropdown__custom li{
+  list-style: none;
+  cursor: pointer;
+  padding: 10px;
+  transition: 0.5s;
+  position: relative;
+}
+
+
+.dropdown__custom li:hover{
+  background: #108fbb;
+  transition: 0.5s;
+
+}
+
+.dropdown__custom .dropdown-menu li{
+  background: transparent;
+  
+}
+
+.dropdown__custom{
+  margin: 0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+
+}
+.dropdown__custom .dropdown-menu.show {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ai__medhak a{
+  color: #fff !important;
+  text-decoration: none;
+}
+
+.dropdown__custom .dropdown-toggle::after {
+  margin-left: 10px;
+}
+
+.dropdown__custom .dropdown-menu li {
+  color: #333; 
+  padding: 5px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+  transition: 0.3s ease;
+}
+
+
+.dropdown__custom .dropdown-menu li:nth-last-child(odd){
+  border-bottom: 0;
+}
+
+.dropdown__custom .dropdown-menu li:hover {
+  color: #006096;
+  transition: 0.3s ease;
+  padding-left: 10px;
+}
+
+
+
+.dropdown__custom .profile__pic img{
+  width: 30px;
+  background: #fff;
+  border-radius: 50px;
+  padding: 5px;
+  margin-right: 6px;
+}
+
+
+.custom__header{
+  position: relative;
+  z-index: 999;
+}
+
+
+.footer__bottom{
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+  color: #fff;
+  background: #006096;
+  left: 0;
+}

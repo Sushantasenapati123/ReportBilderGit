@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetReportBuilder.ReportSource\DatabaseManager.Core\NetReportBuilder.DatabaseManager.Core.csproj" />
+    <ProjectReference Include="..\NetReportBuilder.ReportSource\NetReportBuilder.ReportSource.Model\NetReportBuilder.ReportSource.Model.csproj" />
+  </ItemGroup>
+
+</Project>

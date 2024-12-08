@@ -1,0 +1,269 @@
+﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<head>
+    <link href="~/css/InputQueryPage.css" rel="stylesheet" />
+</head>
+<div class="row">
+    <div class="col-md-4">
+        <form id="compileForm">
+            <div class="containerr">
+                <div class="flex-item">
+                    <h2>Select File</h2>
+                    <select class="form-control" id="DataBaseType" hidden>
+                        <option value="mysql">MySQL</option>
+                        <option value="SqlServer" selected>SQL Server</option>
+                    </select>
+
+                    <input type="file" class="form-control" id="Input" />
+                </div>
+                <div class="flex-item">
+                    <h2>Output</h2>
+                    <div id="Output" class="form-control" style="height: 200px; width: 650px; overflow-y: scroll; white-space: pre-wrap; background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px;">
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="button-container">
+                <div class="form-group">
+                    <input id="compileButton" type="button" value="Compile" class="btn btn-primary" onclick="submitForm()" />
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <h2>View Data</h2>
+                <div id="ViewTable" class="form-control" style="height: 273px; width: 900px; overflow-y: scroll; white-space: pre-wrap; background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px;">
+                </div>
+            </div>
+            <br />
+
+
+        </form>
+    </div>
+</div>
+
+<script>
+    function uploadExcelll() {
+        var fileInput = document.getElementById('Input');
+        var file = fileInput.files[0]; // Get the selected file
+
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+
+            //fetch('/DataMapping/UploadExcel', {
+                 fetch('@Url.Action("UploadExcel", "DataMapping")', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Assuming server returns JSON data
+                })
+                .then(data => {
+                    console.log('File uploaded successfully:', data);
+                    // Handle response data as needed
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`Error occurred while uploading the file: ${error.message}`);
+                });
+        } else {
+            alert('Please select a file.');
+        }
+    }
+
+    // Declare a variable outside any function scope
+    let tableDropdownData = null;
+    function submitForm() {
+
+        var fileInput = document.getElementById('Input');
+        var file = fileInput.files[0]; // Get the selected file
+
+
+
+
+
+
+        if (document.getElementById('Input').value == "") {
+            alert("Please Write XML Data");
+            return;
+        }
+
+        document.getElementById("compileButton").disabled = true;
+
+        document.getElementById('Output').innerHTML = ""; // Clear previous output
+       /* document.getElementById('Schema').innerHTML = ""; */// Clear previous output
+        document.getElementById('ViewTable').innerHTML = ""; // Clear previous output
+
+        const form = document.getElementById('compileForm');
+        const formData = new FormData(form);
+
+        formData.append('DBType', document.getElementById('DataBaseType').value); // Append the table name to the form data
+        formData.append('input', document.getElementById('Input').value);
+        formData.append('file', file);
+
+
+
+
+
+
+          fetch('@Url.Action("UploadExcel", "DataMapping")', {
+      /*  fetch('/DataMapping/CompileQuery', {*/
+            method: 'POST',
+              body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+
+
+                const outputMessages = data.messages;
+                outputMessages.forEach(message => {
+                    const outputElement = document.getElementById('Output');
+                    outputElement.innerHTML += message + "<br>"; // Append each message with a line break
+
+                });
+
+
+                ////    // Display schema info
+                //const schemaElement = document.getElementById('Schema');
+                //schemaElement.innerHTML = data.schemaInfo;
+
+
+                //schemaElement.innerHTML = `<pre>${data.schemaInfo}</pre>`;
+
+
+                //    // Display view table
+                const viewTableElement = document.getElementById('ViewTable');
+                viewTableElement.innerHTML = data.viewTable;
+
+
+
+
+
+
+
+                var IsSuccessful = data.isSuccessfullyCompile;
+                if (IsSuccessful) {
+                    /*document.getElementById("ExportButton").disabled = true;*/
+                    document.getElementById("DataMapping").disabled = false;
+
+                  
+
+                    // Check if ListOfProperty is defined and is an array
+                    const listOfProperty = data.listOfProperty;
+                    if (Array.isArray(listOfProperty)) {
+                        const sourceGridBody = document.querySelector("#SourceGrid tbody");
+                        sourceGridBody.innerHTML = ""; // Clear previous content
+
+                        listOfProperty.forEach(property => {
+                            const row = document.createElement("tr");
+
+                            const checkboxCell = document.createElement("td");
+                            const checkbox = document.createElement("input");
+                            checkbox.type = "checkbox";
+                            checkboxCell.appendChild(checkbox);
+
+                            const columnNameCell = document.createElement("td");
+                            columnNameCell.textContent = property.column_Name;
+
+                            const columnTypeCell = document.createElement("td");
+                            columnTypeCell.textContent = property.column_Type;
+
+                            /*row.appendChild(checkboxCell);*/
+                            row.appendChild(columnNameCell);
+                            row.appendChild(columnTypeCell);
+
+                            sourceGridBody.appendChild(row);
+                        });
+                    } else {
+                        console.error('ListOfProperty is not an array:', listOfProperty);
+                    }
+
+
+                    // Dynamically add rows to the destination grid
+                    populateDestinationGrid(data.listOfProperty);
+
+
+                    // Populate table name dropdowns
+                    //populateTableDropdowns(data.listOfTable.result);
+                    populateTableDropdowns(data.listOfTable);
+
+                    // Store data.listOfTable.result in the variable
+                    //tableDropdownData = data.listOfTable.result;
+                    tableDropdownData = data.listOfTable;
+
+
+                }
+                else {
+                    document.getElementById("ExportButton").disabled = true;
+
+                    document.getElementById('existingExportOptions').style.display = 'none'; // or 'none' to hide it initially
+                }
+                document.getElementById("compileButton").disabled = false;
+
+            })
+            .catch(error => console.error('Error:', error));
+
+    }
+
+    function promptForTableName() {
+        openModal();
+        var tableName = prompt("Please enter the table name:", "");
+        if (tableName !== null && tableName !== "") {
+            Export(tableName);
+        }
+    }
+
+    function Export(tableName) {
+        const dataToSend = {};
+        /*document.getElementById('Schema').innerHTML = ""; */// Clear previous output
+        document.getElementById('ViewTable').innerHTML = ""; // Clear previous output
+        const form = document.getElementById('compileForm');
+        const formData = new FormData(form);
+        formData.append('tableName', tableName); // Append the table name to the form data
+        formData.append('input', document.getElementById('Input').value);
+        formData.append('DBType', document.getElementById('DataBaseType').value);
+        document.getElementById('Output').innerHTML = ""; // Clear previous output
+
+
+        dataToSend.inputValue = document.getElementById('Input').value;
+
+        fetch('/DataMapping/ExportExcel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        })
+            .then(response => response.json())
+            .then(data => {
+
+
+                const outputMessages = data.messages;
+                outputMessages.forEach(message => {
+                    const outputElement = document.getElementById('Output');
+                    outputElement.innerHTML += message + "<br>"; // Append each message with a line break
+
+                });
+
+
+
+            })
+            .catch(error => console.error('Error:', error));
+
+    }
+
+
+
+</script>

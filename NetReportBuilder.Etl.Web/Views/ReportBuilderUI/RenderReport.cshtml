@@ -1,0 +1,162 @@
+﻿@using NetReportBuilder.ReportUI.Models
+@model NetReportBuilder.ReportUI.Models.ReportConfigurationModel.ReportTypes
+@{
+    ViewData["Title"] = "RenderReport";
+    Layout = "~/Views/Shared/_LayoutRender.cshtml";
+    var Configs = ViewBag.ConfigurationData as List<ThemeConfiguration>;
+    var JSFilePath = ViewBag.JSFilePath as string;
+    var gridhtml = ViewBag.GridHTML as string;
+    var Tables = ViewBag.Tables as List<TableData>;
+}
+<link href="~/css/layoutrender.css" rel="stylesheet" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<div class="card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <div class='dashboard'>
+            <div class='dashboard-app'>
+                <div class="row ">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card border-0 dashboard-bg">
+                            <div class="card-body p-0 grid__bgmain" id="grids">
+                                @Html.Raw(System.Web.HttpUtility.HtmlDecode(gridhtml))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script src="~/gridstack/js/gridstack-all.js"></script>
+<script src="~/gridstack/js/gridstack-poly.js"></script>
+
+<script src="~/js/form_builder.js"></script>
+<script src="@JSFilePath"></script>
+<script>
+
+    function BindTable(portletid, charttype, charttitle, xaxis, xaxistitle, yaxis, yaxistitle, DataSource) {
+        $.ajax({
+            url: "/ReportBuilderUI/TableDetail?DataSource=" + DataSource,
+            type: "GET",
+            success: function (result) {
+                var response = JSON.parse(result);
+                var tablehead = $('#dataGrid-' + portletid + ' thead');
+                tablehead.empty(); // Clear the table head
+                var rowHeaderhtml = '<tr style="font-weight:bold;border: 1px solid black; background-color: #EEE;">';
+                for (var i = 0; i < response.thead.length; i++) {
+                    rowHeaderhtml += '<th>' + response.thead[i] + '</th>';
+                }
+                var rowHeaderhtml = rowHeaderhtml + '</tr>';
+                tablehead.append(rowHeaderhtml);
+
+                var tablebody = $('#dataGrid-' + portletid + ' tbody');
+                tablebody.empty(); // Clear the table head
+                for (var j = 0; j < response.tbody.length; j++) {
+                    var rowBodyhtml = '<tr>';
+                    for (var i = 0; i < response.thead.length; i++) {
+                        if (i == 0) {
+                            rowBodyhtml += '<th>' + response.tbody[j][response.thead[i]] + '</th>';
+                        }
+                        else {
+                            rowBodyhtml += '<td>' + response.tbody[j][response.thead[i]] + '</td>';
+                        }
+                    }
+                    var rowBodyhtml = rowBodyhtml + '</tr>';
+                    tablebody.append(rowBodyhtml);
+                }
+                /*   genericchart(portletid, charttype, charttitle, getColumnContents(xaxis, portletid), xaxistitle, getColumnContents(yaxis, portletid), yaxistitle);*/
+            },
+            error: function (error) {
+                jsonValue = jQuery.parseJSON(error.responseText);
+                alert("Error : " + jsonValue);
+            }
+        });
+    }
+    function genericchart(portletid, charttype, charttitle, xaxis, xaxistitle, yaxis, yaxistitle) {
+        Highcharts.chart('container-' + portletid + '', {
+            data: {
+                table: 'dataGrid-' + portletid + ''
+            },
+            chart: {
+                type: charttype
+            },
+            title: {
+                text: charttitle,
+                align: 'center'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: xaxis,
+                type: xaxis,
+                title: {
+                    text: xaxistitle
+                }
+            },
+            yAxis: {
+                allowDecimals: false,
+                type: yaxis,
+                //  categories: yaxis,
+                title: {
+                    text: yaxistitle
+                }
+            },
+        });
+    }
+    function getColumnContents(headerName, portletid) {
+        var table = $('#dataGrid-' + portletid + '');
+        var headerIndex = -1;
+
+        // Find the index of the header
+        table.find('th').each(function (index) {
+            if ($(this).text() === headerName) {
+                headerIndex = index;
+                return false; // Exit the loop
+            }
+        });
+
+        if (headerIndex === -1) {
+            console.log('Header not found');
+            return;
+        }
+
+        // Get the contents of the column
+        var columnContents = [];
+        table.find('tbody tr').each(function () {
+            var cell = $(this).find('th').eq(headerIndex);
+            columnContents.push(cell.text());
+        });
+
+        return columnContents;
+    }
+    $(document).ready(function () {
+        let grid = GridStack.init({
+            cellHeight: 70,
+            acceptWidgets: true,
+            removable: '#trash', // drag-out delete class
+        });
+        GridStack.setupDragIn('.newWidget', { appendTo: 'body', helper: 'clone' });
+        grid.on('added removed change', function (e, items) {
+            let str = '';
+            items.forEach(function (item) { str += ' (x,y)=' + item.x + ',' + item.y; });
+            console.log(e.type + ' ' + items.length + ' items:' + str);
+        });
+        $(".crush_icon").hide();
+        $(".bi-gear").hide();
+    })
+</script>

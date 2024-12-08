@@ -1,0 +1,619 @@
+﻿@{
+    var inputData = @Html.Raw(ViewBag.Response);
+}
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<head>
+    <link href="~/css/InputQueryPage.css" rel="stylesheet" />
+    <style>
+        .tab2 {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+            .tab2 button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+            }
+
+                .tab2 button:hover {
+                    background-color: #ddd;
+                }
+
+                .tab2 button.active {
+                    background-color: #ccc;
+                }
+
+        .tabcontentt2 {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        .schema-content2, .viewdata-content2 {
+            height: 150px;
+            overflow-y: scroll;
+            white-space: pre-wrap;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<div class="row">
+    <div class="col-md-4">
+        <form id="compileForm">
+            <div class="containerr">
+                <div class="flex-item">
+                    <h6>Input</h6>
+                    <select class="form-control" id="DataBaseType" hidden>
+                        <option value="mysql">MySQL</option>
+                        <option value="SqlServer" selected>SQL Server</option>
+                    </select>
+
+                    <textarea id="Input" readonly placeholder="Wite XML/JSON Data.." name="Input" rows="10" cols="70" class="form-control"></textarea>
+                </div>
+                <div class="flex-item">
+                    <h6>Output</h6>
+
+                    <div id="Output"  class="form-control" style="height: 260px; width:400px; overflow-y: scroll; white-space: pre-wrap; background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px;">
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="button-container">
+                <div class="form-group">
+
+                    <input id="compileButton" style="margin-top:62px" type="button" value="Parse" class="btn btn-primary" onclick="submitFormAPI()" />
+                </div>
+
+                @*<div class="form-group">
+                    <input id="Next" style="margin-top:62px" disabled type="button"  value="Next" class="btn btn-success" onclick="open()" />
+                </div>*@
+            </div>
+
+            <br />
+
+
+        </form>
+    </div>
+</div>
+<!--<div class="tab2">-->
+    @*<button class="tablinks2" onclick="openTab2(event, 'Schema2')">Schema Info</button>*@
+    <!--<button class="tablinks2" onclick="openTab2(event, 'ViewData2')">View Data</button>
+</div>-->
+@*<div id="Schema2" class="tabcontentt2">
+
+        <div class="schema-content2" id="SchemaContent">
+            <div id="Schema2" class="form-control" style="height: 150px; width: 320px; overflow-y: scroll; white-space: pre-wrap; background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px;">
+            </div>
+        </div>
+    </div>*@
+
+@*<div id="ViewData2" class="tabcontentt23">
+
+    <div class="viewdata-content2" id="ViewTable">
+       
+        </div>
+    </div>
+</div>*@
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            // Get the data from ViewBag
+           
+               var inputData = '@Html.Raw(inputData)';
+
+
+            // Set the data to the textarea
+            $('#Input').val(inputData);
+        });
+</script>
+
+<script>
+
+    document.getElementById('InsertButton').addEventListener('click', function () {
+        const selectElement = document.getElementById('InsertType');
+        if (selectElement.value !== 'Existing') {
+            if (document.getElementById('txtTable').value == "") {
+                alert("Please Write Table Name");
+                return;
+            }
+        }
+        const dataToSend = {};
+        const form = document.getElementById('compileForm');
+        const formData = new FormData(form);
+        if (selectElement.value === 'Existing') {
+            // Function to get data from SourceGrid
+            function getSourceGridData() {
+                const sourceGrid = document.getElementById('SourceGrid').getElementsByTagName('tbody')[0];
+                const rows = sourceGrid.getElementsByTagName('tr');
+                let sourceData = [];
+                for (let row of rows) {
+                    const cells = row.getElementsByTagName('td');
+                    sourceData.push({
+                        fieldName: cells[0].innerText,
+                        dataType: cells[1].innerText
+                    });
+                }
+                return sourceData;
+            }
+
+            // Function to get data from DestinationGrid
+            function getDestinationGridData() {
+                const destinationGrid = document.getElementById('DestinationGrid').getElementsByTagName('tbody')[0];
+                const rows = destinationGrid.getElementsByTagName('tr');
+                let destinationData = [];
+                for (let row of rows) {
+                    const cells = row.getElementsByTagName('td');
+
+                    const tableNameCell = cells[0];
+                    let tableName;
+                    const tableSelectElement = tableNameCell.querySelector('select');
+                    if (tableSelectElement) {
+                        tableName = tableSelectElement.value;
+                    } else {
+                        tableName = tableNameCell.innerText.trim();
+                    }
+
+                    const columnNameCell = cells[1];
+                    let columnName;
+                    const columnSelectElement = columnNameCell.querySelector('select');
+                    if (columnSelectElement) {
+                        columnName = columnSelectElement.value;
+                    } else {
+                        columnName = columnNameCell.innerText.trim();
+                    }
+
+                    destinationData.push({
+                        tableName: tableName,
+                        columnName: columnName
+                    });
+                }
+                return destinationData;
+            }
+
+            // Collect data from both tables
+            const sourceData = getSourceGridData();
+            const destinationData = getDestinationGridData();
+
+            // Ensure both grids have the same number of rows
+            if (sourceData.length !== destinationData.length) {
+                alert('The number of rows in SourceGrid and DestinationGrid do not match.');
+                return;
+            }
+
+            // Create a mapping
+            let mapping = [];
+            for (let i = 0; i < sourceData.length; i++) {
+                mapping.push({
+                    source: sourceData[i],
+                    destination: destinationData[i]
+                });
+            }
+
+            // Get other input values
+            const inputValue = document.getElementById('Input').value;
+            const tableName = document.getElementById('txtTable').value;
+            const databaseType = document.getElementById('DataBaseType').value;
+
+            // Construct data to send
+            dataToSend.mapping = mapping;
+            dataToSend.inputValue = inputValue;
+            dataToSend.TableName = tableName;
+            dataToSend.DatabaseType = databaseType;
+        }
+
+        else {
+            // Handle other cases as needed
+            const inputValue = document.getElementById('Input').value;
+            const tableName = document.getElementById('txtTable').value;
+            const databaseType = document.getElementById('DataBaseType').value;
+
+            dataToSend.inputValue = inputValue;
+            dataToSend.TableName = tableName;
+            dataToSend.DatabaseType = databaseType;
+
+
+
+            formData.append('tableName', tableName); // Append the table name to the form data
+            formData.append('input', document.getElementById('Input').value);
+            formData.append('DBType', document.getElementById('DataBaseType').value);
+            document.getElementById('Output').innerHTML = ""; // Clear previous output
+
+        }
+
+        // Store the mapping (here we simply log it to the console)
+        console.log('Data to send:', dataToSend);
+
+        // Send the data to the server
+        // fetch('/DataMapping/PostMappingData', {
+
+             fetch('@Url.Action("ExportXml", "DataMapping")', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json'
+                 },
+
+                 body: JSON.stringify(dataToSend)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error('Network response was not ok: ' + response.status + ' ' + text);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+                // Handle success response
+                const outputElement = document.getElementById('Output');
+                outputElement.innerHTML = ''; // Clear previous messages
+                const outputMessages = data.messages;
+                outputMessages.forEach(message => {
+                    outputElement.innerHTML += message + "<br>";
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Optionally handle error response
+            });
+    });
+
+
+</script>
+<script>
+    // Declare a variable outside any function scope
+    let tableDropdownData = null;
+    function submitFormAPI() {
+
+        if (document.getElementById('Input').value == "") {
+            alert("Please Write XML Data");
+            return;
+        }
+
+        document.getElementById("compileButton").disabled = true;
+
+        document.getElementById('Output').innerHTML = ""; // Clear previous output
+       /* document.getElementById('Schema').innerHTML = ""; */// Clear previous output
+        document.getElementById('ViewTable').innerHTML = ""; // Clear previous output
+
+        const form = document.getElementById('compileForm');
+        const formData = new FormData(form);
+
+        formData.append('DBType', document.getElementById('DataBaseType').value); // Append the table name to the form data
+        formData.append('input', document.getElementById('Input').value);
+
+
+
+
+        if (@ViewBag.APIResponseTYpe== 'XML') {
+
+            fetch('@Url.Action("GetXmlData", "DataMapping")', {
+                /*  fetch('/DataMapping/CompileQuery', {*/
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+
+
+                    const outputMessages = data.messages;
+                    outputMessages.forEach(message => {
+                        const outputElement = document.getElementById('Output');
+                        outputElement.innerHTML += message + "<br>"; // Append each message with a line break
+
+                    });
+
+
+                    ////    // Display schema info
+                    //const schemaElement = document.getElementById('Schema');
+                    //schemaElement.innerHTML = data.schemaInfo;
+
+
+                    //schemaElement.innerHTML = `<pre>${data.schemaInfo}</pre>`;
+
+
+                    //    // Display view table
+                    const viewTableElement = document.getElementById('ViewTable');
+                    viewTableElement.innerHTML = data.viewTable;
+
+
+
+
+
+
+
+                    var IsSuccessful = data.isSuccessfullyCompile;
+                    if (IsSuccessful) {
+                       
+                        document.getElementById("DataMapping").disabled = false;
+
+
+                        //document.getElementById("ExportButton").disabled = false;
+
+
+                        // Check if ListOfProperty is defined and is an array
+                        const listOfProperty = data.listOfProperty;
+                        if (Array.isArray(listOfProperty)) {
+                            const sourceGridBody = document.querySelector("#SourceGrid tbody");
+                            sourceGridBody.innerHTML = ""; // Clear previous content
+
+                            listOfProperty.forEach(property => {
+                                const row = document.createElement("tr");
+
+                                const checkboxCell = document.createElement("td");
+                                const checkbox = document.createElement("input");
+                                checkbox.type = "checkbox";
+                                checkboxCell.appendChild(checkbox);
+
+                                const columnNameCell = document.createElement("td");
+                                columnNameCell.textContent = property.column_Name;
+
+                                const columnTypeCell = document.createElement("td");
+                                columnTypeCell.textContent = property.column_Type;
+
+                                /*row.appendChild(checkboxCell);*/
+                                row.appendChild(columnNameCell);
+                                row.appendChild(columnTypeCell);
+
+                                sourceGridBody.appendChild(row);
+                            });
+                        } else {
+                            console.error('ListOfProperty is not an array:', listOfProperty);
+                        }
+
+
+                        // Dynamically add rows to the destination grid
+                        populateDestinationGrid(data.listOfProperty);
+
+
+                        // Populate table name dropdowns
+                        //populateTableDropdowns(data.listOfTable.result);
+                       populateTableDropdowns(data.listOfTable);
+
+                        // Store data.listOfTable.result in the variable
+                        //tableDropdownData = data.listOfTable.result;
+                        tableDropdownData = data.listOfTable;
+
+
+                    }
+                    else {
+                      
+                        document.getElementById('existingExportOptions').style.display = 'none'; // or 'none' to hide it initially
+                    }
+                    document.getElementById("compileButton").disabled = false;
+
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        else {//for Json Data
+             fetch('@Url.Action("GetJsonData", "DataMapping")', {
+     /*  fetch('/DataMapping/CompileQuery', {*/
+     method: 'POST',
+     body: formData
+ })
+     .then(response => response.json())
+     .then(data => {
+
+
+         const outputMessages = data.messages;
+         outputMessages.forEach(message => {
+             const outputElement = document.getElementById('Output');
+             outputElement.innerHTML += message + "<br>"; // Append each message with a line break
+
+         });
+
+
+
+         //    // Display view table
+         const viewTableElement = document.getElementById('ViewTable');
+         viewTableElement.innerHTML = data.viewTable;
+
+         //open Output Tab
+         var outputTabButton = document.querySelector("button[onclick=\"openTab(event, 'data-Output')\"]");
+         outputTabButton.click();
+
+
+
+
+
+         var IsSuccessful = data.isSuccessfullyCompile;
+         if (IsSuccessful) {
+          
+             document.getElementById("DataMapping").disabled = false;
+
+
+             //document.getElementById("ExportButton").disabled = false;
+
+
+             // Check if ListOfProperty is defined and is an array
+             const listOfProperty = data.listOfProperty;
+             if (Array.isArray(listOfProperty)) {
+                 const sourceGridBody = document.querySelector("#SourceGrid tbody");
+
+                 const NewGridBody = document.querySelector("#NewGrid tbody");
+
+
+
+
+
+
+
+                 sourceGridBody.innerHTML = ""; // Clear previous content
+                 NewGridBody.innerHTML = "";
+
+                 listOfProperty.forEach(property => {
+                     const row = document.createElement("tr");
+
+                     const rowNewExport = document.createElement("tr");
+
+                   
+
+                     const columnNameCell = document.createElement("td");
+                     columnNameCell.textContent = property.column_Name;
+
+                     const columnTypeCell = document.createElement("td");
+                     columnTypeCell.textContent = property.column_Type;
+
+                     const tableNameCell = document.createElement("td");
+                     const tableDropdown = document.createElement("select");
+
+                     const tableColumnCelltxt = document.createElement("td");
+                     const textBox = document.createElement("input");
+
+                     textBox.value = property.column_Name;
+
+
+                     tableDropdown.classList.add("form-control");
+                     textBox.classList.add("form-control");
+
+
+                     tableNameCell.appendChild(tableDropdown);
+                     tableColumnCelltxt.appendChild(textBox);
+
+
+                     // Populate table dropdown options
+                     if (tableDropdownData) {
+                         tableDropdownData.forEach(table => {
+                             const option = document.createElement("option");
+                             option.value = table.name;
+                             option.textContent = table.name;
+                             tableDropdown.appendChild(option);
+                         });
+                     } else {
+                         console.error('tableDropdownData is not available.');
+                     }
+
+                     const columnDropdownCell = document.createElement("td");
+                     const columnDropdown = document.createElement("select");
+                     columnDropdown.classList.add("column-dropdown");
+                     columnDropdownCell.appendChild(columnDropdown);
+
+                     // Append cells to the row
+                     row.appendChild(columnNameCell);
+                     row.appendChild(columnTypeCell);
+                     row.appendChild(tableNameCell);
+                     row.appendChild(columnDropdownCell);
+
+                     rowNewExport.appendChild(columnNameCell);
+                     rowNewExport.appendChild(columnTypeCell);
+                     rowNewExport.appendChild(tableColumnCelltxt);
+                    
+
+
+                     //rowNewExport.appendChild(columnNameCell);
+                     //rowNewExport.appendChild(columnTypeCell);
+                     //rowNewExport.appendChild(columnNameCell);
+
+
+                     sourceGridBody.appendChild(row);
+                     NewGridBody.appendChild(rowNewExport);
+
+
+                     // Event listener for table dropdown change
+                     tableDropdown.addEventListener('change', function () {
+                         const selectedTable = this.value;
+                         fetchColumnsByTable(selectedTable, columnDropdown);
+                     });
+                 });
+             } else {
+                 console.error('listOfProperty is not an array:', listOfProperty);
+             }
+
+
+
+             // Dynamically add rows to the destination grid
+             populateDestinationGrid(data.listOfProperty);
+
+
+             // Populate table name dropdowns
+             //populateTableDropdowns(data.listOfTable.result);
+            populateTableDropdowns(data.listOfTable);
+
+             // Store data.listOfTable.result in the variable
+             //tableDropdownData = data.listOfTable.result;
+             tableDropdownData = data.listOfTable;
+
+
+         }
+         else {
+          
+
+             document.getElementById('existingExportOptions').style.display = 'none'; // or 'none' to hide it initially
+         }
+         document.getElementById("compileButton").disabled = false;
+
+     })
+     .catch(error => console.error('Error:', error));
+        }
+    }
+
+    function promptForTableName() {
+        openModal();
+        var tableName = prompt("Please enter the table name:", "");
+        if (tableName !== null && tableName !== "") {
+            Export(tableName);
+        }
+    }
+
+    function Export(tableName) {
+        const dataToSend = {};
+        /*document.getElementById('Schema').innerHTML = ""; */// Clear previous output
+        document.getElementById('ViewTable').innerHTML = ""; // Clear previous output
+        const form = document.getElementById('compileForm');
+        const formData = new FormData(form);
+        formData.append('tableName', tableName); // Append the table name to the form data
+        formData.append('input', document.getElementById('Input').value);
+        formData.append('DBType', document.getElementById('DataBaseType').value);
+        document.getElementById('Output').innerHTML = ""; // Clear previous output
+
+
+        dataToSend.inputValue = document.getElementById('Input').value;
+
+        fetch('/DataMapping/ExportXml', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        })
+            .then(response => response.json())
+            .then(data => {
+
+
+                const outputMessages = data.messages;
+                outputMessages.forEach(message => {
+                    const outputElement = document.getElementById('Output');
+                    outputElement.innerHTML += message + "<br>"; // Append each message with a line break
+
+                });
+
+
+
+            })
+            .catch(error => console.error('Error:', error));
+
+    }
+
+
+
+</script>

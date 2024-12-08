@@ -1,0 +1,192 @@
+﻿@model NetReportBuilder.ReportUI.Models.ReportConfigurationModel.ReportTypes
+@{
+    var IconList = ViewBag.Icons as List<string>;
+    var gridhtml = ViewBag.GridHTML as string;
+    var ResultData = ViewBag.Result as List<NetReportBuilder.ReportUI.Models.DashboardDetail>;
+}
+
+<!--  left side -->
+<div class="col-xs-2 ScrollStyle">
+    <ul style="padding: 0; margin: 0; list-style-type: none;">
+        <li class="grid__list Widget1" style="display: inline-block; margin-right: 15px; vertical-align: top;" data-chart-type="Widget1">
+            <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" onclick="showpreview1()" data-bs-placement="top" title="Widget1">
+                <div class="icon__graph">
+                    <img src="../images/Widget/Wid1.PNG" alt="Column Icon">
+                    <label> Widget1 </label>
+                </div>
+            </a>
+        </li>
+        <li class="grid__list Widget2" style="display: inline-block; margin-right: 15px; vertical-align: top;" data-chart-type="Widget2">
+            <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" onclick="showpreview2()" data-bs-placement="top" title="Widget2">
+                <div class="icon__graph">
+                    <img src="../images/Widget/Wid2.PNG" alt="Column Icon">
+                    <label> Widget2 </label>
+                </div>
+            </a>
+        </li>
+        <li class="grid__list Widget4" style="display: inline-block; margin-right: 15px; vertical-align: top;" data-chart-type="Widget4">
+            <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" onclick="showpreview4()" data-bs-placement="top" title="Widget4">
+                <div class="icon__graph">
+                    <img src="../images/Widget/Wid4.PNG" alt="Column Icon">
+                    <label> Widget4 </label>
+                </div>
+            </a>
+        </li>
+        <li class="grid__list  Widget5" style="display: inline-block; margin-right: 15px; vertical-align: top;" data-chart-type="Widget5">
+            <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" onclick="showpreview5()" data-bs-placement="top" title="Widget5">
+                <div class="icon__graph">
+                    <img src="../images/Widget/Wid5.PNG" alt="Column Icon">
+                    <label> Widget5 </label>
+                </div>
+            </a>
+        </li>
+        <li class="grid__list Widget6" style="display: inline-block; margin-right: 15px; vertical-align: top;" data-chart-type="Widget6">
+            <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" onclick="showpreview6()" data-bs-placement="top" title="Widget6">
+                <div class="icon__graph">
+                    <img src="../images/Widget/Wid6.PNG" alt="Column Icon">
+                    <label> Widget6 </label>
+                </div>
+            </a>
+        </li>
+        @* <li class="grid__list" style="display: inline-block; margin-right: 15px; vertical-align: top;">
+            <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" onclick="showpreview7()" data-bs-placement="top" title="Widget7">
+            <div class="icon__graph">
+            <img src="~/images/widget/wid7.png" alt="Column Icon">
+            <label> Widget7 </label>
+            </div>
+            </a>
+            </li> *@
+        <li class="grid__list Widget3" style="display: inline-block; margin-right: 15px; vertical-align: top;  display:none;" data-chart-type="Widget3">
+            <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" onclick="showpreview3()" data-bs-placement="top" title="Widget3">
+                <div class="icon__graph">
+                    <img src="~/images/widget/wid3.png" alt="Column Icon">
+                    <label> Widget3 </label>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+<!--  left side-->
+<!--  middle side -->
+<div class="card-body row">
+    <div class="col-lg-5 col-md-5 col-12">
+        <h3><b>Widget  Configuration</b></h3>
+        <div class="form-group">
+            @*TableName*@
+            <div id="TableData" class="form-group">
+                <label class="control-label">Data Source<span class="text-danger">*</span></label>
+                @*<select id="ddlDataSourceForWizget" class="form-select" onchange="GetColumnsByTableforwiz()" asp-items="@(new SelectList(ViewBag.DataSource, "order", "name"))">
+                        <option value="0">Select Data Source</option>
+                    </select>*@
+                <select id="ddlDataSourceForWizget" class="form-select" onchange="GetColumnsByTableforwizfromdatasourcequery()">
+                    <option value="0">Select Data Source</option>
+                </select>
+            </div>
+            @*Title*@
+            <div class="form-group ">
+                <label class="control-label">Title<span class="text-danger">*</span></label>
+                <input type="text" id="txtTitleWiz" class="form-control">
+            </div>
+            <div class="form-group" id="ddlIconSelectiondiv">
+                <label class="control-label">Select Icon<span class="text-danger">*</span></label>
+                <select id="ddlIconSelection" class="form-select">
+                    <option value="fa fa-user" selected>User</option>
+                    <option value="fa fa-cog">Cog</option>
+                    <option value="fa fa-envelope">Envelope</option>
+                    <option value="fa fa-calendar">Calendar</option>
+                    <option value="fa fa-bell">Bell</option>
+                    <option value="fa fa-clipboard">Clipboard</option>
+                    <option value="fa fa-shopping-cart">Shopping Cart</option>
+                    <option value="fa fa-globe">Globe</option>
+                    <option value="fa fa-key">Key</option>
+                    <option value="fa fa-user-friends">Friends</option>
+                    <option value="fa fa-comment">Comment</option>
+                    <option value="fa fa-users">Users</option>
+                    <option value="fa fa-lock">Lock</option>
+                    <option value="fa fa-thumbs-up">Thumbs Up</option>
+                    <option value="fa fa-download">Download</option>
+                    <option value="fa fa-upload">Upload</option>
+
+                    <!-- Add more icons as needed -->
+                </select>
+            </div>
+
+            @*DataColumn(Table Column Name)*@
+            <div class="form-group ">
+                <label class="control-label">DataColumn<span class="text-danger">*</span></label>
+                <select id="ddlDataColumn" class="form-select">
+                    <option value="0" selected>Select Data  Column</option>
+                </select>
+            </div>
+            @*Percentage(Table Column Name)*@
+            <div class="form-group " id="ddlPercentagedivid">
+                <label class="control-label">Percentage<span class="text-danger">*</span></label>
+                <select id="ddlPercentage" class="form-select">
+                    <option value="0" selected>Select Percentage</option>
+                </select>
+            </div>
+            @*Hidden Potlate Height & Width*@
+            <div class="form-group row" style="display:none">
+                <div class="col-xs-6 col-md-3 col-xl-3">
+                    <label class="control-label" for="portletHeight">Portlet Height:</label>
+                    <input type="text" id="portletHeight" readonly />
+                </div>
+                <div class="col-xs-6 col-md-3 col-xl-3">
+                    <label class="control-label" for="portletWidth">Portlet Width:</label>
+                    <input type="text" id="portletWidth" readonly />
+                </div>
+            </div>
+            @*BUTTONS*@
+            <div class="form-group row">
+                <div class="col-6 col-md-6 col-xl-6">
+                    <div class="col-md-6 mt-3">
+                        <button class="btn btn-primary mb-1 me-2" id="btnApplyWizard">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  right side-->
+    <div class="col-lg-7 col-md-7 col-12">
+        <center><h3><b>Preview</b></h3></center>
+        <!-- Widget container -->
+        <div class="widget-container" id="apexChartWidget1" style="display:none;">
+        </div>
+    </div>
+    <!--  right side-->
+</div>
+<!--  middle  side -->
+<!-- Add Select2 CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#ddlDataSourceForWizget').select2({
+            placeholder: "Select Data Source",
+            allowClear: true
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        
+        // Call your GetDataSource action via AJAX
+        $.ajax({
+            url: '@Url.Action("GetDataSource", "ReportBuilderUI")', // Update the URL if necessary
+            type: 'GET',
+            success: function (data) {
+                // Loop through the returned data and append options to the dropdown
+                var ddlDataSourceForWizget = $('#ddlDataSourceForWizget');
+                $.each(data, function (i, item) {
+                    ddlDataSourceForWizget.append($('<option>', {
+                        value: item.id, // Set the value attribute
+                        text: item.name // Set the text for display
+                    }));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log("Error loading data sources: " + error);
+            }
+        });
+    });
+</script>

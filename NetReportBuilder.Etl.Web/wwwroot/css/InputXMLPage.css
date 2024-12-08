@@ -1,0 +1,150 @@
+﻿
+.side-by-side {
+    display: flex;
+    gap: 20px; /* Adds space between the columns */
+    justify-content: space-between;
+}
+
+.side-by-side .form-group {
+    flex: 1;
+}
+
+
+.button-container {
+    display: flex; /* Use flexbox layout */
+    margin-bottom: -20px; /* Optional: Add margin at the bottom */
+}
+
+.form-group {
+    margin-right: 5px; /* Adjust the margin between buttons */
+    margin-top: 50px;
+}
+
+    /* Reduce margin for the last button */
+    .form-group:last-child {
+        margin-right: 0;
+    }
+
+
+
+
+
+
+
+.containerr {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 40vh;
+    box-sizing: border-box;
+    padding: 10px;
+    gap: 10px;
+}
+
+.flex-item {
+    margin: 0;
+    padding: 0;
+}
+
+    .flex-item h2 {
+        margin-top: 0;
+        margin-bottom: 5px;
+        margin-left: 127px
+    }
+
+.input-container {
+    flex: 0 0 40%;
+}
+
+.output-container {
+    flex: 0 0 60%;
+}
+
+.form-control {
+    width: 80%;
+    box-sizing: border-box;
+}
+
+textarea {
+    width: 100%;
+    height: calc(100% - 38px); /* Subtracting the height of the h2 */
+}
+
+#Output {
+    height: calc(100% - 38px); /* Subtracting the height of the h2 */
+    overflow-y: scroll;
+    white-space: pre-wrap;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+
+
+
+#existingExportOptions {
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    border-radius: 10px; /* Rounds the corners */
+    margin-top: 20px; /* Adds space between Export button and this div */
+}
+
+.content {
+    max-width: 800px;
+    margin: auto;
+}
+
+.header {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px; /* Adds spacing below the header */
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+tbody tr:hover {
+    background-color: #f5f5f5; /* Adds a hover effect on rows */
+}
+
+label {
+    font-weight: bold;
+}
+
+.btn {
+    padding: 10px 15px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+

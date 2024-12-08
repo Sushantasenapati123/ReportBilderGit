@@ -1,0 +1,22 @@
+﻿<div id="ViewData2" class="tabcontentt23">
+
+    <div class="viewdata-content2" id="ViewTable"  style="height:350px">
+
+    </div>
+</div>
+
+
+<input id="OpenDataMappingTab" type="button" onclick="OpenDataMappingTab()" value="Verify and Expert Data" class="btn btn-success" />
+<input id="BackButtonToDataFetching" onclick="OpenDataFetchingTab()" type="button" value="Back" class="btn btn-dark" />
+<script>
+    function OpenDataFetchingTab() {
+        //open Output Tab
+        var outputTabButton = document.querySelector("button[onclick=\"openTab(event, 'data-fetching')\"]");
+        outputTabButton.click();
+    }
+    function OpenDataMappingTab() {
+        //open Output Tab
+        var outputTabButton = document.querySelector("button[onclick=\"openTab(event, 'data-mapping')\"]");
+        outputTabButton.click();
+    }
+</script>

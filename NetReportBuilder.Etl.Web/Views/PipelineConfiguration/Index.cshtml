@@ -1,0 +1,352 @@
+﻿@{
+    Layout = "~/Views/Shared/_PopupLayout.cshtml";
+}
+<!-- Other head content -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+<style>
+    .TextLeft {
+        text-align: left;
+    }
+
+    .BasicControlSettings {
+        font-family: Verdana;
+        font-size: medium;
+        text-align: left;
+        vertical-align: middle;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .BoldSetting {
+        font-weight: bold;
+    }
+
+    .NormalSetting {
+        font-weight: normal;
+    }
+
+
+
+    div.DivBorderStyle {
+        border-style: solid;
+        border-color: lightgray;
+        border-width: 2px;
+    }
+</style>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="form-group" style="width:100%;height:auto;" align="center">
+    <div class="row">
+        <div class="col-sm">
+            <div class="card-header" style="background-color:lightgray;padding:5px;">
+                <h2>Configure PipeLine</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding:10px;width:50%;height:auto;" align="center">
+
+        <form id="pipelineForm">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-4 TextLeft">
+                        <label for="PipelineName" class="BasicControlSettings BoldSetting">Pipeline Name:</label>
+                    </div>
+                    <div class="col-sm-8 TextLeft">
+                        <input type="text" id="PipelineName" value="@ViewBag.PipelineName" class="form-control BasicControlSettings NormalSetting" readonly />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 TextLeft">
+                        <label for="DataSourceType" class="BasicControlSettings BoldSetting">DataSource Type:</label>
+                    </div>
+                    <div class="col-sm-8 TextLeft">
+                        <input type="text" id="DataSourceType" value="@ViewBag.DataSourceType" class="form-control BasicControlSettings NormalSetting" readonly />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 TextLeft">
+                        <label for="DataSyncModes" class="BasicControlSettings BoldSetting">DataSync Mode:</label>
+                    </div>
+                    <div class="col-sm-8 TextLeft">
+                        <select id="DataSyncModes" class="form-select form-control BasicControlSettings NormalSetting">
+                            <option value="">Select</option>
+                            @foreach (var item in ViewBag.DataSyncModes)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 TextLeft">
+                        <label for="ExecutionMode" class="BasicControlSettings BoldSetting">Execution Mode:</label>
+                    </div>
+                    <div class="col-sm-8 TextLeft">
+                        <select id="ExecutionMode" class="form-select form-control BasicControlSettings NormalSetting">
+                            <option value="">Select</option>
+                            @foreach (var item in ViewBag.ExecutionModes)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="row DivBorderStyle" style="display: none;" id="hiddenDiv">
+                    <div class="row">
+                        <h3 class="BasicControlSettings BoldSetting">Execution Parameters</h3>
+                    </div>
+                    <div class="row">
+
+                        <div class="row hidden" id="WeekDay">
+                            <div class="col-sm-4 TextLeft">
+                                <label for="ExecutionMode" class="BasicControlSettings BoldSetting">Week Day:</label>
+                            </div>
+                            <div class="col-sm-4 TextLeft">
+                                <select id="SelectedWeekDay" class="form-select form-control BasicControlSettings NormalSetting">
+                                    <option value="">Select</option>
+                                    @foreach (var item in ViewBag.WeekDays)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row hidden" id="Day">
+                            <div class="col-sm-4 TextLeft">
+                                <label for="ExecutionMode" class="BasicControlSettings BoldSetting">Day:</label>
+                            </div>
+                            <div class="col-sm-2 TextLeft">
+                                <select id="SelectedDay" class="form-select form-control BasicControlSettings NormalSetting">
+                                    <option value="">Select</option>
+                                    @foreach (var item in ViewBag.Days)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row hidden" id="Hour">
+                            <div class="col-sm-4 TextLeft">
+                                <label for="ExecutionMode" class="BasicControlSettings BoldSetting">Hour:</label>
+                            </div>
+                            <div class="col-sm-2 TextLeft">
+                                <select id="SelectedHour" class="form-select form-control BasicControlSettings NormalSetting">
+                                    <option value="">Select</option>
+                                    @foreach (var item in ViewBag.Hours)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row hidden" id="Minute">
+                            <div class="col-sm-4 TextLeft">
+                                <label for="ExecutionMode" class="BasicControlSettings BoldSetting">Minute:</label>
+                            </div>
+                            <div class="col-sm-2 TextLeft">
+                                <select id="SelectedMinute" class="form-select form-control BasicControlSettings NormalSetting">
+                                    <option value="">Select </option>
+                                    @foreach (var item in ViewBag.Minutes)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row hidden" id="ScheduledHour">
+
+                            <div class="col-sm-4 TextLeft">
+                                <label for="ExecutionMode" class="BasicControlSettings BoldSetting">Interval in Hours:</label>
+                            </div>
+                            <div class="col-sm-2 TextLeft">
+
+                                <select id="SelectedSchueduledHour" class="form-select form-control BasicControlSettings NormalSetting">
+                                    <option value="">Select</option>
+                                    @foreach (var item in ViewBag.ScheduledHours)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row hidden" id="ScheduledMinutes">
+                            <div class="col-sm-4 TextLeft">
+                                <label for="ExecutionMode" class="BasicControlSettings BoldSetting">Interval in Minutes:</label>
+                            </div>
+                            <div class="col-sm-2 TextLeft">
+                                <select id="SelectedSchueduledMinute" class="form-select form-control BasicControlSettings NormalSetting">
+                                    <option value="">Select</option>
+                                    @foreach (var item in ViewBag.ScheduledMinutes)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 TextLeft">
+                        <label for="Description" class="BasicControlSettings BoldSetting">Description:</label>
+                    </div>
+                    <div class="col-sm-8 TextLeft">
+                        <textarea id="Description" class="form-control BasicControlSettings NormalSetting"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8">
+                        <button type="button" id="btnSavePipelineConfiguration" style="margin-top:20px" class="btn btn-primary">Save</button>
+
+                        <button type="button" id="btnResetPipelineConfiguration" style="margin-top:20px" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+    function resetForm() {
+        document.getElementById('pipelineForm').reset();
+    }
+
+    document.getElementById('ExecutionMode').addEventListener('change', function () {
+        
+        var selectedValue = this.value;
+        var weekDay = document.getElementById('WeekDay');
+        var day = document.getElementById('Day');
+        var hour = document.getElementById('Hour');
+        var minute = document.getElementById('Minute');
+        var hiddenDiv = document.getElementById('hiddenDiv');
+        var ScheduledHour = document.getElementById('ScheduledHour');
+        var ScheduledMinute = document.getElementById('ScheduledMinutes');
+
+        weekDay.classList.add('hidden');
+        day.classList.add('hidden');
+        hour.classList.add('hidden');
+        minute.classList.add('hidden');
+        ScheduledHour.classList.add('hidden');
+        ScheduledMinute.classList.add('hidden');
+        if (selectedValue === 'Weekly') {
+            weekDay.classList.remove('hidden');
+            hour.classList.remove('hidden');
+            minute.classList.remove('hidden');
+            hiddenDiv.style.display = 'Block';
+
+        }
+
+        else if (selectedValue === 'Daily') {
+            hour.classList.remove('hidden');
+            minute.classList.remove('hidden');
+            hiddenDiv.style.display = 'Block';
+
+        }
+        else if (selectedValue === 'Hourly') {
+            ScheduledHour.classList.remove('hidden');
+            hiddenDiv.style.display = 'Block';
+
+        }
+        else if (selectedValue === 'Monthly') {
+
+            day.classList.remove('hidden');
+            hour.classList.remove('hidden');
+            minute.classList.remove('hidden');
+            hiddenDiv.style.display = 'Block';
+        }
+        else if (selectedValue === 'Minutely') {
+
+            ScheduledMinute.classList.remove('hidden');
+            hiddenDiv.style.display = 'Block';
+        }
+
+        else {
+            hiddenDiv.style.display = 'none';
+
+
+
+        }
+
+    });
+
+
+
+    $('#btnSavePipelineConfiguration').click(function () {
+        const model = {
+            PipelineName: $('#PipelineName').val() || "",
+            DataSourceType: $('#DataSourceType').val() || "",
+            ExecutionMode: $('#ExecutionMode').val() || "",
+            DataSyncModes: $('#DataSyncModes').val(),
+            ExecutionInterval: {
+                WeekDay: $('#SelectedWeekDay').val() || "",
+                Day: $('#SelectedDay').val() || 0,
+                
+                Hour: $('#SelectedHour').val() || 0,
+                Minute: $('#SelectedMinute').val() || 0,
+                HoursInterval: $('#SelectedSchueduledHour').val() || 0,
+                MinutesInterval: $('#SelectedSchueduledMinute').val() || 0
+            },
+            Description: $('#Description').val() || ""
+        };
+
+        console.log('Model:', model); // Debugging: log the model to the console
+
+        fetch('/PipelineConfiguration/Save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(model)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                //alert(data.message);
+                if (data.message==='success') {
+                    parent.ClosePopupFromChild("The Api was successfully configured");
+
+                }
+                else {
+                    parent.ClosePopupFromChild("There was an issue while connecting to the API");
+                }
+
+            })
+
+    });
+
+</script>
+
+
+
+
+

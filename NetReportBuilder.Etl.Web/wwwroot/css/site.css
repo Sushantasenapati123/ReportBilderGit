@@ -1,0 +1,40 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+.header_new {
+  position: relative;
+  display: flex;
+  z-index: 2;
+  background: #006096;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.header_new .container-fluid {
+  padding: 0;
+}
+
+.logo_head{
+  padding: 0 15px;
+}
+
+a{
+  text-decoration: none;
+}

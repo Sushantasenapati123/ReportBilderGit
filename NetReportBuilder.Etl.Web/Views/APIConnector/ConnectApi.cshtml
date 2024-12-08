@@ -1,0 +1,572 @@
+﻿
+
+@model NetReportBuilder.Etl.Core.ApiInfo
+
+@{
+    ViewData["Title"] = "Api Connector";
+    Layout = "~/Views/Shared/_PopupLayout.cshtml";
+    var methodTypes = ViewBag.MethodTypes;
+    var apitypes = ViewBag.apiTypes;
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<style>
+    .report-group {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        margin-top: 20px;
+    }
+
+    .report-block {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Ensure maximum 3 blocks per row */
+        gap: 10px;
+    }
+
+    .report-item {
+        border: 1px solid #ddd;
+        border-color: darkslategray;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #fff;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .report-item img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .report-item h3 {
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .report-item:hover {
+            background-color: antiquewhite;
+        }
+
+    table td {
+        border: 1px solid black;
+        padding: 4px 12px;
+    }
+
+    .scrollable-textarea {
+        width: 100%;
+        height: 200px;
+        overflow: auto;
+        resize: none;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .control-label {
+        display: inline-block;
+        margin-bottom: .5rem;
+        font-weight: 600;
+    }
+
+    .text-danger {
+        color: red;
+    }
+
+    .btn-primary {
+        background-color: green;
+        border-color: green;
+    }
+
+    .btn-danger {
+        background-color: blue;
+        border-color: blue;
+    }
+
+    #dataGridViewContainer {
+        width: 50%; /* Adjust as needed */
+        height: 200px; /* Adjust as needed */
+        overflow: auto;
+        border: 1px solid #252525;
+        /* Optional: add a border */
+    }
+
+    #dataGridview {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        #dataGridview th, #dataGridview td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+</style>
+<style>
+    .hidden {
+        display: none;
+    }
+
+    .TextLeft {
+        text-align: left;
+    }
+
+    .BasicControlSettings {
+        font-family: Verdana;
+        font-size: medium;
+        text-align: left;
+        vertical-align: middle;
+        padding: 5px;
+        margin: 5px;
+    }
+
+    .BoldSetting {
+        font-weight: bold;
+    }
+
+    .NormalSetting {
+        font-weight: normal;
+    }
+
+
+
+    div.DivBorderStyle {
+        border-style: solid;
+        border-color: lightgray;
+        border-width: 2px;
+    }
+</style>
+<style>
+    #tblParameters {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        padding: 5px;
+    }
+
+        #tblParameters td, #tblParameters th {
+            border: 1px solid #ddd;
+            padding: 5px;
+            width: 33%;
+        }
+
+        #tblParameters tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #tblParameters tr:hover {
+            background-color: #ddd;
+        }
+
+        #tblParameters th {
+            padding: 5px;
+            text-align: left;
+            background-color: gray;
+            color: white;
+            width: auto;
+            height: auto;
+        }
+</style>
+
+<div class="form-group" style="width:100%;height:auto;" align="center">
+    <div class="row">
+        <div class="col-sm">
+            <div class="card-header" style="background-color:lightgray;padding:5px;">
+                <h2>Configure API details</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 TextLeft">
+            <label class="BasicControlSettings BoldSetting">
+                Http Method
+                <span class="text-danger">*</span>
+            </label>
+            <select id="ddlMethodtype" class="form-control BasicControlSettings NormalSetting">
+                <option value="Select">Select</option>
+                @foreach (var method in methodTypes)
+                {
+                    <option value="@method">@method</option>
+                }
+            </select>
+
+        </div>
+        <div class="col-sm-4 TextLeft">
+            <label class="BasicControlSettings BoldSetting">
+                End Point
+                <span class="text-danger">*</span>
+            </label>
+            <input type="text" id="txtendpoint" class="form-control BasicControlSettings NormalSetting">
+        </div>
+        <div class="col-sm-2 TextLeft">
+
+            <label class="BasicControlSettings BoldSetting">
+                Parameter Type
+                <span class="text-danger">*</span>
+            </label>
+            <select id="ddlaitype" class="form-control BasicControlSettings NormalSetting">
+                <option value="Select">Select</option>
+                @foreach (var apitype in apitypes)
+                {
+                    <option value="@apitype">@apitype</option>
+                }
+            </select>
+        </div>
+       
+        
+    </div>
+    <div class="row">
+        <div class="col-sm-4 TextLeft">
+            
+                <button type="button" class="btn btn-primary mb-1" id="btnSend" style="top:38px;">Send</button>
+                <button type="button" class="btn btn-danger mb-1" id="btnSave" style="top: 4px;">Next</button>
+            
+        </div>
+    </div>
+    <div id="RequestSection" class="row hidden">
+        <div class="col-sm-8 TextLeft" id="ParameterSection">
+            <label id="lblParameters" class="BasicControlSettings BoldSetting">
+                Parameters
+            </label>
+            <div id="bindparameters" style="width:60%;overflow:scroll;height:170px; overflow-x:hidden;">
+
+                <table id="tblParameters" class="table table-bordered form-control" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+
+
+
+
+            </div>
+        </div>
+        <div class="col-sm-8 TextLeft hidden" id="BodySection">
+            <label id="lblBody" class="BasicControlSettings BoldSetting">
+                Body
+            </label>
+            <textarea id="textareaParameters" style="width:100%;overflow:scroll;height:180px; overflow-x:hidden; border-style:solid;" class="form-control"></textarea>
+        </div>
+    </div>
+   
+    <div class="row">
+
+        <div class="row-cols-sm-auto TextLeft">
+            <label id="lblBody" class="BasicControlSettings BoldSetting">
+                Result
+            </label>
+            <div id="dataGridViewContainer" style="width:65%;overflow:scroll;height:160px; overflow-x:hidden;">
+                <table id="dataGridview" class="table table-bordered">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <textarea hidden class="scrollable-textarea" style="border-color:black;border-width:2px;border-style:solid;" disabled id="apiresult"></textarea>
+
+        </div>
+    </div>
+
+
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    //-------------------------------------------------------
+    var rowIdx = 0;
+    // Function to add a row
+    function addRow() {
+        $('#tbody').append(`
+                <tr id="R${++rowIdx}">
+                    <td class="row-index text-center" style="text-align: center; vertical-align: middle;">
+                        <input id="txtKeyParam${rowIdx}" style="width:150px;display: block; margin: 0 auto;" class="inputs form-control m-input">
+                    </td>
+                    <td class="row-index text-center" style="text-align: center; vertical-align: middle;">
+                        <input id="txtValueParam${rowIdx}" style="width:150px;display: block; margin: 0 auto;" class="inputs form-control m-input">
+                    </td>
+                    <td class="text-center" style="text-align: center; vertical-align: middle;">
+                       <button class="btn btn-primary add" type="button"><i class="fa-solid fa-plus"></i></button>
+
+                        <button class="btn btn-danger remove" type="button"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+         `);
+    }
+
+    $(document).ready(function () {
+        lblbind();
+        // Add the first row when the page loads
+        addRow();
+        //    toggleParameterGridView();
+    });
+
+    $('#tbody').on('click', '.add', function () {
+        addRow();
+    });
+    // jQuery button click event to remove a row.
+    $('#tbody').on('click', '.remove', function () {
+        var currentRow = $(this).closest('tr');
+
+        // Check if the current row is the first row
+        if (currentRow.is(':first-child')) {
+            alert("The first row cannot be removed.");
+            return;
+        }
+
+        var child = currentRow.nextAll();
+
+        // Iterating across all the rows
+        // obtained to change the index
+        child.each(function () {
+            var id = $(this).attr('id');
+            var idx = $(this).children('.row-index').children('p');
+            var dig = parseInt(id.substring(1));
+            idx.html(`Row ${dig - 1}`);
+            $(this).attr('id', `R${dig - 1}`);
+        });
+        // Removing the current row.
+        $(this).closest('tr').remove();
+        // Decreasing total number of rows by 1.
+        rowIdx--;
+    });
+    //Function for the send request api
+    $('#btnSend').click(function () {
+
+        if ($('#ddlMethodtype').val() == "Select") {
+            alert("Please select Method Type.");
+            return;
+        }
+        if ($('#txtendpoint').val() == "") {
+            alert("Please provide the Api endpoint");
+            return;
+        }
+        if ($('#ddlaitype').val() == "Select") {
+            alert("Please select the Parameter type.");
+            return;
+        }
+        if (document.getElementById('tbody') == null
+            ||
+            document.getElementById('tbody').rows == null
+            || document.getElementById('tbody').rows.length === 0) {
+            alert("Table data is required.");
+            return;
+        }
+        if ($('#ddlaitype').val() == "Raw" && $('#textareaParameters').val() == "") {
+            alert("send parameters as json are required.");
+            return;
+        }
+
+        var apiUrl = $('#txtendpoint').val();
+        var selectedMethod = $('#ddlMethodtype').val();
+        var apiType = $('#ddlaitype').val();
+        var tableData = [];
+        var tbl = document.getElementById('tbody');
+        var rawparams = $('#textareaParameters').val();
+
+        for (var i = 0; i < tbl.rows.length; i++) {
+            var item1 = {};
+            item1.key = tbl.rows[i].cells[0].querySelector('input').value;
+            item1.value = tbl.rows[i].cells[1].querySelector('input').value;
+            tableData.push(item1);
+        }
+        $.ajax({
+            url: '/APIConnector/Invoke',
+            type: 'POST',
+            data: {
+                apiUrl: apiUrl,
+                selectedMethod: selectedMethod,
+                apiType: apiType,
+                tableData: JSON.stringify(tableData),
+                rawparam: rawparams
+            },
+            success: function (data) {
+                $('#apiresult').val(JSON.stringify(data, null, 2));
+                bindDataGridView(data);
+            },
+            error: function (xhr, status, error) {
+                // $('#apiresult').val('Error: ' + xhr.responseText);
+                alert('Error: ' + xhr.responseText);
+            }
+        });
+    });
+
+    $('#btnSave').click(function () {
+        var entity = {
+            Configuration: {
+                DataPipeLineName: $('#datasrcnm').val(),
+                MethodType: $('#ddlMethodtype').val(),
+                EndPoint: $('#txtendpoint').val(),
+                ParameterType: $('#ddlaitype').val(),
+                Parameters: [],
+                Response: $('#apiresult').val(),
+                RawBody: $('textareaParameters').val()
+            }
+        };
+        var apitype = $('#ddlaitype').val();
+        if (apitype == "Raw") {
+            var rawJson = $('#textareaParameters').val();
+
+            if (rawJson.trim() !== "") {
+                try {
+                    var parsedParameters = JSON.parse(rawJson);
+
+                    for (var key in parsedParameters) {
+                        if (parsedParameters.hasOwnProperty(key)) {
+                            entity.Configuration.Parameters.push({ Pkey: key, Pvalue: parsedParameters[key] });
+                        }
+                    }
+                } catch (e) {
+                    /* $('#apiresult').val('Error parsing JSON: ' + e.message);*/
+                    return;
+                }
+            }
+
+        }
+        else {
+            var tbl = document.getElementById('tbody');
+            for (var i = 0; i < tbl.rows.length; i++) {
+                var item = {};
+                item.Pkey = tbl.rows[i].cells[0].querySelector('input').value;
+                item.Pvalue = tbl.rows[i].cells[1].querySelector('input').value;
+                if (item.Pkey != "" && item.Pvalue != "") {
+                    entity.Configuration.Parameters.push(item);
+                }
+
+            }
+
+        }
+        if ($('#apiresult').val() == "") {
+            alert("Click the send button to get response  ");
+            return;
+        }
+        else if ($('#dataGridview tbody tr').length === 0) {
+            alert("Please add at least one parameter to the data grid.");
+            return;
+        }
+        $.ajax({
+            url: '/APIConnector/SubmitApi', // Your endpoint for the Submit action
+            type: 'POST',
+            data: entity,
+            success: function (response) {
+                debugger;
+                parent.ClosePopupFromChild("The Api was successfully configured");
+                //location.href = "/DataMapping/Index"
+                //  $('#apiresult').val('Submit Successful: ' + JSON.stringify(response, null, 2));
+            },
+            error: function (xhr, status, error) {
+                // $('#apiresult').val('Error: ' + xhr.responseText);
+                //alert('Error: ' + xhr.responseText);
+                parent.ClosePopupFromChild("There was an issue while connecting to the API");
+            }
+        });
+    });
+    //datagrid bind
+
+
+    function bindDataGridView(data) {
+        if (!Array.isArray(data) || data.length === 0) {
+            console.error("Invalid data structure or empty data array");
+            return;
+        }
+
+        var tablehead = $('#dataGridview thead');
+        tablehead.empty(); // Clear the table head
+
+        // Extract the header from the first data item
+        var headers = Object.keys(data[0]);
+        var rowHeaderhtml = '<tr style="font-weight:bold;border: 1px solid black; background-color: #EEE;">';
+        headers.forEach(header => {
+            rowHeaderhtml += '<td>' + header + '</td>';
+        });
+        rowHeaderhtml += '</tr>';
+        tablehead.append(rowHeaderhtml);
+
+        var tablebody = $('#dataGridview tbody');
+        tablebody.empty(); // Clear the table body
+        data.forEach(row => {
+            var rowBodyhtml = '<tr>';
+            headers.forEach(header => {
+                rowBodyhtml += '<td>' + (row[header] !== undefined ? row[header] : '') + '</td>';
+            });
+            rowBodyhtml += '</tr>';
+            tablebody.append(rowBodyhtml);
+        });
+    }
+    //-----------
+
+    //function toggleParameterGridView() {
+    //    var selectedApiType = $('#ddlaitype').val();
+    //    if (selectedApiType === "Select" || selectedApiType === "NoParameters") {
+    //        // Clear the data in the input fields
+    //        $('#bindparameters').find('input').val('');
+
+    //        $('#bindparameters').find('input').attr('disabled', 'disabled');
+    //        $('#bindparameters').find('.add, .remove').attr('disabled', 'disabled');
+    //    } else {
+    //        $('#bindparameters').find('input').removeAttr('disabled');
+    //        $('#bindparameters').find('.add, .remove').removeAttr('disabled');
+    //    }
+    //}
+    function toggleParameterGridView() {
+        var selectedApiType = $('#ddlaitype').val();
+        if (selectedApiType === "Select" || selectedApiType === "NoParameters") {
+            // Clear the data in the input fields
+            $('#bindparameters').find('input').val('');
+            $('#textareaParameters').val('');
+            $('#bindparameters').find('input').attr('disabled', 'disabled');
+            $('#bindparameters').find('.add, .remove').attr('disabled', 'disabled');
+            $('#tblParameters').show();
+            $('#textareaParameters').hide();
+        } else if (selectedApiType === "Raw") {
+            $('#bindparameters').find('input').val('');
+            $('#tblParameters').hide();
+            $('#textareaParameters').show();
+        } else {
+            $('#tblParameters').show();
+            $('#textareaParameters').val('');
+            $('#textareaParameters').hide();
+            $('#bindparameters').find('input').removeAttr('disabled');
+            $('#bindparameters').find('.add, .remove').removeAttr('disabled');
+        }
+    }
+    //-------------------------------------------------------------------------
+    $('#ddlaitype').change(function () {
+        lblbind();
+        //    toggleParameterGridView();
+    });
+    function lblbind() {
+        debugger;
+        let ParameterSection = document.getElementById('ParameterSection');
+        let RequestSection = document.getElementById('RequestSection');
+        let BodySection = document.getElementById('BodySection');
+        ParameterSection.classList.add('hidden');
+        RequestSection.classList.add('hidden');
+        BodySection.classList.add('hidden');
+
+
+        var apitype = $('#ddlaitype').val();
+        if (apitype == "Raw") {
+            RequestSection.classList.remove('hidden');
+            BodySection.classList.remove('hidden');
+        }
+
+        if (apitype === "QueryParams" || apitype === "UrlParams" || apitype === 'x_www_form_urlencoded') {
+            RequestSection.classList.remove('hidden');
+            ParameterSection.classList.remove('hidden');
+        }
+    }
+
+</script>
+

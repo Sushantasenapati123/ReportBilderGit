@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Query List";
+    Layout = "~/Views/Shared/_LayoutQB.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMF+0xNO0No+7ErWZ3gG/BvW4LvXtkIMk5cYg2" crossorigin="anonymous">
+<!-- Back Button with Font Awesome Icon -->
+<a href="/DatabaseConfiguration/Index" class="btn btn-secondary mb-3">
+    <i class="fas fa-arrow-left"></i> Back
+</a>
+
+<h2>Query List</h2>
+
+<table id="queryTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Sl.No</th>
+            <th>Database Name</th>
+            <th>Query Text</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+</table>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#queryTable').DataTable({
+                "ajax": {
+                    "url": "/Query/GetQuery",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "slno" },
+                    { "data": "databasename" },
+                    { "data": "queryText" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            let trimmedQueryText = row.queryText.trim();
+                            let escapedQueryText = trimmedQueryText
+                                .replace(/'/g, "\\'")
+                                .replace(/"/g, '\\"')
+                                .replace(/(\r\n|\n|\r)/gm, "");
+                            let databasename = row.databasename.trim();
+                            return `<a href="javascript:void(0);" onclick="editQuery('${escapedQueryText}', '${databasename}')" class="btn btn-primary btn-sm">Edit</a>
+                                            <a href="/YourControllerName/Delete/${row.slno}" class="btn btn-danger btn-sm">Delete</a>`;
+                        },
+                        "orderable": false
+                    }
+                ]
+            });
+        });
+
+        function editQuery(encodedQueryText, databasename) {
+            let queryText = decodeURIComponent(encodedQueryText);
+            databasename = decodeURIComponent(databasename);
+            alert(queryText);
+            let targetUrl = `/DatabaseConfiguration/Index?queryText=${encodeURIComponent(queryText)}&databasename=${encodeURIComponent(databasename)}`;
+            window.location.href = targetUrl;
+            var query = queryText;
+            //const result = parseSQLQuery(query);
+            //const resultString = JSON.stringify(result);
+            //console.log(resultString);
+        }
+    </script>
+}

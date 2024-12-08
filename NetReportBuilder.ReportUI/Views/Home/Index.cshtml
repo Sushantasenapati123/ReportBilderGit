@@ -1,0 +1,1100 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    /*Line Chart*/
+
+    .highcharts-figure, .highcharts-data-table table {
+        min-width: 360px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    /*Pie Chart*/
+
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 320px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    input[type="number"] {
+        min-width: 50px;
+    }
+
+    /*Basic Area Chart*/
+
+    .highcharts-figure, .highcharts-data-table table {
+        min-width: 320px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    #container {
+        height: 450px;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    /*BasicColumnChart*/
+
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    #container {
+        height: 400px;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    /* BasicBarChart*/
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    #container {
+        height: 400px;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+
+    /*BubbleChart*/
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    #container {
+        height: 400px;
+    }
+
+    .highcharts-tooltip h3 {
+        margin: 0.3em 0;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    /*PercentageAreaChart*/
+
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    #container {
+        height: 420px;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    /* ScatterPlot*/
+    #container {
+        max-width: 800px;
+        margin: auto;
+    }
+
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 360px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+</style>
+
+<div class="page-title">
+    <div class="title-details">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb p-0 mb-0 bg-transparent" id="navigation">
+            </ol>
+        </nav>
+    </div>
+</div>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs nav-fill" role="tablist">
+                    @*<a class="nav-item nav-link active" asp-controller="HospitalMaster" asp-action="AddHospital">Add</a>*@
+                </ul>
+                <div class="indicatorslist">
+                    <a title="" href="javascript:void(0)" id="backIcon" data-toggle="tooltip" data-placement="top" data-original-title="Back"><i class="icon-arrow-left1"></i></a>
+                    <p class="ml-2">(*) Indicates mandatory </p>
+                </div>
+            </div>
+            @*//  BASIC FORM ELEMENTS
+                //===================================================*@
+
+            <div class="card-body col-md-6">
+                <div class="w3-panel w3-card">
+                    <p>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label"><b>Data Source</b><span class="text-danger">*</span></label>
+                                <select id="ddlDataSource" class="form-control">
+                                    <option value="0">--Select--</option>
+                                    <option value="1">Employee</option>
+                                    <option value="2">City</option>
+                                    <option value="3">State</option>
+                                </select>
+                            </div>
+                        </div>
+                    </p>
+                </div>
+
+                <div class="w3-panel w3-card">
+                    <p>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label"><b>Chart Type</b><span class="text-danger">*</span></label><br />
+                                <i class="fa fa-area-chart" style="font-size:24px" id="AreaChart"></i>
+                                <i class="fa fa-bar-chart" style="font-size:24px" id="BarChart"></i><br />
+                                <i class="fa fa-pie-chart" style="font-size:24px" id="PieChart"></i>
+                                <i class="fa fa-line-chart" style="font-size:24px" id="LineChart"></i>
+                            </div>
+                        </div>
+                    </p>
+                </div>
+                <div class="w3-panel w3-card">
+                    <p>
+                        <center><b>Report Configuration</b></center>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label"><b>Series</b><span class="text-danger">*</span></label>
+                                <select id="ddlSeries" class="form-control">
+                                    <option value="0">--Select--</option>
+                                    <option value="1">No Of Employees</option>
+                                    <option value="2">Years</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label"><b>X-Axis</b><span class="text-danger">*</span></label>
+                                <select id="ddlX-Axis" class="form-control">
+                                    <option value="0">--Select--</option>
+                                    <option value="1">No Of Employees</option>
+                                    <option value="2">Years</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label"><b>Y-Axis</b><span class="text-danger">*</span></label>
+                                <select id="Y-Axis" class="form-control">
+                                    <option value="0">--Select--</option>
+                                    <option value="1">No Of Employees</option>
+                                    <option value="2">Years</option>
+                                </select>
+                            </div>
+                        </div>
+                    </p>
+                </div>
+                <div class="w3-panel w3-card">
+                    <p>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label"><b>Title</b><span class="text-danger">*</span></label>
+                                <input type="text" id="txtTitle" class="form-control">
+                            </div>
+                        </div>
+                    </p>
+                </div>
+                @*BUTTONS*@
+                <div class="form-group row">
+                    <label class="col-12 col-md-2 col-xl-2 control-label"></label>
+                    <div class="col-12 col-md-4 col-xl-4">
+                        <button class="btn btn-primary mb-1" id="btnApply">Apply</button>
+                        <button class="btn btn-danger mb-1" id="btnSave">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body col-md-6">
+                @*Chart*@
+                <figure class="highcharts-figure">
+                    <div id="container"></div>
+                    <p class="highcharts-description" id="content">
+                    </p>
+                </figure>
+            </div>
+            @*===================================================
+                END BASIC FORM ELEMENTS*@
+        </div>
+    </div>
+</div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    Highcharts.chart('container', {
+
+        title: {
+            text: 'U.S Solar Employment Growth',
+            align: 'left'
+        },
+
+        subtitle: {
+            text: 'By Job Category. Source: <a href="https://irecusa.org/programs/solar-jobs-census/" target="_blank">IREC</a>.',
+            align: 'left'
+        },
+
+        yAxis: {
+            title: {
+                text: 'Number of Employees'
+            }
+        },
+
+        xAxis: {
+            accessibility: {
+                rangeDescription: 'Range: 2010 to 2020'
+            }
+        },
+
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+
+        plotOptions: {
+            series: {
+                label: {
+                    connectorAllowed: false
+                },
+                pointStart: 2010
+            }
+        },
+
+        series: [{
+            name: 'Installation & Developers',
+            data: [
+                43934, 48656, 65165, 81827, 112143, 142383,
+                171533, 165174, 155157, 161454, 154610
+            ]
+        }, {
+            name: 'Manufacturing',
+            data: [
+                24916, 37941, 29742, 29851, 32490, 30282,
+                38121, 36885, 33726, 34243, 31050
+            ]
+        }, {
+            name: 'Sales & Distribution',
+            data: [
+                11744, 30000, 16005, 19771, 20185, 24377,
+                32147, 30912, 29243, 29213, 25663
+            ]
+        }, {
+            name: 'Operations & Maintenance',
+            data: [
+                null, null, null, null, null, null, null,
+                null, 11164, 11218, 10077
+            ]
+        }, {
+            name: 'Other',
+            data: [
+                21908, 5548, 8105, 11248, 8989, 11816, 18274,
+                17300, 13053, 11906, 10073
+            ]
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+
+    });
+    $("#charts").change(function () {
+        if ($("#myChart").val() == "LineChart") {
+            $.ajax({
+                url: "/Home/Get_ChartData",
+                type: "GET",
+                success: function (data) {
+                    var chartData = $.parseJSON(data);
+
+                    var chart = Highcharts.chart('container', {
+                        chart: {
+                            type: 'line',
+                        },
+                        title: {
+                            text: chartData.GraphTitle,
+                            align: 'middle'
+                        },
+
+                        xAxis: {
+                            title: {
+                                text: chartData.XAxisTitle
+                            }
+                        },
+
+                        yAxis: {
+                            title: {
+                                text: chartData.YAxisTitle
+                            },
+                            accessibility: {
+                                rangeDescription: 'Range: ' + chartData.StartYear + ' to ' + chartData.EndYear
+                            }
+                        },
+
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+
+                        plotOptions: {
+                            series: {
+                                label: {
+                                    connectorAllowed: false
+                                },
+                                pointStart: chartData.StartYear
+                            }
+                        },
+
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    legend: {
+                                        layout: 'horizontal',
+                                        align: 'center',
+                                        verticalAlign: 'bottom'
+                                    }
+                                }
+                            }]
+                        }
+
+                    });
+                    if (chartData != null) {
+                        $('#container').show();
+                        var irr2 = [];
+                        for (var i = 0; i < (chartData.InstallationData.length); i++) {
+                            irr2.push(chartData.InstallationData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "Installation and Development",
+                                data: irr2
+                            }
+                        )
+                        var irr1 = [];
+                        for (var i = 0; i < (chartData.ManufacturingData.length); i++) {
+                            irr1.push(chartData.ManufacturingData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "Manufacturing",
+                                data: irr1
+                            }
+                        )
+                        var irr3 = [];
+                        for (var i = 0; i < (chartData.SalesAndDistributionData.length); i++) {
+                            irr3.push(chartData.SalesAndDistributionData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "SalesAndDistribution",
+                                data: irr3
+                            }
+                        )
+                        var irr4 = [];
+                        for (var i = 0; i < (chartData.OperationsAndMaintenanceData.length); i++) {
+                            irr4.push(chartData.OperationsAndMaintenanceData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "OperationsAndMaintenance",
+                                data: irr4
+                            }
+                        )
+                    }
+                    else {
+                        $('#container').hide();
+                    }
+
+                },
+
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    bootbox.alert("Error : " + jsonValue);
+                }
+            });
+            $("#content").text("Basic line chart showing trends in a dataset. This chart includes the < code > series - label</code > module, which adds a label to each line for enhanced readability.");
+        }
+        else if ($("#myChart").val() == "PieChart") {
+            $.ajax({
+                url: "/Home/Get_ChartData",
+                type: "GET",
+                success: function (data) {
+                    var chartData = $.parseJSON(data);
+
+                    var chart = Highcharts.chart('container', {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: chartData.GraphTitle,
+                            align: 'left'
+                        },
+
+                        xAxis: {
+                            title: {
+                                text: chartData.XAxisTitle
+                            }
+                        },
+
+                        yAxis: {
+                            title: {
+                                text: chartData.YAxisTitle
+                            },
+                            accessibility: {
+                                rangeDescription: 'Range: ' + chartData.StartYear + ' to ' + chartData.EndYear
+                            }
+                        },
+
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+
+                        plotOptions: {
+                            series: {
+                                label: {
+                                    connectorAllowed: false
+                                },
+                                pointStart: chartData.StartYear
+                            }
+                        },
+
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    legend: {
+                                        layout: 'horizontal',
+                                        align: 'center',
+                                        verticalAlign: 'bottom'
+                                    }
+                                }
+                            }]
+                        }
+
+                    });
+                    if (chartData != null) {
+                        $('#container').show();
+                        var irr2 = [];
+                        for (var i = 0; i < (chartData.InstallationData.length); i++) {
+                            irr2.push(chartData.InstallationData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "Installation and Development",
+                                data: irr2
+                            }
+                        )
+                        var irr1 = [];
+                        for (var i = 0; i < (chartData.ManufacturingData.length); i++) {
+                            irr1.push(chartData.ManufacturingData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "Manufacturing",
+                                data: irr1
+                            }
+                        )
+                        var irr3 = [];
+                        for (var i = 0; i < (chartData.SalesAndDistributionData.length); i++) {
+                            irr3.push(chartData.SalesAndDistributionData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "SalesAndDistribution",
+                                data: irr3
+                            }
+                        )
+                        var irr4 = [];
+                        for (var i = 0; i < (chartData.OperationsAndMaintenanceData.length); i++) {
+                            irr4.push(chartData.OperationsAndMaintenanceData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "OperationsAndMaintenance",
+                                data: irr4
+                            }
+                        )
+                    }
+                    else {
+                        $('#container').hide();
+                    }
+
+                },
+
+
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    bootbox.alert("Error : " + jsonValue);
+                }
+            });
+            $("#content").text("Demonstrating a basic area chart, also known as a mountain chart.Area charts are similar to line charts, but commonly used to visualize volumes.");
+        }
+        else if ($("#myChart").val() == "BasicAreaChart") {
+            $.ajax({
+                url: "/Home/Get_ChartData",
+                type: "GET",
+                success: function (data) {
+                    var chartData = $.parseJSON(data);
+
+                    var chart = Highcharts.chart('container', {
+                        chart: {
+                            type: 'area'
+                        },
+                        title: {
+                            text: chartData.GraphTitle,
+                            align: 'left'
+                        },
+
+                        xAxis: {
+                            title: {
+                                text: chartData.XAxisTitle
+                            }
+                        },
+
+                        yAxis: {
+                            title: {
+                                text: chartData.YAxisTitle
+                            },
+                            accessibility: {
+                                rangeDescription: 'Range: ' + chartData.StartYear + ' to ' + chartData.EndYear
+                            }
+                        },
+
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+
+                        plotOptions: {
+                            series: {
+                                label: {
+                                    connectorAllowed: false
+                                },
+                                pointStart: chartData.StartYear
+                            }
+                        },
+
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    legend: {
+                                        layout: 'horizontal',
+                                        align: 'center',
+                                        verticalAlign: 'bottom'
+                                    }
+                                }
+                            }]
+                        }
+
+                    });
+                    if (chartData != null) {
+                        $('#container').show();
+                        var irr2 = [];
+                        for (var i = 0; i < (chartData.InstallationData.length); i++) {
+                            irr2.push(chartData.InstallationData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "Installation and Development",
+                                data: irr2
+                            }
+                        )
+                        var irr1 = [];
+                        for (var i = 0; i < (chartData.ManufacturingData.length); i++) {
+                            irr1.push(chartData.ManufacturingData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "Manufacturing",
+                                data: irr1
+                            }
+                        )
+                        var irr3 = [];
+                        for (var i = 0; i < (chartData.SalesAndDistributionData.length); i++) {
+                            irr3.push(chartData.SalesAndDistributionData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "SalesAndDistribution",
+                                data: irr3
+                            }
+                        )
+                        var irr4 = [];
+                        for (var i = 0; i < (chartData.OperationsAndMaintenanceData.length); i++) {
+                            irr4.push(chartData.OperationsAndMaintenanceData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "OperationsAndMaintenance",
+                                data: irr4
+                            }
+                        )
+                    }
+                    else {
+                        $('#container').hide();
+                    }
+
+                },
+
+
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    bootbox.alert("Error : " + jsonValue);
+                }
+            });
+            $("#content").text("Demonstrating a basic area chart, also known as a mountain chart.Area charts are similar to line charts, but commonly used to visualize volumes.");
+        }
+        else if ($("#myChart").val() == "BasicBarChart") {
+            $.ajax({
+                url: "/Home/Get_ChartData",
+                type: "GET",
+                success: function (data) {
+                    var chartData = $.parseJSON(data);
+
+                    var chart = Highcharts.chart('container', {
+                        chart: {
+                            type: 'bar'
+                        },
+                        title: {
+                            text: chartData.GraphTitle,
+                            align: 'left'
+                        },
+
+                        xAxis: {
+                            title: {
+                                text: chartData.XAxisTitle
+                            }
+                        },
+
+                        yAxis: {
+                            title: {
+                                text: chartData.YAxisTitle
+                            },
+                            accessibility: {
+                                rangeDescription: 'Range: ' + chartData.StartYear + ' to ' + chartData.EndYear
+                            }
+                        },
+
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+
+                        plotOptions: {
+                            series: {
+                                label: {
+                                    connectorAllowed: false
+                                },
+                                pointStart: chartData.StartYear
+                            }
+                        },
+
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    legend: {
+                                        layout: 'horizontal',
+                                        align: 'center',
+                                        verticalAlign: 'bottom'
+                                    }
+                                }
+                            }]
+                        }
+
+                    });
+                    if (chartData != null) {
+                        $('#container').show();
+                        var irr2 = [];
+                        for (var i = 0; i < (chartData.InstallationData.length); i++) {
+                            irr2.push(chartData.InstallationData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "Installation and Development",
+                                data: irr2
+                            }
+                        )
+                        var irr1 = [];
+                        for (var i = 0; i < (chartData.ManufacturingData.length); i++) {
+                            irr1.push(chartData.ManufacturingData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "Manufacturing",
+                                data: irr1
+                            }
+                        )
+                        var irr3 = [];
+                        for (var i = 0; i < (chartData.SalesAndDistributionData.length); i++) {
+                            irr3.push(chartData.SalesAndDistributionData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "SalesAndDistribution",
+                                data: irr3
+                            }
+                        )
+                        var irr4 = [];
+                        for (var i = 0; i < (chartData.OperationsAndMaintenanceData.length); i++) {
+                            irr4.push(chartData.OperationsAndMaintenanceData[i].NoOfEmployee);
+                        }
+                        chart.addSeries(
+                            {
+                                name: "OperationsAndMaintenance",
+                                data: irr4
+                            }
+                        )
+                    }
+                    else {
+                        $('#container').hide();
+                    }
+
+                },
+
+
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    bootbox.alert("Error : " + jsonValue);
+                }
+            });
+            $("#content").text("Bar chart showing horizontal columns. This chart type is often beneficial for smaller screens, as the user can scroll through the data vertically, and axis labels are easy to read.");
+        }
+    });
+
+
+</script>

@@ -1,0 +1,118 @@
+2023-04-04 09:46:01.093 +05:30 [INF] Login Started
+2023-04-04 09:46:18.108 +05:30 [INF] Login Post Started
+2023-04-04 09:53:09.561 +05:30 [INF] Login Started
+2023-04-04 09:53:29.058 +05:30 [INF] Login Post Started
+2023-04-04 09:53:48.947 +05:30 [INF] PathoLabBill Started
+2023-04-04 09:53:49.426 +05:30 [INF] PathoLabBill Started
+2023-04-04 09:53:56.732 +05:30 [INF] View PathoLab Collection 
+2023-04-04 09:53:56.919 +05:30 [INF] View PathoLab Collection 
+2023-04-04 09:54:11.175 +05:30 [INF]  Collect Sample  
+2023-04-04 09:54:11.355 +05:30 [INF]  Collect Sample  
+2023-04-04 09:54:11.384 +05:30 [INF]  Binding Test
+2023-04-04 09:54:11.384 +05:30 [INF]  Get Patient Details By Patho Bill Id
+2023-04-04 09:54:15.664 +05:30 [INF] View Collection
+2023-04-04 09:54:15.841 +05:30 [INF] View Collection
+2023-04-04 09:54:19.512 +05:30 [INF]  Views PathoLab Report  
+2023-04-04 09:54:19.649 +05:30 [INF]  Get Patient Details By Patho Bill Id
+2023-04-04 09:54:19.655 +05:30 [INF]  Binding Test Config
+2023-04-04 09:54:19.661 +05:30 [INF]  Views PathoLab Report  
+2023-04-04 09:54:24.817 +05:30 [INF] Patho Report Collection For Print 
+2023-04-04 09:54:24.980 +05:30 [INF] Patho Report Collection For Print 
+2023-04-04 09:54:29.306 +05:30 [INF]  Print Report
+2023-04-04 09:54:29.493 +05:30 [INF]  Binding Test Config
+2023-04-04 09:54:29.498 +05:30 [INF]  Print Patho Report
+2023-04-04 09:54:29.555 +05:30 [INF]  Print Report
+2023-04-04 09:54:46.407 +05:30 [INF] Patho Report Collection For Print 
+2023-04-04 09:54:54.333 +05:30 [INF]  Print Report
+2023-04-04 09:54:54.435 +05:30 [INF]  Binding Test Config
+2023-04-04 09:54:54.436 +05:30 [INF]  Print Patho Report
+2023-04-04 09:54:54.494 +05:30 [INF]  Print Report
+2023-04-04 11:31:18.390 +05:30 [INF] Login Started
+2023-04-04 11:31:37.169 +05:30 [INF] Login Post Started
+2023-04-04 12:24:55.506 +05:30 [INF] Login Started
+2023-04-04 12:25:03.376 +05:30 [INF] Login Post Started
+2023-04-04 12:25:03.376 +05:30 [INF] Login Post Started
+2023-04-04 12:31:46.044 +05:30 [INF] Login Started
+2023-04-04 12:32:00.206 +05:30 [INF] Login Post Started
+2023-04-04 12:32:00.206 +05:30 [INF] Login Post Started
+2023-04-04 12:33:38.715 +05:30 [INF] Login Started
+2023-04-04 12:33:49.414 +05:30 [INF] Login Post Started
+2023-04-04 12:33:49.414 +05:30 [INF] Login Post Started
+2023-04-04 12:52:33.150 +05:30 [INF] Login Started
+2023-04-04 12:52:42.445 +05:30 [INF] Login Post Started
+2023-04-04 12:52:42.445 +05:30 [INF] Login Post Started
+2023-04-04 12:55:12.689 +05:30 [INF] Login Started
+2023-04-04 12:55:24.300 +05:30 [INF] Login Post Started
+2023-04-04 12:55:24.300 +05:30 [INF] Login Post Started
+2023-04-04 13:04:37.239 +05:30 [INF] Login Post Started
+2023-04-04 13:08:04.620 +05:30 [INF] Login Started
+2023-04-04 13:08:18.339 +05:30 [INF] Login Post Started
+2023-04-04 13:08:18.339 +05:30 [INF] Login Post Started
+2023-04-04 15:31:44.510 +05:30 [INF] Login Started
+2023-04-04 15:31:53.439 +05:30 [INF] Login Post Started
+2023-04-04 15:31:53.444 +05:30 [INF] Login Post Started
+2023-04-04 15:38:27.735 +05:30 [INF] PathoLabBill Started
+2023-04-04 15:38:28.159 +05:30 [INF] PathoLabBill Started
+2023-04-04 15:38:29.528 +05:30 [INF] View PathoLab Collection 
+2023-04-04 15:38:29.747 +05:30 [INF] View PathoLab Collection 
+2023-04-04 15:38:32.530 +05:30 [INF]  Collect Sample  
+2023-04-04 15:38:32.684 +05:30 [INF]  Get Patient Details By Patho Bill Id
+2023-04-04 15:38:32.684 +05:30 [INF]  Binding Test
+2023-04-04 15:38:32.693 +05:30 [INF]  Collect Sample  
+2023-04-04 15:38:37.704 +05:30 [INF] View Collection
+2023-04-04 15:38:37.848 +05:30 [INF] View Collection
+2023-04-04 15:38:50.330 +05:30 [INF] View Collection
+2023-04-04 15:38:50.437 +05:30 [INF] View Collection
+2023-04-04 15:40:09.172 +05:30 [INF] View Collection
+2023-04-04 15:40:10.073 +05:30 [INF] View Collection
+2023-04-04 15:41:42.510 +05:30 [INF] View Collection
+2023-04-04 15:41:43.294 +05:30 [INF] View Collection
+2023-04-04 16:32:19.309 +05:30 [INF] View Collection
+2023-04-04 16:32:19.390 +05:30 [INF] View Collection
+2023-04-04 16:32:25.999 +05:30 [INF]  Views PathoLab Report  
+2023-04-04 16:32:26.057 +05:30 [INF]  Get Patient Details By Patho Bill Id
+2023-04-04 16:32:26.058 +05:30 [INF]  Binding Test Config
+2023-04-04 16:32:26.065 +05:30 [INF]  Views PathoLab Report  
+2023-04-04 16:32:30.805 +05:30 [INF] Patho Report Collection For Print 
+2023-04-04 16:32:30.864 +05:30 [INF] Patho Report Collection For Print 
+2023-04-04 16:40:21.184 +05:30 [INF] Login Started
+2023-04-04 16:40:29.633 +05:30 [INF] Login Post Started
+2023-04-04 16:40:29.633 +05:30 [INF] Login Post Started
+2023-04-04 16:41:29.654 +05:30 [INF]  Print Report
+2023-04-04 16:41:29.761 +05:30 [INF]  Binding Test Config
+2023-04-04 16:41:29.761 +05:30 [INF]  Print Patho Report
+2023-04-04 16:41:29.768 +05:30 [INF]  Print Report
+2023-04-04 16:41:42.217 +05:30 [INF]  Print Report
+2023-04-04 16:41:42.271 +05:30 [INF]  Print Patho Report
+2023-04-04 16:41:42.271 +05:30 [INF]  Binding Test Config
+2023-04-04 16:41:42.310 +05:30 [INF]  Print Report
+2023-04-04 16:44:41.469 +05:30 [INF] Login Started
+2023-04-04 16:44:49.939 +05:30 [INF] Login Post Started
+2023-04-04 16:44:49.939 +05:30 [INF] Login Post Started
+2023-04-04 16:53:03.606 +05:30 [INF] Login Started
+2023-04-04 16:53:12.108 +05:30 [INF] Login Post Started
+2023-04-04 16:53:12.108 +05:30 [INF] Login Post Started
+2023-04-04 17:05:02.298 +05:30 [INF] Login Started
+2023-04-04 17:05:10.066 +05:30 [INF] Login Post Started
+2023-04-04 17:05:10.066 +05:30 [INF] Login Post Started
+2023-04-04 17:06:59.834 +05:30 [INF] Login Started
+2023-04-04 17:07:08.303 +05:30 [INF] Login Post Started
+2023-04-04 17:07:08.303 +05:30 [INF] Login Post Started
+2023-04-04 17:13:31.975 +05:30 [INF]  Print Report
+2023-04-04 17:13:32.112 +05:30 [INF]  Print Report
+2023-04-04 17:13:32.112 +05:30 [INF]  Binding Test Config
+2023-04-04 17:13:32.112 +05:30 [INF]  Print Patho Report
+2023-04-04 17:13:41.141 +05:30 [INF]  Print Report
+2023-04-04 17:13:41.187 +05:30 [INF]  Print Patho Report
+2023-04-04 17:13:41.187 +05:30 [INF]  Binding Test Config
+2023-04-04 17:13:41.195 +05:30 [INF]  Print Report
+2023-04-04 17:13:49.704 +05:30 [INF]  Print Report
+2023-04-04 17:13:49.751 +05:30 [INF]  Binding Test Config
+2023-04-04 17:13:49.751 +05:30 [INF]  Print Patho Report
+2023-04-04 17:13:49.757 +05:30 [INF]  Print Report
+2023-04-04 17:58:00.422 +05:30 [INF] Login Started
+2023-04-04 17:58:12.475 +05:30 [INF] Login Post Started
+2023-04-04 17:58:12.475 +05:30 [INF] Login Post Started
+2023-04-04 18:08:35.778 +05:30 [INF] Login Started
+2023-04-04 18:08:51.167 +05:30 [INF] Login Post Started
+2023-04-04 18:08:51.167 +05:30 [INF] Login Post Started

@@ -1,0 +1,1757 @@
+﻿@*//@model DatabaseConfiguration.Models.DatabaseConfiguration.DatabaseModel*@
+@{
+    ViewData["Title"] = "Database Configuration Page";
+    Layout = "~/Views/Shared/_LayoutQB.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Datasource Configuration</title>
+
+    <!-- Including Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Including jQuery from CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Including SweetAlert2 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Including Drawflow from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/drawflow@0.0.36/dist/drawflow.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow@0.0.48/dist/drawflow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" type="text/css" href="../css/drawflow.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+    <style>
+
+        .hidden {
+            display: none;
+        }
+
+        .modal_custom .modal-dialog {
+            max-width: 800px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin-left: 0;
+            width: 100%;
+        }
+    </style>
+   <style>
+        .custom-modal {
+            position: fixed; /* Fixed to stay on top while scrolling */
+            top: 0; /* Start at the top of the screen */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Transparent black overlay */
+            z-index: 9999; /* High z-index to ensure it's on top */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: left;
+            width: 50%; /* Adjust width as per need */
+            max-width: 600px; /* Ensure modal does not exceed a reasonable width */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-height: 90vh; /* Ensures modal doesn't take more than 90% of viewport height */
+            overflow-y: auto; /* Adds scrolling if content overflows vertically */
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end; /* Align buttons to the right */
+            margin-top: 10px;
+        }
+
+            .modal-buttons button {
+                margin-left: 10px;
+            }
+
+   </style>
+
+</head>
+
+<body>
+    <!-- drflowchart -->
+    <div class="wrapper">
+        <!-- left section start here -->
+        <div class="col left__section" id="dashbrdGroups">
+            <input type="hidden" id="hdnTBlName" value="" />
+            <nav class="custom__tab">
+                <div class="form_box">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter Search.." aria-label="Search" aria-describedby="basic-addon1">
+                        <span class="input-group-text" id="basic-addon1"> <i class="bi bi-search"></i></span>
+                    </div>
+                </div>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true" title="Database"> Database </button>
+                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" title="Queries"> Queries </button>
+                </div>
+                <div class="nav nav-tabs">
+                    <div class="btn-group ms-1">
+                        <select class="form-select" id="databaseDropdown" onchange="getDatabaseConfiguration()">
+                            <option selected disabled>-- Select Database --</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <button class="btn-sm btn btn-outline-primary ms-2" id="addDatabaseBtn" title="Add Database" data-bs-toggle="modal" data-bs-target="#addDatabaseModal">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <input type="hidden" value="" id="hdnGroupValue" />
+                <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="b-dashboard-content mCustomScrollbar">
+                        <div class="b-dashboard-body">
+                            <nav class="b-dashboard-menu">
+                                <ul>
+                                    <li class="expandable">
+                                        <a href="#" title="Table Name" class="active__items"><i class="bi bi-folder"></i>Tables</a>
+                                        <ul id="tablesContent">
+                                            <!-- Tables will be loaded here via AJAX -->
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <ul>
+                                    <li class="expandable">
+                                        <a href="#" title="View Name" class="active__items"><i class="bi bi-folder"></i>Views</a>
+                                        <ul id="viewsContent error">
+                                            <!-- Views will be loaded here via AJAX -->
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div><!-- b-dashboard-body -->
+                    </div><!-- b-dashboard-content -->
+                </div><!-- tab-pane -->
+            </div><!-- tab-content -->
+            <footer class="footer__bottom">
+                All Rights Reserved 2024
+            </footer>
+            <!-- ------------------------------- -->
+        </div>
+        <!-- left section end here -->
+        <!-- Database Connection Modal -->
+        <div class="modal fade modal_custom" id="addDatabaseModal" tabindex="-1" aria-labelledby="addDatabaseModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                <div class="modal-content p-0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addDatabaseModalLabel">Add Database</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="databaseForm">
+                            <div class="row">
+                                <div class="form-group mb-3 col-xl-4">
+                                    <label for="DatabaseType">Database Type:</label>
+                                    <select id="DatabaseType" name="DatabaseType" class="form-select">
+                                        <option value="Select Database">~Select Database~</option>
+                                        <option value="SqlServer">SqlServer</option>
+                                        <option value="Oracle">Oracle</option>
+                                        <option value="MySQL">MySQL</option>
+                                        <option value="Postgre">Postgre</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3 col-xl-4">
+                                    <label for="Host">Host Name/Server Name:</label>
+                                    <input type="text" id="Host" name="Host" class="form-control">
+                                </div>
+                                <div class="form-group mb-3 col-xl-4">
+                                    <label for="DataBase">Database Name:</label>
+                                    <input type="text" id="DataBase" name="DataBase" class="form-control">
+                                </div>
+                               
+                            </div>
+                            <div class="row">
+                                <div class="form-group mb-3 col-xl-4">
+                                    <label for="Authentication">Authentication:</label>
+                                    <select id="Authentication" name="Authentication" class="form-select">
+                                        <option value="Select Authentication">~Select Authentication~</option>
+                                        <option value="Password">Password</option>
+                                        <option value="Integrated Security">Integrated Security</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3 col-xl-4">
+                                    <label for="UserId">User Name:</label>
+                                    <input type="text" id="UserId" name="UserId" class="form-control">
+                                </div>
+                                <div class="form-group mb-3 col-xl-4">
+                                    <label for="Password">Password:</label>
+                                    <input type="password" id="Password" name="Password" class="form-control">
+                                </div>
+                                <div class="form-group mb-3 col-xl-4">
+                                    <label for="Port">Port:</label>
+                                    <input type="text" id="Port" name="Port" class="form-control">
+                                </div>
+                                <div class="form-check mb-3 col-xl-6">
+                                    <label for="Port"> &nbsp; </label>
+                                    <div>
+                                        <input type="checkbox" id="RememberPassword" name="RememberPassword" class="form-check-input">
+                                        <label for="RememberPassword" class="form-check-label">Remember Password</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="testConnectionButton" class="btn btn-primary" type="button" onclick="connectDatabase()">Test Connection</button>
+                        <button id="connectButton" class="btn btn-success" type="button" onclick="saveDatabase()">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- right section start here -->
+        <div class="col-right" id="colRight">
+            <div class="d-flex w-100 justify-content-between">
+                <div class="custom__heading">
+                    <div class="b-dashboard-toggler">
+                        <span title="Menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid status_toggle middle sidebar-toggle">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </span>
+                    </div>
+
+                    <div>
+                        <h3>Datasource Configuration</h3>
+                    </div>
+                </div>
+                <input type="hidden" id="hdnPrimarynode" />
+                <input type="hidden" id="hdnSecondarynode" />
+                <div class="menu_sidebar">
+                    <nav class="breadcrumbs">
+                        <a href="#home" class="breadcrumbs__item" title="Home"> <i class="bi bi-house"></i> Home </a>
+                        <a href="#cart" class="breadcrumbs__item" title="Database"> <i class="bi bi-database"></i> Database </a>
+                        <a href="#shop" class="breadcrumbs__item" title="Project"> <i class="bi bi-card-list"></i> Project </a>
+                        <a href="#cart" class="breadcrumbs__item" title="Table"> <i class="bi bi-table"></i> Table </a>
+                        <a href="#checkout" class="breadcrumbs__item is-active" title="Department"> <i class="bi bi-folder"></i> Department </a>
+                    </nav>
+                </div>
+            </div>
+            <div class="resizable-x">
+                <div class="resizer-x"></div>
+                <!-- draflow section -->
+                <div class="resizable-y">
+                    <div class="div1">
+                        <div id="drawflow" @*ondrop="drop(event)" ondragover="allowDrop(event)"*@>
+                            <div class="btn-export" onclick="saveQuery()">Save</div>
+                            <div class="btn-clear" onclick="clearFlow()">Clear</div>
+
+                            <div class="btn-lock">
+                                <i id="lock" class="fas fa-lock" onclick="changeMode('lock')" style="display:none;"></i>
+                                <i id="unlock" class="fas fa-lock-open" onclick="changeMode('unlock')"></i>
+                            </div>
+                            <div class="bar-zoom">
+                                <i class="fas fa-search-plus" onclick="editor.zoom_in()"></i>
+                                <i class="fas fa-search" onclick="editor.zoom_reset()"></i>
+                                <i class="fas fa-search-minus" onclick="editor.zoom_out()"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resizer-y"></div>
+
+                <!-- tab section -->
+
+                <div class="div2">
+                    <div class="tabs__new">
+                        <input id="tab1" type="radio" name="tabs">
+                        <label for="tab1" title=" Coloumn List"> Coloumn List </label>
+                        <input id="tab2" type="radio" name="tabs">
+                        <label for="tab2" title="SQL Text">SQL Text </label>
+                        <input id="tab3" type="button" name="tabs">
+                        <label for="tab3" title="Join">Join</label>
+                        <input id="tab4" type="button" onclick="refresh()" name="tabs">
+                        <label for="tab4" class="align-content-md-end" title="Querylist">Querylist</label>
+                    </div>
+
+                    <div class="tab-content list__tab" id="nav-tabContent">
+                        <div class="table-responsive custom_scrollbar" id="content1">
+                            <!-- Placeholder for the table with column details -->
+                            <table class="table table-bordered custom_scrollbar" id="columnlist">
+                                <thead>
+                                    <tr>
+                                        <th>Table Name</th>
+                                        <th>Column Name</th>
+                                        <th>Alias</th>
+                                        <th>Group By</th>
+                                        <th>Filter</th>
+                                        <th>Sort By</th>
+
+                                        @*<th>Is Nullable</th>
+                                        <th>Is Identity</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody id="columnlisttbody">
+                                    <!-- Dynamically populated rows will be inserted here -->
+                                </tbody>
+                            </table>
+                            <textarea id="textarea" class="w-100 mt-2" rows="4" cols="171"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- right section end here -->
+        <!-- Relationship Configuration Modal -->
+        <div class="modal" id="connectionModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" role="document">
+                <div class="modal-content p-0">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Connect Tables</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="connectionForm">
+                            <div class="form-group">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="jointable">
+                                        <thead>
+                                            <tr>
+                                                <th>Left Table Name</th>
+                                                @*<th>Alias Name</th>*@
+                                                <th>Columns</th>
+                                                <th>Join Type</th>
+                                                <th>Right Table Name</th>
+                                                @*<th>Alias Name</th>*@
+                                                <th>Columns</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Dynamically populated rows will be inserted here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <input type="hidden" id="primaryNodeId">
+                            <input type="hidden" id="foreignNodeId">
+                            <input type="hidden" id="joinquery">
+                            <input type="hidden" id="RowID" />
+                            <input type="hidden" id="Jsondata" />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnJoinSubmit" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
+                        @*            <button type="button" class="btn btn-primary" id="connectNodesButton">Connect</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Save Query Modal -->
+    <div id="saveQueryModal" class="custom-modal" style="display:none;">
+        <div class="custom-modal-content">
+            <label for="queryTitle">Query Title:</label>
+            <input type="text" id="queryTitle" class="form-control" placeholder="Enter Query Title">
+
+            <!-- Save and Cancel buttons -->
+            <div class="modal-buttons">
+                <button id="saveQueryBtn" class="btn btn-primary" onclick="submitQuerySave()">Save</button>
+                <button id="cancelQueryBtn" class="btn btn-secondary" onclick="closeSaveQueryModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+
+
+</html>
+
+<script src="../js/resizable.js"></script>
+<script>
+    //$(document).ready(function () {
+    //    var toggleDashboard = document.querySelector('.b-dashboard-toggler');
+    //    var dashbrdGroups = document.getElementById('dashbrdGroups');
+    //    var colRight = document.getElementById('colRight');
+
+    //    toggleDashboard.addEventListener('click', function () {
+    //        dashbrdGroups.classList.toggle('hidden');
+    //        colRight.classList.toggle('full-display');
+    //    });
+    //    bindDatabase();
+    //    removeLocalStorageItem();
+    //    $('#textarea').hide();
+
+    //});
+    $(document).ready(function () {
+        $('#textarea').hide();
+
+        document.getElementById('tab1').click();
+        var toggleDashboard = document.querySelector('.b-dashboard-toggler');
+        var dashbrdGroups = document.getElementById('dashbrdGroups');
+        var colRight = document.getElementById('colRight');
+
+        toggleDashboard.addEventListener('click', function () {
+            dashbrdGroups.classList.toggle('hidden');
+            colRight.classList.toggle('full-display');
+        });
+
+        //bindDatabase();
+        removeLocalStorageItem();
+
+        // Function to get query parameter by name
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Get queryText from URL
+        const queryText = getQueryParam('queryText');
+        const databasename = getQueryParam('databasename');
+        //alert(databasename);
+        if (databasename == null) {
+            bindDatabase();
+        }
+        else {
+            $('#databaseDropdown').append(`<option value="${databasename}" selected>${databasename}</option>`);
+            getDatabaseConfiguration();
+        }
+
+        // If queryText exists, bind it to the textarea
+        if (queryText) {
+            $('#textarea').val(decodeURIComponent(queryText)).show();
+        } else {
+            return false;
+        }
+        //var tbody = document.getElementById('columnlisttbody');
+        if ($('#textarea').val() == "") {
+            return false;
+        } else {
+            var query = queryText;
+            const result = parseSQLQuery(query);
+            const resultString = JSON.stringify(result);
+            //alert(resultString);
+        }
+        //alert($('#Jsondata').val());
+        var jsonData = JSON.parse($('#Jsondata').val());
+        if (jsonData == null) {
+            return false;
+        }
+        else {
+            populateTable(jsonData);
+        }
+    });
+    function parseSQLQuery(query) {
+        let tables = {};
+        let tableColumns = {};  // To track columns by their tables
+
+        // Extract clauses from query
+        const selectClause = query.match(/SELECT (.+?) FROM/i)[1];
+        const fromClause = query.match(/FROM (.+?)( WHERE| GROUP BY| ORDER BY|$)/i)[1];
+        const groupByClause = query.match(/GROUP BY (.+?)( ORDER BY|$)/i);
+        const orderByClause = query.match(/ORDER BY (.+)$/i);
+
+        // Extract table names from FROM clause
+        const tableMatches = fromClause.match(/\b\w+\b/g).filter(word => !['INNER', 'JOIN', 'ON', 'WHERE', 'GROUP', 'ORDER', 'BY'].includes(word.toUpperCase()));
+
+        // Initialize tables and columns
+        tableMatches.forEach(table => {
+            if (!tables[table]) {
+                tables[table] = { name: table, columns: {} };
+                tableColumns[table] = new Set();  // Initialize set for tracking column names
+            }
+        });
+
+        // Process SELECT columns
+        const selectColumns = selectClause.split(/\s*,\s*/);
+        selectColumns.forEach(column => {
+            // Handle column alias
+            const [func, col] = column.includes('(') ? column.match(/(\w+)\(([\w.]+)\)/).slice(1) : [null, column];
+            const [actualCol, alias] = col.includes(' as ') ? col.split(' as ') : [col, col];
+            const [tableName, colName] = actualCol.includes('.') ? actualCol.split('.') : [tableMatches[0], actualCol];
+
+            if (!tables[tableName]) {
+                tables[tableName] = { name: tableName, columns: {} };
+                tableColumns[tableName] = new Set();
+            }
+
+            // Initialize columns with default values
+            if (!tables[tableName].columns[colName]) {
+                tables[tableName].columns[colName] = {
+                    groupBy: false,
+                    orderBy: null,
+                    function: null
+                };
+            }
+
+            // Set function if exists
+            tables[tableName].columns[colName].function = func || null;
+
+            // Add column to the set for checking later
+            tableColumns[tableName].add(colName);
+        });
+
+        // Process GROUP BY columns
+        if (groupByClause) {
+            const groupByColumns = groupByClause[1].split(/\s*,\s*/);
+            groupByColumns.forEach(groupCol => {
+                const [tableName, colName] = groupCol.includes('.') ? groupCol.split('.') : [tableMatches[0], groupCol];
+                if (tables[tableName] && tables[tableName].columns[colName]) {
+                    tables[tableName].columns[colName].groupBy = true;
+                }
+            });
+        }
+
+        // Process ORDER BY columns
+        if (orderByClause) {
+            const orderByColumns = orderByClause[1].split(/\s*,\s*/);
+            orderByColumns.forEach(orderCol => {
+                const [col, direction] = orderCol.split(/\s+/);
+                const [actualCol, alias] = col.includes(' as ') ? col.split(' as ') : [col, col];
+                const [tableName, colName] = actualCol.includes('.') ? actualCol.split('.') : [tableMatches[0], actualCol];
+
+                if (tables[tableName] && tables[tableName].columns[colName]) {
+                    tables[tableName].columns[colName].orderBy = direction.toLowerCase();
+                }
+            });
+        }
+
+        // Ensure all columns from GROUP BY and ORDER BY are included
+        const result = {
+            tables: Object.values(tables).map(table => {
+                const filteredColumns = Object.fromEntries(
+                    Object.entries(table.columns).map(([colName, column]) => {
+                        return [
+                            colName,
+                            {
+                                groupBy: column.groupBy || false,
+                                orderBy: column.orderBy || null,
+                                function: column.function || null
+                            }
+                        ];
+                    })
+                );
+                return {
+                    name: table.name,
+                    columns: filteredColumns
+                };
+            }).filter(table => Object.keys(table.columns).length > 0)  // Filter out tables with empty columns
+        };
+        $('#Jsondata').val(JSON.stringify(result));
+        return result;
+    }
+
+    //function populateTable(jsonData) {
+    //    if (!jsonData) {
+    //        return false;
+    //    }
+
+    //    var tbody = $('#columnlisttbody');
+
+    //    jsonData.tables.forEach(function (table) {
+    //        Object.keys(table.columns).forEach(function (columnName) {
+    //            var columnData = table.columns[columnName];
+    //            var row = `
+    //                <tr>
+    //                    <td>${table.name}</td>
+    //                    <td>${columnName}</td>
+    //                    <td>${columnData.alias || ''}</td>
+    //                    <td>${columnData.groupBy ? 'Yes' : 'No'}</td>
+    //                    <td>${columnData.filter || ''}</td>
+    //                    <td>${columnData.orderBy || ''}</td>
+    //                </tr>`;
+    //            tbody.append(row);
+    //        });
+    //    });
+    //}
+
+    function populateTable(jsonData) {
+        if (!jsonData) {
+            return false;
+        }
+
+        var empTab = document.getElementById('columnlisttbody');
+        var tableRowsMap = {};
+
+        jsonData.tables.forEach(function (table) {
+            var tableName = table.name;
+
+            Object.keys(table.columns).forEach(function (columnName) {
+                var columnData = table.columns[columnName];
+
+                const arrHead = ['Table', 'Col', 'Alias', 'GrpBy', 'Filter', 'Sort'];
+                var rowCnt = empTab.rows.length;
+                var tr = empTab.insertRow(rowCnt);
+                var rowID = `row_${tableName}_${columnName}`; // Unique ID for the row
+                tr.setAttribute('id', rowID);
+
+                if (!tableRowsMap[tableName]) {
+                    tableRowsMap[tableName] = [];
+                }
+                tableRowsMap[tableName].push(rowID);
+
+                for (var c = 0; c < arrHead.length; c++) {
+                    var td = tr.insertCell(c);
+
+                    if (c == 0) {  // Table column
+                        var ddlTable = document.createElement("SELECT");
+                        var option = document.createElement("OPTION");
+                        option.innerHTML = tableName;
+                        option.value = tableName;
+                        ddlTable.options.add(option);
+                        ddlTable.classList.add('form-select');
+                        ddlTable.onchange = generateQuery;
+                        td.appendChild(ddlTable);
+                    } else if (c == 1) {  // Column column
+                        var ddlCol = document.createElement("SELECT");
+                        var option = document.createElement("OPTION");
+                        option.innerHTML = columnName;
+                        option.value = columnName;
+                        ddlCol.options.add(option);
+                        ddlCol.classList.add('form-select');
+                        ddlCol.onchange = generateQuery;
+                        td.appendChild(ddlCol);
+                    } else if (c == 3) {  // GroupBy/Aggregate column
+                        var Agrigate = [
+                            { text: 'Select', value: 0 },
+                            { text: 'group by', value: 'group by' },
+                            { text: 'sum', value: 'sum' },
+                            { text: 'average', value: 'average' },
+                            { text: 'min', value: 'min' },
+                            { text: 'max', value: 'max' },
+                            { text: 'count', value: 'count' },
+                            { text: 'where', value: 'where' }
+                        ];
+                        var ddlAgr = document.createElement("SELECT");
+                        Agrigate.forEach(function (agr) {
+                            var option = document.createElement("OPTION");
+                            option.innerHTML = agr.text;
+                            option.value = agr.value;
+                            ddlAgr.options.add(option);
+                        });
+                        ddlAgr.classList.add('form-select');
+                        ddlAgr.onchange = function () {
+                            if (this.value === 'where') {
+                                AddRowandData(checkbox, tableName, columnName);
+                                var lastRow = empTab.rows[empTab.rows.length - 1];
+                                var lastRowDropdown = lastRow.cells[3].querySelector("SELECT");
+                                if (lastRowDropdown) {
+                                    lastRowDropdown.value = 'where';
+                                }
+                            } else {
+                                generateQuery();
+                            }
+                        };
+                        ddlAgr.value = columnData.function || 0;  // Pre-select based on JSON
+                        td.appendChild(ddlAgr);
+                    } else if (c == 4) {  // Filter column
+                        var filterInput = document.createElement('input');
+                        filterInput.setAttribute('type', 'text');
+                        filterInput.classList.add('form-control');
+                        filterInput.value = columnData.filter || '';  // Pre-set filter value from JSON
+                        filterInput.onfocus = function () {
+                            if (!this.value.includes('=')) {
+                                this.value = '=' + this.value;
+                            }
+                        };
+                        filterInput.onchange = generateQuery;
+                        td.appendChild(filterInput);
+                    } else if (c == 5) {  // SortBy column
+                        var ordBy = [
+                            { text: 'Select', value: 0 },
+                            { text: 'Ascending', value: 'asc' },
+                            { text: 'Descending', value: 'desc' }
+                        ];
+                        var ddlordBy = document.createElement("SELECT");
+                        ordBy.forEach(function (order) {
+                            var option = document.createElement("OPTION");
+                            option.innerHTML = order.text;
+                            option.value = order.value;
+                            ddlordBy.options.add(option);
+                        });
+                        ddlordBy.classList.add('form-select');
+                        ddlordBy.value = columnData.orderBy || 0;  // Pre-select based on JSON
+                        ddlordBy.onchange = generateQuery;
+                        td.appendChild(ddlordBy);
+                    } else {  // Alias or other columns
+                        var ele = document.createElement('input');
+                        ele.setAttribute('type', 'text');
+                        ele.classList.add('form-control');
+                        ele.value = columnData.alias || '';  // Pre-set alias from JSON
+                        ele.onchange = generateQuery;
+                        td.appendChild(ele);
+                    }
+                }
+            });
+        });
+    }
+
+    function bindDatabase() {
+        $.ajax({
+            url: '/DatabaseConfiguration/DatabasesInformations',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (responseData) {
+                console.log('Response received:', responseData);
+                var databaseDropdown = $('#databaseDropdown');
+                databaseDropdown.empty();
+                databaseDropdown.append($('<option>', {
+                    value: '',
+                    text: '-- Select Database --',
+                    disabled: true,
+                    selected: true
+                }));
+                $.each(responseData, function (index, databaseName) {
+                    databaseDropdown.append($('<option>', {
+                        value: databaseName,
+                        text: databaseName
+                    }));
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error connecting to the server:', textStatus, errorThrown);
+                alert('Error connecting to the server. Please try again later.');
+            }
+        });
+    }
+
+    // function saveQuery() {
+    //     debugger;
+    //     var QueryText = $('#textarea').val();
+    //     var Databasename = $('#databaseDropdown').val();
+    //     $.ajax({
+    //         url: '/Query/InsertQuery',
+    //         type: 'POST',
+    //         data: { QueryText: QueryText, Databasename: Databasename },
+    //         success: function (responseData) {
+    //             Swal.fire({
+    //                 title: "Good job!",
+    //                 text: "Query Saved Successfully!",
+    //                 icon: "success"
+    //             });
+    //         },
+    //         error: function (jqXHR, textStatus, errorThrown) {
+    //             console.error('Error connecting to the server:', textStatus, errorThrown);
+    //             Swal.fire({
+    //                 title: "Error!",
+    //                 text: "Query Save Failed!",
+    //                 icon: "error"
+    //             });
+
+    //         }
+    //     });
+    // }
+
+    function saveQuery() {
+        // Show the modal when the Save button is clicked
+        document.getElementById('saveQueryModal').style.display = 'flex';
+    }
+
+    function submitQuerySave() {
+        // Get the Query Title and other inputs
+        var queryTitle = $('#queryTitle').val();
+        var queryText = $('#textarea').val();
+        var databaseName = $('#databaseDropdown').val();
+
+        if (queryTitle === "") {
+            Swal.fire({
+                title: "Error!",
+                text: "Query Title is required!",
+                icon: "error"
+            });
+            return;
+        }
+
+        // Send the AJAX request to save the query with the Query Title
+        $.ajax({
+          //  url: '@Url.Action("InsertQuery", "Query")',
+            url: '/Query/InsertQuery',
+
+            type: 'POST',
+            //contentType: 'application/json',  // Send as JSON
+            data: {
+            QueryTitle: queryTitle,
+            QueryText: queryText,
+            Databasename: databaseName
+        },
+            success: function (responseData) {
+                Swal.fire({
+                    title: "Good job!",
+                    text: "Query Saved Successfully!",
+                    icon: "success"
+                });
+
+                // Close the modal
+                closeSaveQueryModal();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error connecting to the server:', textStatus, errorThrown);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Query Save Failed!",
+                    icon: "error"
+                });
+            }
+        });
+    }
+
+
+    function closeSaveQueryModal() {
+        // Close the modal and clear the input
+        document.getElementById('saveQueryModal').style.display = 'none';
+        $('#queryTitle').val('');
+    }
+
+
+    function getDatabaseConfiguration() {
+        debugger;
+        var selectedValue = $('#databaseDropdown').val();
+        localStorage.setItem("selectedValue", JSON.stringify(selectedValue))
+        if (selectedValue) {
+            fetchTablesAndViews(selectedValue); // Call fetchTablesAndViews with selected database name
+        } else {
+            // Handle case where no database is selected (optional)
+            $('#tablesContent').html('<p>Please select a database.</p>');
+            $('#viewsContent').html('<p>Please select a database.</p>');
+        }
+    }
+
+    function fetchTablesAndViews(databaseName) {
+        $.ajax({
+            url: '/DatabaseConfiguration/GetTablesandViews', // Replace with your actual endpoint
+            type: 'GET',
+            data: { databaseName: databaseName },
+            success: function (response) {
+                console.log(response.tables);
+                displayTables(response.tables, '#tablesContent');
+                displayViews(response.views, '#viewsContent');
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching data:', error);
+                $('#tablesContent').html('<p class="text-danger">Error fetching tables.</p>');
+                $('#viewsContent').html('<p class="text-danger">Error fetching views.</p>');
+            }
+        });
+    }
+
+    // Function to display tables
+    function displayTables(tables, container) {
+        var html = '';
+        if (tables != null && tables.length > 0) {
+            $.each(tables, function (index, table) {
+                html += '<li class="expandable">';
+                html += '<a href="#" class="bi bi-table drag-drawflow" draggable="true" ondragstart="drag(event)" ';
+                html += 'data-node="tabledrawflow" data-table="' + table.name + '" ';
+                html += 'data-columns="' + getColumnNames(table.columns) + '">';
+                html += '<i></i> ' + table.name + '</a>';
+                html += renderColumns(table.columns);
+                html += '</li>';
+            });
+        } else {
+            html += '<p>No tables available</p>';
+        }
+        $(container).html(html);
+    }
+
+    // Function to display views
+    function displayViews(views, container) {
+        var html = '';
+        if (views != null && views.length > 0) {
+            $.each(views, function (index, view) {
+                html += '<li class="expandable">';
+                html += '<a href="#" class="bi bi-table drag-drawflow" draggable="true" ondragstart="drag(event)" ';
+                html += 'data-node="viewdrawflow" data-view="' + view.name + '" ';
+                html += 'data-columns="' + getColumnNames(view.columns) + '">';
+                html += '<i></i> ' + view.name + '</a>';
+                html += renderColumns(view.columns);
+                html += '</li>';
+            });
+        } else {
+            html += '<p>No views available</p>';
+        }
+        $(container).html(html);
+    }
+
+    // Function to render columns
+    function renderColumns(columns) {
+        var html = '';
+        if (columns != null && columns.length > 0) {
+            html += '<ul>';
+            $.each(columns, function (index, column) {
+                html += '<li>';
+                html += '<a class="drawflow__txt" href="#">';
+                html += '<span class="fa fa-columns" aria-hidden="true"></span> ' + column.name;
+                html += '</a>';
+                html += '</li>';
+            });
+            html += '</ul>';
+        } else {
+            html += '<p>No fields available for this table/view</p>';
+        }
+        return html;
+    }
+
+    // Function to get column names as a comma-separated string
+    function getColumnNames(columns) {
+        if (columns == null || columns.length === 0) {
+            return '';
+        }
+        return columns.map(function (c) { return c.name; }).join(',');
+    }
+    var id = document.getElementById("drawflow");
+    editor = new Drawflow(id);
+    editor.reroute = true;
+    editor.start();
+    editor.editor_mode = 'edit';
+    document.getElementById('lock').style.display = 'none';
+    document.getElementById('unlock').style.display = 'block';
+
+    const sqlJoinTypes = ['INNER JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FULL JOIN'];
+
+    editor.on('connectionCreated', function (connection) {
+        debugger;
+        var primaryNode = editor.getNodeFromId(connection.output_id);
+        var foreignNode = editor.getNodeFromId(connection.input_id);
+        localStorage.setItem("primaryNode", JSON.stringify(primaryNode))
+        localStorage.setItem("foreignNode", JSON.stringify(foreignNode))
+        var TableNames = $("#hdnTBlName").val();
+        //alert("Connection Created successfully");
+        $('#connectionModal').modal('show');
+        populateModal(primaryNode, foreignNode, TableNames);
+
+    });
+    $('#tab1').on('click', function () {
+        $('#columnlist').show();
+        $('#textarea').hide();
+    });
+    $('#tab2').on('click', function () {
+        $('#textarea').show();
+        $('#columnlist').hide();
+    });
+    $('#tab3').on('click', function () {
+        debugger;
+        var connection = "";
+        var primaryNode = JSON.parse(localStorage.getItem("primaryNode"));
+        var foreignNode = JSON.parse(localStorage.getItem("foreignNode"));
+        if (!primaryNode || !foreignNode) {
+            Swal.fire({
+                title: "Error!",
+                text: "Kindly select one more table!",
+                icon: "error"
+            });
+            return false;
+        }
+        var TableNames = $("#hdnTBlName").val();
+        //populateModal(primaryNode, foreignNode, TableNames);
+        $('#connectionModal').modal('show');
+    });
+    function refresh() {
+        window.open('/Query/GetallQuery');
+    }
+
+    function removeLocalStorageItem() {
+        localStorage.removeItem("primaryNode");
+        localStorage.removeItem("foreignNode");
+        localStorage.removeItem("leftTablevalue");
+        localStorage.removeItem("ExcGroupValue")
+    }
+
+    var elements = document.getElementsByClassName('drag-drawflow');
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].addEventListener('dragstart', drag, false);
+    }
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        //ev.preventDefault();
+        ev.dataTransfer.setData("node", ev.target.getAttribute('data-node'));
+        ev.dataTransfer.setData("table", ev.target.getAttribute('data-table') || '');
+        ev.dataTransfer.setData("view", ev.target.getAttribute('data-view') || '');
+        ev.dataTransfer.setData("columns", ev.target.getAttribute('data-columns'));
+    }
+    var drawFlowList = [];
+    function drop(ev) {
+        debugger;
+        ev.preventDefault();
+        var dataNode = ev.dataTransfer.getData("node");
+        var tableName = ev.dataTransfer.getData("table");
+        localStorage.setItem("tableName", JSON.stringify(tableName));
+        if ($("#hdnTBlName").val() == "") {
+            $("#hdnTBlName").val(tableName);
+        }
+        else {
+            var TbLName = $("#hdnTBlName").val();
+            $("#hdnTBlName").val(TbLName + "," + tableName);
+        }
+        var viewName = ev.dataTransfer.getData("view");
+        var columns = ev.dataTransfer.getData("columns").split(',');
+        var x = ev.clientX;
+        var y = ev.clientY;
+        var displayName = (tableName || viewName);
+        var jsonObject = {
+            dataNode: dataNode,
+            x: x,
+            y: y,
+            displayName: displayName,
+            columns: columns
+        };
+        drawFlowList.push(jsonObject);
+        console.log(drawFlowList);
+        if (dataNode === 'tabledrawflow' || dataNode === 'viewdrawflow') {
+            addNodeToDrawFlow(jsonObject.dataNode, jsonObject.x, jsonObject.y, jsonObject.displayName, jsonObject.columns);
+        }
+    }
+    $(".drawflow-delete").click(function () {
+        debugger;
+        alert("Delete button clicked!");
+    });
+
+    let tableRowsMap = {};
+    function addNodeToDrawFlow(name, pos_x, pos_y, displayName, fields) {
+        //debugger;
+        if (editor.editor_mode === 'fixed') {
+            return false;
+        }
+
+        pos_x = pos_x * (editor.precanvas.clientWidth / (editor.precanvas.clientWidth * editor.zoom)) - (editor.precanvas.getBoundingClientRect().x * (editor.precanvas.clientWidth / (editor.precanvas.clientWidth * editor.zoom)));
+        pos_y = pos_y * (editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom)) - (editor.precanvas.getBoundingClientRect().y * (editor.precanvas.clientHeight / (editor.precanvas.clientHeight * editor.zoom)));
+
+        let columnsHTML = fields.map(field => `
+                                                                                                   <label class="form-check-label">
+                                                                                                <input class="form-check-input" type="checkbox" onchange="AddRowandData(this, '${displayName}', '${field.trim()}')" /> ${field.trim()}
+                                                                                    </label>
+                                                                                `).join('');
+
+        const nodeContent = `
+                                                                                                <div class="drawflow_txt_scroll">
+                                                                                                    <div class="title-box"><i class="bi bi-list"></i> ${displayName}</div>
+                                                                                                    <div class="box">
+                                                                                                        ${columnsHTML}
+                                                                                                    </div>
+                                                                                                </div>`;
+
+        const nodeId = editor.addNode(name, 1, 1, pos_x, pos_y, name, { displayName: displayName, columns: fields }, nodeContent);
+        if (!droppedTables.includes(displayName)) {
+            droppedTables.push(displayName);
+        }
+        if (!tableRowsMap[displayName]) {
+            tableRowsMap[displayName] = [];
+        }
+
+        editor.on('nodetrash', (id) => {
+            const node = editor.getNodeFromId(id);
+            if (node && node.name === displayName) {
+                if (tableRowsMap[displayName]) {
+                    tableRowsMap[displayName].forEach(rowID => {
+                        document.getElementById(rowID).remove();
+                    });
+                    delete tableRowsMap[displayName];
+                }
+                droppedTables = droppedTables.filter(table => table !== displayName);
+            }
+        });
+        return nodeId;
+    }
+    var checkedColumns = {};
+    var existingtablecolumns = {};
+    var newcheckedcolumns = {};
+    var droppedTables = [];
+    var columnSelectionCounts = {};
+    window.handleColumnCheckChange = function (checkbox, tableName, columnName) {
+        debugger;
+        if (checkbox.checked) {
+            if (!checkedColumns[tableName]) {
+                checkedColumns[tableName] = [];
+            }
+            //checkedColumns[tableName].push(columnName);
+            if (!checkedColumns[tableName].includes(columnName)) {
+                checkedColumns[tableName].push(columnName);  // Add columnName if not already in array
+            }
+        } else {
+            checkedColumns[tableName] = checkedColumns[tableName].filter(col => col !== columnName);
+        }
+        var tbl = document.querySelector('#columnlist tbody');
+        var tables = [];
+        var tableObjects = [];
+        for (var i = 0; i < tbl.rows.length; i++) {
+            var tablename = tbl.rows[i].children[0].children[0].value;
+            var columnname = tbl.rows[i].children[1].children[0].value;
+            var afunction = tbl.rows[i].children[3].children[0].value;
+
+            var alias = tbl.rows[i].children[2].children[0].value;
+            var ordby = tbl.rows[i].children[4].children[0].value;
+
+            //existingtablecolumns[tablename].push(columnname)
+            var tableObject = {
+                tablename: tablename,
+                columnname: columnname,
+                afunction: afunction,
+                alias: alias,
+                ordby: ordby
+            };
+            tables.push(tablename);
+            tableObjects.push(tableObject);
+        }
+        var unique = tables.filter(function (itm, i, tables) {
+            return i == tables.indexOf(itm);
+        });
+        generateQuery();
+    };
+    var bool = false;
+    function AddRowandData(checkbox, tableName, columnName) {
+        debugger;
+        var rowID = tableName + '_' + columnName;
+        if (rowID != null) {
+            $('#RowID').val('');
+            $('#RowID').val(rowID)
+        }
+        else {
+            $('#RowID').val(rowID)
+        }
+        if (checkbox.checked) {
+            const arrHead = ['Table', 'Col', 'Alias', 'GrpBy', 'Filter', 'Sort'];
+            var empTab = document.getElementById('columnlisttbody');
+
+            var rowCnt = empTab.rows.length;
+            var tr = empTab.insertRow(rowCnt);
+            tr.setAttribute('id', rowID);
+
+            // Store rowID in the map under the tableName
+            if (!tableRowsMap[tableName]) {
+                tableRowsMap[tableName] = [];
+            }
+            tableRowsMap[tableName].push(rowID);
+
+            for (var c = 0; c < arrHead.length; c++) {
+                var td = document.createElement('td');
+                td = tr.insertCell(c);
+
+                if (c == 0) {
+                    var ddlTable = document.createElement("SELECT");
+                    var option = document.createElement("OPTION");
+                    option.innerHTML = tableName;
+                    option.value = tableName;
+                    ddlTable.options.add(option);
+                    ddlTable.classList.add('form-select');
+                    ddlTable.onchange = function () {
+                        generateQuery();
+                    };
+                    td.appendChild(ddlTable);
+                } else if (c == 1) {
+                    var ddlCol = document.createElement("SELECT");
+                    var option = document.createElement("OPTION");
+                    option.innerHTML = columnName;
+                    option.value = columnName;
+                    ddlCol.options.add(option);
+                    ddlCol.classList.add('form-select');
+                    ddlCol.onchange = function () {
+                        generateQuery();
+                    };
+                    td.appendChild(ddlCol);
+                } else if (c == 3) {
+                    var count = 0;
+                    var Agrigate = [
+                        { text: 'Select', value: 0 },
+                        { text: 'group by', value: 'group by' },
+                        { text: 'sum', value: 'sum' },
+                        { text: 'average', value: 'average' },
+                        { text: 'min', value: 'min' },
+                        { text: 'max', value: 'max' },
+                        { text: 'count', value: 'count' },
+                        { text: 'where', value: 'where' }
+                    ];
+                    var ddlAgr = document.createElement("SELECT");
+                    for (var i = 0; i < Agrigate.length; i++) {
+                        var option = document.createElement("OPTION");
+                        option.innerHTML = Agrigate[i].text;
+                        option.value = Agrigate[i].value;
+                        ddlAgr.options.add(option);
+                    }
+                    ddlAgr.classList.add('form-select');
+                    ddlAgr.id = 'newDropdownId';
+
+                    ddlAgr.onchange = function () {
+                        if (this.value === 'where') {
+                            AddRowandData(checkbox, tableName, columnName);
+                            var lastRow = empTab.rows[empTab.rows.length - 1];
+                            var lastRowDropdown = lastRow.cells[3].querySelector("SELECT");
+                            if (lastRowDropdown) {
+                                lastRowDropdown.value = 'where';
+                            }
+                        } else {
+                            generateQuery();
+                        }
+                    };
+                    td.appendChild(ddlAgr);
+                    count++;
+                }
+
+                else if (c == 4) {  // Filter column
+                    var filterInput = document.createElement('input');
+                    filterInput.setAttribute('type', 'text');
+                    filterInput.setAttribute('value', '');
+                    filterInput.classList.add('form-control');
+                    filterInput.onfocus = function () {
+                        if (!this.value.includes('=')) {
+                            this.value = '=' + this.value;
+                        }
+                    };
+                    filterInput.onchange = function () {
+                        generateQuery();
+                    };
+                    td.appendChild(filterInput);
+                }
+                else if (c == 5) {
+                    var ordBy = [
+                        { text: 'Select', value: 0 },
+                        { text: 'Ascending', value: 'asc' },
+                        { text: 'Descending', value: 'desc' }
+                    ];
+                    var ddlordBy = document.createElement("SELECT");
+                    for (var i = 0; i < ordBy.length; i++) {
+                        var option = document.createElement("OPTION");
+                        option.innerHTML = ordBy[i].text;
+                        option.value = ordBy[i].value;
+                        ddlordBy.options.add(option);
+                    }
+                    ddlordBy.classList.add('form-select');
+                    ddlordBy.onchange = function () {
+                        generateQuery();
+                    };
+                    td.appendChild(ddlordBy);
+                } else {
+                    var ele = document.createElement('input');
+                    ele.setAttribute('type', 'text');
+                    ele.setAttribute('value', '');
+                    ele.classList.add('form-control');
+                    ele.onchange = function () {
+                        generateQuery();
+                    };
+                    td.appendChild(ele);
+                }
+            }
+        } else {
+            document.getElementById(rowID).remove();
+
+            //// Remove rowID from the map under the tableName
+            //if (tableRowsMap[tableName]) {
+            //    tableRowsMap[tableName] = tableRowsMap[tableName].filter(id => id !== rowID);
+            //}
+        }
+
+        generateQuery();
+    }
+    function removeRow(oButton) {
+        var empTab = document.getElementById('columnlist');
+        empTab.deleteRow(oButton.parentNode.parentNode.rowIndex);       // BUTTON -> TD -> TR.
+    }
+    function handleColumnNameChange(selectElement, tableName, oldColumnName) {
+
+        var newColumnName = selectElement.value.trim();
+        var columnIndex = checkedColumns[tableName].indexOf(oldColumnName);
+        if (columnIndex !== -1) {
+            checkedColumns[tableName][columnIndex] = newColumnName;
+        }
+        var nodes = document.querySelectorAll('.drawflow_content_node');
+        nodes.forEach(node => {
+            var title = node.querySelector('.title-box').textContent.trim();
+            if (title === tableName) {
+                var labels = node.querySelectorAll('label');
+                labels.forEach(label => {
+                    var input = label.querySelector('input');
+                    var labelText = label.textContent.trim();
+                    if (labelText === oldColumnName) {
+                        label.textContent = newColumnName;
+                        label.insertBefore(input, label.firstChild);
+                    }
+                });
+            }
+        });
+        updateColumnDetailsTable();
+    }
+
+    var drawflowElement = document.getElementById("drawflow");
+    drawflowElement.addEventListener('dragover', allowDrop, false);
+    drawflowElement.addEventListener('drop', drop, false);
+
+    function populateModal(primaryNode, foreignNode, TableNames) {
+        var primaryColumns = primaryNode.data.columns;
+        var foreignColumns = foreignNode.data.columns;
+        var tableBody = $('#connectionForm tbody');
+        //tableBody.empty();
+        addRow(primaryNode.data.displayName, primaryColumns, foreignNode.data.displayName, foreignColumns, TableNames);
+    }
+    var Count = 1;
+    function addRow(leftTableName, leftColumns, rightTableName, rightColumns, TableNames) {
+        var tableBody = $('#connectionForm tbody');
+        var row = $('<tr></tr>');
+
+        // Left Table Name
+        var leftTableCell = $('<td id="LeftTable"></td>');
+        var lefttableSelect = $('<select class="form-select" id="LefttableDD' + Count + '" onchange="getcolumnValue(this.id)"></select>');
+        var TBLARR = TableNames.split(",");
+        lefttableSelect.append('<option value="0">SELECT</option>');
+        for (var i = 0; i < TBLARR.length; i++) {
+            lefttableSelect.append('<option value="' + TBLARR[i] + '">' + TBLARR[i] + '</option>');
+        }
+        leftTableCell.append(lefttableSelect);
+
+
+        //leftTableCell.text(leftTableName);
+        //var leftTablevalue = leftTableCell.text();
+        //localStorage.setItem("leftTablevalue", leftTablevalue)
+        //var leftTablevalue = localStorage.getItem("leftTablevalue");
+
+
+        // Left Table Columns
+        var leftColumnsCell = $('<td></td>');
+        var leftColumnsSelect = $('<select class="form-select" id="LefttableDD' + Count + '_1"></select>');
+        leftColumnsSelect.append('<option value="0">SELECT</option>');
+        leftColumns.forEach(column => {
+            leftColumnsSelect.append(`<option value="${column}">${column}</option>`);
+        });
+        leftColumnsCell.append(leftColumnsSelect);
+
+
+        // Join Type
+        var joinTypeCell = $('<td></td>');
+        var joinTypeSelect = $('<select class="form-select" id="Joincell"></select>');
+        sqlJoinTypes.forEach(type => {
+            joinTypeSelect.append(`<option value="${type}">${type}</option>`);
+        });
+        joinTypeCell.append(joinTypeSelect);
+        $('body').append(joinTypeCell);
+
+
+
+        // Right Table Name
+        var rightTableCell = $('<td id="Righttable"></td>');
+        var righttableSelect = $('<select class="form-select" id="righttableDD' + Count + '" onchange="getcolumnValue(this.id)"></select>');
+        var TBLARR = TableNames.split(",");
+        righttableSelect.append('<option value="0">SELECT</option>');
+        for (var i = 0; i < TBLARR.length; i++) {
+            righttableSelect.append('<option value="' + TBLARR[i] + '">' + TBLARR[i] + '</option>');
+        }
+        rightTableCell.append(righttableSelect);
+
+
+        // Right Table Columns
+        var rightColumnsCell = $('<td></td>');
+        var rightColumnsSelect = $('<select class="form-select" id="righttableDD' + Count + '_1"></select>');
+        rightColumnsSelect.append('<option value="0">SELECT</option>');
+        rightColumns.forEach(column => {
+            rightColumnsSelect.append(`<option value="${column}">${column}</option>`);
+        });
+        rightColumnsCell.append(rightColumnsSelect);
+
+        // Action Cell
+        var actionCell = $('<td></td>').css('width', '157px');
+        var addButton = $('<button type="button" class="btn btn-success">Add</button>');
+        addButton.css('margin-right', '5px');
+        addButton.on('click', function () {
+            addRow(leftTableName, leftColumns, rightTableName, rightColumns, TableNames);
+        });
+        var removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
+        removeButton.on('click', function () {
+            row.remove();
+        });
+        actionCell.append(addButton, removeButton);
+        row.append(leftTableCell, /*leftAliasCell,*/ leftColumnsCell, joinTypeCell, rightTableCell, /*rightAliasCell,*/ rightColumnsCell, actionCell);
+        tableBody.append(row);
+        Count++;
+    }
+
+    function getcolumnValue(id) {
+        debugger;
+        var dbname = $("#" + id + "").val();
+        var database = JSON.parse(localStorage.getItem("selectedValue"));
+        $.ajax({
+            url: '@Url.Content("~/DatabaseConfiguration/GetColumns")',
+            type: 'GET',
+            data: { dbname: dbname, databasename: database },
+            success: function (responseData) {
+                if (responseData != null) {
+                    $("#" + id + "_1").empty();
+                    for (var i = 0; i < responseData.length; i++) {
+                        $("#" + id + "_1").append('<option value="' + responseData[i] + '">' + responseData[i] + '</option>')
+                    }
+                }
+                else {
+                    $("#" + id + "_1").append('<option value="0">"SELECT"</option>')
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                //console.error('Error connecting to the server:', textStatus, errorThrown);
+                alert('Error connecting to the server. Please try again later.');
+                // Handle error scenario here
+            }
+        });
+    }
+    //function getData(){
+    //    debugger;
+    //    var righttable = rightTableName;
+    //    var lefttable = leftTableName;
+    //}
+    $('#connectNodesButton').on('click', function () {
+        var primaryNodeId = $('#primaryNodeId').val();
+        var foreignNodeId = $('#foreignNodeId').val();
+        var joinConditions = [];
+
+        $('#connectionForm tbody tr').each(function () {
+            var primaryKey = $(this).find('select').eq(0).val();
+            var joinType = $(this).find('select').eq(1).val();
+            var foreignKey = $(this).find('select').eq(2).val();
+
+            joinConditions.push({ primaryKey, joinType, foreignKey });
+        });
+        connectPrimaryToForeignKey(primaryNodeId, foreignNodeId, joinConditions);
+        $('#connectionModal').modal('hide');
+    });
+    function connectPrimaryToForeignKey(primaryTableNodeId, foreignTableNodeId, joinConditions) {
+        joinConditions.forEach(condition => {
+            // Assuming the first output/input port for simplicity
+            editor.addConnection(primaryTableNodeId, 0, foreignTableNodeId, 0);
+        });
+    }
+    // Export flow
+    window.exportFlow = function () {
+        var data = editor.export();
+        console.log(JSON.stringify(data));
+    }
+    // Clear flow
+    window.clearFlow = function () {
+        editor.clear();
+        $('#textarea').val('');
+        $('#columnlisttbody').empty();
+        $('#joinquery').val('');
+    }
+    // Change mode
+    window.changeMode = function (mode) {
+        if (mode === 'unlock') {
+            editor.editor_mode = 'fixed';
+            document.getElementById('unlock').style.display = 'none';
+            document.getElementById('lock').style.display = 'block';
+        } else {
+            editor.editor_mode = 'edit';
+            document.getElementById('lock').style.display = 'none';
+            document.getElementById('unlock').style.display = 'block';
+        }
+    }
+</script>
+
+<script>
+    function connectDatabase() {
+        // Convert FormData to JSON
+        const form = document.getElementById('databaseForm');
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => { data[key] = value });
+
+
+        const jsonData = {
+            DatabaseType: data.DatabaseType,
+            DataBase: data.DataBase,
+            Host: data.Host,
+            Port: parseInt(data.Port, 10),
+            Authentication: data.Authentication,
+            UserId: data.UserId,
+            Password: data.Password
+        };
+
+        $.ajax({
+            url: '@Url.Content("~/DatabaseConfiguration/DatabsesInformations")',
+            type: 'GET',
+            data: jsonData,
+            success: function (responseData) {
+                console.log('Response received:', responseData);
+                if (responseData) {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Database connection successful!",
+                        icon: "success"
+                    });
+                } else {
+                    //console.error('Database connection failed:', responseData.message);
+                    Swal.fire({
+                        title: "Error!",
+                        text: `Database connection failed. Reason: ${responseData.message}`,
+                        icon: "error"
+                    });
+
+                    // Handle failure scenario here
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                //console.error('Error connecting to the server:', textStatus, errorThrown);
+                alert('Error connecting to the server. Please try again later.');
+                // Handle error scenario here
+            }
+        });
+    }
+
+
+    function saveDatabase() {
+        // Convert FormData to JSON
+        const form = document.getElementById('databaseForm');
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => { data[key] = value.trim() });
+
+        // Validation - check for missing required fields
+        const missingFields = [];
+
+        if (!data.DatabaseType) missingFields.push('Database Type');
+        if (!data.DataBase) missingFields.push('Database');
+        if (!data.Host) missingFields.push('Host');
+        if (!data.Port) missingFields.push('Port');
+        if (!data.Authentication) missingFields.push('Authentication');
+        if (!data.UserId) missingFields.push('User ID');
+        if (!data.Password) missingFields.push('Password');
+
+        if (missingFields.length > 0) {
+            // Create a detailed message with each field on a new line
+            const missingFieldsMessage = missingFields.map(field => `- ${field}`).join('\n');
+
+            Swal.fire({
+                title: "Missing!",
+                text: `Please fill in the following missing fields:\n${missingFieldsMessage}`,
+                icon: "error"
+            });
+            return; // Exit the function if validation fails
+        }
+
+        const jsonData = {
+            DatabaseType: data.DatabaseType,
+            DataBase: data.DataBase,
+            Host: data.Host,
+            Port: parseInt(data.Port, 10),
+            Authentication: data.Authentication,
+            UserId: data.UserId,
+            Password: data.Password
+        };
+
+        // Send AJAX request
+        $.ajax({
+            url: '/DatabaseConfiguration/SaveDatabaseInfo',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(jsonData),
+            success: function (responseData) {
+                console.log('Response received:', responseData);
+                if (responseData.success) {
+                    // Close Bootstrap modal if it's open
+                    $('#myModal').modal('hide'); // Replace '#myModal' with your modal's ID
+
+                    Swal.fire({
+                        title: "Good Job!",
+                        text: "Database information saved successfully!",
+                        icon: "success"
+                    }).then(function () {
+                        location.reload(); // Reload the page after closing the alert
+                    });
+                } else {
+                    console.error('Failed to save database information:', responseData.message);
+                    Swal.fire({
+                        title: "Error!",
+                        text: `Database connection failed. Reason: ${responseData.message}`,
+                        icon: "error"
+                    });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error connecting to the server. Please try again later.');
+            }
+        });
+    }
+
+
+
+</script>
+<script>
+    // JavaScript code to handle expand/collapse
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to toggle the visibility of nested lists
+        function toggleVisibility(item) {
+            var parentLi = item.parentElement;
+            var sublist = parentLi.querySelector('ul');
+
+            if (sublist) {
+                sublist.classList.toggle('hidden');
+            }
+        }
+        $('.expandable > a').click(function (e) {
+            e.preventDefault(); // Prevent default anchor behavior
+            $(this).parent().toggleClass('is-active'); // Toggle is-active class on parent li
+            $(this).next('ul').slideToggle(); // Toggle visibility of next ul element
+        });
+        var nestedColumns = document.querySelectorAll('.expandable ul ul a');
+
+        nestedColumns.forEach(function (item) {
+            item.addEventListener('click', function (event) {
+                event.stopPropagation();
+            });
+        });
+    });
+    let djoinquery = "";
+    $("#btnJoinSubmit").click(function () {
+        debugger;
+        let left = $("#LefttableDD1").val();
+        let leftc = $("#LefttableDD1_1").val();
+        let join = $("#Joincell").val();
+        let right = $("#righttableDD1").val();
+        let rightc = $("#righttableDD1_1").val();
+        djoinquery += `from ${left} ${join} ${right} on ${left}.${leftc} = ${right}.${rightc}`;
+        $('#joinquery').val(djoinquery);
+        generateQuery();
+    })
+
+    function generateQuery() {
+        debugger;
+        var tbl = document.querySelector('#columnlist tbody');
+        var rowCount = document.getElementById("columnlist").rows.length;
+        var query = "select ";
+        var tables = [];
+        var columns = new Set();
+        var aliases = new Set();
+        var singletablename = "";
+        var gropbystring = "";
+        var orderbyq = "";
+        var wherestring = "";
+        var havingstring = "";
+
+        for (var i = 0; i < tbl.rows.length; i++) {
+            var tablename = tbl.rows[i].children[0].children[0].value;
+            var columnname = tbl.rows[i].children[1].children[0].value;
+            var alias = tbl.rows[i].children[2].children[0].value;
+            var afunction = tbl.rows[i].children[3].children[0].value;
+            var filter = tbl.rows[i].children[4].children[0].value;
+            var ordby = tbl.rows[i].children[5].children[0].value;
+
+            var restOfFilter = filter.substring(1);
+            if (isNaN(restOfFilter)) {
+                filter = "=" + `"${restOfFilter}"`;
+            }
+
+            var aliasName = '';
+            if (alias.length > 0) {
+                aliasName = ' as ' + alias;
+            }
+
+            if (ordby != '0') {
+                if (orderbyq == "") {
+                    orderbyq = ' order by ' + tablename + '.' + columnname + ' ' + ordby;
+                } else {
+                    orderbyq = orderbyq + ',' + tablename + '.' + columnname + ' ' + ordby;
+                }
+            }
+
+            if (afunction == 'where' && afunction != '0' && filter != '') {
+                if (wherestring == "") {
+                    wherestring = ' where ' + tablename + '.' + columnname + filter;
+                } else {
+                    wherestring = wherestring + ' and ' + tablename + '.' + columnname + filter;
+                }
+            }
+
+            if (afunction == 'group by') {
+                if (afunction != 'where' && afunction != '0' && afunction == 'group by' && filter != '') {
+                    if (havingstring == "") {
+                        havingstring = ' having ' + '(' + "" + '(' + tablename + '.' + columnname + ')' + filter + ')';
+                    } else {
+                        havingstring = havingstring + ' and ' + '(' + "" + '(' + tablename + '.' + columnname + ')' + filter + ')';
+                    }
+                }
+            } else {
+                if (afunction != 'where' && afunction != '0' && afunction != 'group by' && filter != '') {
+                    if (havingstring == "") {
+                        havingstring = ' having ' + '(' + afunction + '(' + tablename + '.' + columnname + ')' + filter + ')';
+                    } else {
+                        havingstring = havingstring + ' and ' + '(' + afunction + '(' + tablename + '.' + columnname + ')' + filter + ')';
+                    }
+                }
+            }
+
+            singletablename = tablename;
+            tables.push(tablename);
+
+            // Check for duplicate column and alias combinations
+            if (!columns.has(tablename + "." + columnname + aliasName)) {
+                columns.add(tablename + "." + columnname + aliasName);
+
+                if (i == 0) {
+                    if (afunction === 'sum' || afunction === 'average' || afunction === 'min' || afunction === 'max' || afunction === 'count') {
+                        query += afunction + "(" + tablename + "." + columnname + ")" + aliasName;
+                    } else if (afunction == "group by") {
+                        if (gropbystring == "") {
+                            gropbystring += ' group by ' + tablename + "." + columnname;
+                        } else {
+                            gropbystring += ',' + tablename + "." + columnname;
+                        }
+                        query += tablename + "." + columnname + aliasName;
+                    } else {
+                        query += tablename + "." + columnname + aliasName;
+                    }
+                } else {
+                    if (afunction === 'sum' || afunction === 'average' || afunction === 'min' || afunction === 'max' || afunction === 'count') {
+                        query += "," + afunction + "(" + tablename + "." + columnname + ")" + aliasName;
+                    } else if (afunction == "group by") {
+                        if (gropbystring == "") {
+                            gropbystring += ' group by ' + tablename + "." + columnname;
+                        } else {
+                            gropbystring += ',' + tablename + "." + columnname;
+                        }
+                        query += "," + tablename + "." + columnname + aliasName;
+                    } else {
+                        query += "," + tablename + "." + columnname + aliasName;
+                    }
+                }
+            }
+        }
+
+        var unique = tables.filter(function (itm, i, tables) {
+            return i == tables.indexOf(itm);
+        });
+
+        var joinquery = " ";
+        if (unique.length > 1) {
+            var jointable = document.querySelector('#jointable tbody');
+            for (var i = 0; i < jointable.rows.length; i++) {
+                var jointype = jointable.rows[i].children[2].children[0].value;
+                var lefttablename = jointable.rows[i].children[0].children[0].value;
+                var righttablename = jointable.rows[i].children[3].children[0].value;
+                var leftcolumnname = jointable.rows[i].children[1].children[0].value;
+                var rightcolumnname = jointable.rows[i].children[4].children[0].value;
+                if (i == 0) {
+                    joinquery += "from " + lefttablename + " " + jointype + " " + righttablename + " on " + lefttablename + "." + leftcolumnname + "=" + righttablename + "." + rightcolumnname;
+                } else {
+                    joinquery += " " + jointype + " " + righttablename + " on " + lefttablename + "." + leftcolumnname + "=" + righttablename + "." + rightcolumnname;
+                }
+            }
+
+            $('#textarea').val(query + '\n' + joinquery + '\n' + wherestring + '\n' + gropbystring + '\n' + havingstring + '\n' + orderbyq);
+        } else {
+            var textareaValue = $('#textarea').val();
+            if (textareaValue.includes("JOIN")) {
+                $('#textarea').val(query + '\n' + djoinquery + '\n' + wherestring + '\n' + gropbystring + '\n' + havingstring + '\n' + orderbyq);
+            } else {
+                if ($('#joinquery').val() == '') {
+                    $('#textarea').val(query + " from " + singletablename + '\n' + wherestring + '\n' + gropbystring + '\n' + havingstring + '\n' + orderbyq);
+                } else {
+                    $('#textarea').val(query + '\n' + djoinquery + '\n' + wherestring + '\n' + gropbystring + '\n' + havingstring + '\n' + orderbyq);
+                }
+            }
+        }
+    }
+</script>

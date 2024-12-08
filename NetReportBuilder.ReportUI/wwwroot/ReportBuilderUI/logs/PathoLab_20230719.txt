@@ -1,0 +1,40 @@
+2023-07-19 12:20:44.002 +05:30 [INF] Login Started
+2023-07-19 12:20:46.165 +05:30 [INF] Login Post Started
+2023-07-19 12:21:31.039 +05:30 [INF] PathoLabBill Started
+2023-07-19 12:21:34.120 +05:30 [INF] PathoLabBill Started
+2023-07-19 12:21:43.426 +05:30 [INF] PathoLabBill Started
+2023-07-19 12:21:43.556 +05:30 [INF] PathoLabBill Started
+2023-07-19 12:21:52.342 +05:30 [INF] View PathoLab Collection 
+2023-07-19 12:21:52.458 +05:30 [INF] View PathoLab Collection 
+2023-07-19 12:21:55.871 +05:30 [INF] View Collection
+2023-07-19 12:21:55.994 +05:30 [INF] View Collection
+2023-07-19 12:21:55.996 +05:30 [INF]  Views PathoLab Report  
+2023-07-19 12:21:55.998 +05:30 [INF]  Collect Sample  
+2023-07-19 12:21:56.087 +05:30 [INF]  Binding Test Config
+2023-07-19 12:21:56.090 +05:30 [INF]  Get Patient Details By Patho Bill Id
+2023-07-19 12:21:56.095 +05:30 [INF]  Views PathoLab Report  
+2023-07-19 12:22:00.925 +05:30 [INF]  Views PathoLab Report  
+2023-07-19 12:22:00.993 +05:30 [INF]  Binding Test Config
+2023-07-19 12:22:00.994 +05:30 [INF]  Get Patient Details By Patho Bill Id
+2023-07-19 12:22:00.996 +05:30 [INF]  Views PathoLab Report  
+2023-07-19 12:22:04.324 +05:30 [INF]  Print Report
+2023-07-19 12:22:04.453 +05:30 [INF]  Print Report
+2023-07-19 12:22:15.032 +05:30 [INF]  Views PathoLab Report  
+2023-07-19 14:55:20.598 +05:30 [INF] Login Started
+2023-07-19 14:55:22.602 +05:30 [INF] Login Post Started
+2023-07-19 14:55:27.554 +05:30 [INF] PathoLabBill Started
+2023-07-19 14:55:27.909 +05:30 [INF] PathoLabBill Started
+2023-07-19 14:56:28.809 +05:30 [INF] View PathoLab Collection 
+2023-07-19 14:56:29.022 +05:30 [INF] View PathoLab Collection 
+2023-07-19 14:56:31.124 +05:30 [INF] View Collection
+2023-07-19 14:56:31.389 +05:30 [INF] View Collection
+2023-07-19 14:56:31.397 +05:30 [INF]  Views PathoLab Report  
+2023-07-19 14:56:31.398 +05:30 [INF]  Collect Sample  
+2023-07-19 14:56:31.547 +05:30 [INF]  Binding Test Config
+2023-07-19 14:56:31.555 +05:30 [INF]  Views PathoLab Report  
+2023-07-19 14:56:31.563 +05:30 [INF]  Get Patient Details By Patho Bill Id
+2023-07-19 14:56:35.985 +05:30 [INF] PathoLabBill Started
+2023-07-19 14:56:36.219 +05:30 [INF] PathoLabBill Started
+2023-07-19 14:56:39.973 +05:30 [INF]  Get Patient By Mobile
+2023-07-19 14:56:46.720 +05:30 [INF]  Get Patient By Mobile
+2023-07-19 14:57:09.302 +05:30 [INF]  Get Patient By Mobile

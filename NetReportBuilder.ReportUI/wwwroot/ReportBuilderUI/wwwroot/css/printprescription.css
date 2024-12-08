@@ -1,0 +1,87 @@
+﻿@page {
+    margin-top: -20mm; /* this affects the margin in the printer settings */
+}
+.logo {
+    flex: 1;
+}
+
+
+    .logo img {
+        width: 200px;
+        height: 175px;
+        display: flex;
+        justify-content: center;
+    }
+
+
+
+table .med {
+    width: 95%;
+}
+
+table td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 4px 12px;
+}
+
+.header {
+    padding: 30px;
+    text-align: center;
+    color: black;
+    font-size: 20px;
+    width: 1050px;
+    height: 200px;
+}
+
+table td.psn {
+    border: 1px white;
+    border-collapse: collapse;
+    padding: 4px 4px;
+    text-align: left;
+    font-size: 80%;
+}
+
+table tbody.medbord {
+    border: 1px white;
+    border-collapse: collapse;
+}
+
+.div1 {
+    width: 1050px;
+    height: 100px;
+}
+
+.div2 {
+    width: 1050px;
+    height: 200px;
+}
+
+.div3 {
+    width: 1050px;
+    height: 1250px;
+}
+
+hr.new1 {
+    border-top: 1px solid black;
+}
+
+table td.ob {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table td.na {
+    vertical-align: text-top;
+}
+
+div.fs1 {
+    font-size: 130%;
+}
+
+body.ex1 {
+    border: 1px solid red;
+    padding: 15px;
+}

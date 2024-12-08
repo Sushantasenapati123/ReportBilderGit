@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+@*@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor*@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @*<title>Admin</title>*@
+    <meta name="keywords" content="ADSYS" />
+    <meta name="description" content="ADSYS" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    @*<link href="~/css/icons.css" rel="stylesheet" />*@
+    <link href="~/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/css/custom.css" rel="stylesheet">
+    @*//imp for structur*@
+    <link href="~/css/dashboard.css" rel="stylesheet">
+    <link href="~/css/slimscrollbar.min.css" rel="stylesheet">
+  
+    @*<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>*@
+
+    @*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">*@
+    <!-- Including jQuery from CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Including SweetAlert2 from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <!-- Navbar brand -->
+            <a class="navbar-brand" href="javascript:void:(0);">
+
+                <h1>
+                </h1>
+            </a>
+            <a class="nav-toggle-btn">
+                <span></span>
+            </a>
+
+            <div class="navbar-collapse justify-content-end collapse" id="basicExampleNav">
+                <!-- Links -->
+                <ul class="navbar-nav">
+
+                    @*<li class="nav-item">
+                        <a class="nav-link dropdown-toggle welcome" data-toggle="dropdown" href="Javascript:void(0);">Welcome <span class="bg-danger">@(string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("UserName")) ? "Admin" : HttpContextAccessor.HttpContext.Session.GetString("UserName"))</span></a>
+
+                    </li>*@
+                    <li class="nav-item">
+                        <a class="nav-link logout" href="Javascript:void(0);"><i class="icon-log-out1"></i></a>
+                    </li>
+                    <!-- Dropdown -->
+                </ul>
+                <!-- Links -->
+            </div>
+            <!-- Collapsible content -->
+        </nav>
+        <!--/.Navbar-->
+    </header>
+    <div class="logout-modal">
+        <div class="logou-container text-center">
+            <div class="container">
+                <h3>Do you really want to log out?</h3>
+                <a class="btn btn-mint" asp-controller="CodeGenLogin" asp-action="Logout">Yes</a>
+                <a class="btn btn-danger nologout">No</a>
+            </div>
+        </div>
+    </div>
+    <div class="page-container">
+        <div class="sidemenu" id="dashboard">
+            <div class="user-profile">
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                    <span> </span>
+                </a>
+            </div>
+            <div class="clearfix">
+            </div>
+            <ul class="navbar">
+                <div class="navbar-collapse justify-content-end" id="basicExampleNav">
+                    <ul class="navbar-nav" id="AdConsole">
+                        @*Write code here*@
+                        <li class='nav-item dropdown glmaster'>
+                            <a class='nav-link dropdown-toggle' id='navbarDropdownMenuLink' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                                <i class='fa fa-user'></i><span>Configuration</span>
+                            </a>
+                           
+                        </li>
+                    </ul>
+                </div>
+                
+        </div>
+        <div class="mainpanel">
+            <div class="section">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <footer class="page-footer no-padding white blue-text hide">
+        <div class="footer-copyright">
+            <div class="container">
+                &copy; 2023 All right reserved
+                <a class="right" href="javascript:void(0);">Developed by CSM</a>
+            </div>
+        </div>
+    </footer>
+    <div class="setting-box">
+        <div class="profile-details">
+            <a class="setting-close" href="javascript:void(0)"><span class="icon-x1"></span></a>
+            <div class="change__list">
+                <ul>
+
+                    <li><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Sign out"><span class="icon-log-out1"></span></a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    @*<link href="~/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <script src="~/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/js/slimscrollbar.min.js"></script>
+    <script src="~/js/custom.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    @*<link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <link href="~/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/js/buttons.print.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.buttons.js"></script>*@
+</body>
+</html>

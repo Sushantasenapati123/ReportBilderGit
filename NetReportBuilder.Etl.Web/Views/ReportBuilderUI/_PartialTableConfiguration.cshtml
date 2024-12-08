@@ -1,0 +1,115 @@
+﻿@model NetReportBuilder.ReportUI.Models.ReportConfigurationModel.ReportTypes
+@{
+    var IconList = ViewBag.Icons as List<string>;
+    var gridhtml = ViewBag.GridHTML as string;
+    var ResultData = ViewBag.Result as List<NetReportBuilder.ReportUI.Models.DashboardDetail>;
+
+}
+<!-- left side  -->
+<div class="col-xs-2 ScrollStyle">
+    <ul>
+        <li class="grid__list FirstTable" data-chart-type="FirstTable">
+            <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="FirstTable" onclick="GetFirstTable()">
+                <div class="icon__graph">
+                    <img src="~/images/svg/1.png" alt="FirstTable Icon">
+                </div>
+                <label> Vertical Table  </label>
+            </a>
+        </li>&nbsp;
+        <li class="grid__list SecondTable" data-chart-type="SecondTable">
+            <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="SecondTable" onclick="GetSecondTable()">
+                <div class="icon__graph">
+                    <img src="~/images/svg/2.png" alt="SecondTable Icon">
+                </div>
+                <label> Horizontal Table  </label>
+            </a>
+        </li>&nbsp;
+        <li class="grid__list ThirdTable" data-chart-type="ThirdTable">
+            <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="ThirdTable" onclick="GetThirdTable()">
+                <div class="icon__graph">
+                    <img src="~/images/svg/3.png" alt="ThirdTable Icon">
+                </div>
+            </a>
+        </li>&nbsp;
+        <li class="grid__list ForthTable" data-chart-type="ForthTable">
+            <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="ForthTable" onclick="GetForthTable()">
+                <div class="icon__graph">
+                    <img src="~/images/svg/4.png" alt="ForthTable Icon">
+                </div>
+            </a>
+        </li>&nbsp;
+
+    </ul>
+</div>
+<!-- left side  -->
+<!--  right side -->
+<div class="col-lg-10 col-md-10 col-12 top ">
+    <div class="card-body">
+        <div class="form-group col-xl-4">
+            @*TableName*@
+            <div id="TableData" class="form-group">
+                <label class="control-label">Data Source<span class="text-danger">*</span></label>
+                @*<select id="ddlDataSourceForGrid" class="form-select" asp-items="@(new SelectList(ViewBag.DataSource, "order", "name"))">
+                        <option value="0">Select Data Source</option>
+                    </select>*@
+                <select id="ddlDataSourceForGrid" class="form-select" onchange="GetColumnsByTable()">
+                    <option value="0">Select Data Source</option>
+                </select>
+            </div>
+            <div class="form-group  col-xl-12">
+                @*Title*@
+                <label class="control-label">Title<span class="text-danger">*</span></label>
+                <input type="text" id="txtGridTitle" class="form-control" />
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <!-- bottom side  -->
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 scroll_rightside">
+            <div class="form-group row">
+                <table id="dataGrid" class="table table-bordered">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- bottom side  -->
+    </div>
+</div>
+<!--  right side -->
+<!-- Add Select2 CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#ddlDataSourceForGrid').select2({
+            placeholder: "Select Data Source",
+            allowClear: true
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        
+        // Call your GetDataSource action via AJAX
+        $.ajax({
+            url: '@Url.Action("GetDataSource", "ReportBuilderUI")', // Update the URL if necessary
+            type: 'GET',
+            success: function (data) {
+                // Loop through the returned data and append options to the dropdown
+                var ddlDataSourceForGrid = $('#ddlDataSourceForGrid');
+                $.each(data, function (i, item) {
+                    ddlDataSourceForGrid.append($('<option>', {
+                        value: item.id, // Set the value attribute
+                        text: item.name // Set the text for display
+                    }));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log("Error loading data sources: " + error);
+            }
+        });
+    });
+</script>
+

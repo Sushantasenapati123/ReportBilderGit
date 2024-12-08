@@ -1,0 +1,1052 @@
+﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<head>
+
+    <script src="
+https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="
+https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="
+https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<style>
+
+    #SourceGrid {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        padding: 5px;
+        margin: 5px;
+    }
+
+        #SourceGrid td, #SourceGrid th {
+            border: 1px solid #ddd;
+            padding: 5px;
+            width: auto;
+            text-align: left;
+        }
+
+        #SourceGrid tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #SourceGrid tr:hover {
+            background-color: #ddd;
+        }
+
+        #SourceGrid th {
+            padding: 5px;
+            text-align: center;
+            background-color: gray;
+            color: white;
+            width: auto;
+            height: auto;
+        }
+</style>
+
+<style>
+
+    #NewGrid {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        padding: 5px;
+        margin: 5px;
+    }
+
+        #NewGrid td, #NewGrid th {
+            border: 1px solid #ddd;
+            padding: 5px;
+            width: auto;
+            text-align: left;
+        }
+
+        #NewGrid tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #NewGrid tr:hover {
+            background-color: #ddd;
+        }
+
+        #NewGrid th {
+            padding: 5px;
+            text-align: center;
+            background-color: gray;
+            color: white;
+            width: auto;
+            height: auto;
+        }
+</style>
+<div class="row">
+    <div class="col-sm">
+        <div class="card-header" style="background-color:lightgray;padding:5px;">
+            <h2>Data Mapping Process</h2>
+        </div>
+    </div>
+</div>
+<div id="InsertTypeDiv" style="display: flex; justify-content: flex-start;">
+    <div style="margin-right: 50px; margin-top: 20px; margin-left: 20px; ">
+        <h5>Choose Mapping<span class="text-danger">*</span></h5>
+        <div style="display: flex;">
+            <div style="margin-right: 20px;">
+                <input type="radio" style="height:auto; width:auto; vertical-align: middle;" id="insertNew" name="insertType" value="New" onclick="ShowHideExistingDiv()">
+                <label for="insertNew"><b>New</b></label>
+            </div>
+            <div style="margin-right: 20px;">
+                <input type="radio" id="insertExisting" style="height:auto; width:auto; vertical-align: middle;" name="insertType" value="Existing" onclick="ShowHideExistingDiv()">
+                <label for="insertExisting"><b>Existing</b></label>
+            </div>
+
+        </div>
+    </div>
+    <div id="DivTableName" style="display: none;margin-top:20px">
+        <h6>Enter Table Namee</h6>
+        <input type="text" id="txtTable" class="form-control" style="width: 100%;" />
+    </div>
+</div>
+
+
+
+
+
+
+<form id="ExpertForm" style="display: none;">
+    <h3 id="loader" style="text-align:center;font:bold 30px large;color:forestgreen "><span>Data Loading....</span></h3>
+
+
+    <div id="newInsertOptions" style="display: none;">
+        <div style="height: 300px; overflow-y: auto;width:90%">
+            <table id="NewGrid" class="table table-bordered" hidden>
+                <thead>
+                    <tr>
+                        <th>field Name</th>
+                        <th>data type</th>
+                        <th>column name</th>
+                        <th>Column Constraint</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+
+    <div id="existingExportOptions" style="width:90%;height: 300px; overflow-y: auto;">
+        <table id="SourceGrid" class="table">
+            <thead>
+                <tr>
+                    <th><b>Field Name</b></th>
+                    <th>Data Type</th>
+                    <th>Table Name</th>
+                    <th>Column Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Add table rows dynamically if needed -->
+            </tbody>
+        </table>
+    </div>
+    <input id="InsertButton" hidden type="button" style="margin-top:20px;margin-left:20px" onclick="OpenPopUp()" value="Finish Mapping" class="btn btn-success" />
+</form>
+
+
+
+
+@* ---------- model popup----------------*@
+
+<div class="modal fade" id="pipelineModal" tabindex="-1" role="dialog" aria-labelledby="pipelineModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content p-0">
+
+            <div class="modal-header" style="background-color: #013661;">
+
+                <h5 class="modal-title" id="pipelineModalLabel" style="color: white;"><b>PipeLine Details</b></h5>
+
+                <button type="button" class="close custom-close-btn" data-dismiss="modal" aria-label="Close">
+
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+
+            </div>
+
+            <div class="modal-body" style="background-color:#f0f0f0;">
+
+                <div>
+
+                    <div class="row">
+
+                        <div class="col-xl-6 col-md-12">
+
+                            <div class="form-group">
+
+                                <label for="pipelineName" class="d-block"><strong>Pipeline Name </strong></label>
+
+                                <label for="pipelineName" id="lblpipelinenm">@ViewBag.PipelineName</label>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-xl-6 col-md-12">
+
+                            <div class="form-group">
+
+                                <label for="pipelineType" class="d-block"><strong>DataSourceType </strong></label>
+
+                                <label for="pipelineType" id="lblDatasrctype">@ViewBag.DisplaySection</label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-xl-12 col-md-12">
+
+                            <div class="form-group">
+
+                                <label for="pipelinedes"><b>Description </b></label>
+
+<textarea class="scrollable-textarea form-control" id="description" style="border-color:black;border-width:2px;border-style:solid;"></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-xl-12 col-md-12">
+
+                            <div class="form-group">
+
+                                <label for="pipelineType"><b>Excution Model </b></label>
+
+                                <select id="ddlExcutionmdl" class="form-control" style="border-color:black;border-width:2px;border-style:solid;">
+
+                                    <option value="Select">Select</option>
+
+                                    @foreach (var mode in (IEnumerable<string>)ViewBag.ExecutionMode)
+
+                                    {
+
+                                        <option value="@mode">@mode</option>
+
+                                    }
+
+                                </select>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-primary mb-1" onclick="SavePipeLineConfig()" id="btnPipeLineconfig" style="top:38px;">Submit</button>
+                </div>
+                <div id="ExportDivhg" class="row">
+                    <input id="InsertButton" type="button" style="margin-top: 20px; color: white; background-color: #2C43CB;" hidden @*onclick="ExportDataInsert()"*@ onclick="OpenPopUp()" value="Finish Mapping" class="btn" @*data-toggle="modal"*@ @*data-target="#pipelineModal"*@ />
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+@* ------------- model popupEND-------------*@
+
+
+<script>
+    function initializeModal() {
+        $('#pipelineModal').on('hidden.bs.modal', function () {
+            // Perform any additional actions if needed after modal is closed
+        });
+
+        $('.close').click(function () {
+            $('#pipelineModal').modal('hide');
+        });
+    }
+    function OpenPopUp() {
+        ExportDataInsert();
+    }
+
+    function SavePipeLineConfig() {
+        //InsertButton
+        let insertButton=document.getElementById('InsertButton').disabled = true
+        var pipenm = $('#lblpipelinenm').text();
+        var datasourctype = $('#lblDatasrctype').text();
+        var description = $('#description').val();
+        var excutionmdl = $('#ddlExcutionmdl').val();
+
+
+        $.ajax({
+            url: '/DataMapping/CreatePipelineConfig',
+            type: 'POST',
+            data: {
+                FileName: pipenm,
+                DataSourceType: datasourctype,
+                Description: description,
+                ExecutionMode: excutionmdl
+            },
+            success: function (data) {
+                if (data == "Success") {
+                    $('#pipelineModal').modal('hide');
+                    ExportDataInsert();
+
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('Error: ' + xhr.responseText);
+            }
+        });
+
+    }
+
+</script>
+
+
+
+@*Show Hide Div and Set Tab*@
+<script>
+
+    function OpenOutputTab() {
+        //open Output Tab
+        var outputTabButton = document.querySelector("button[onclick=\"openTab(event, 'data-Output')\"]");
+        outputTabButton.click();
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Hide existingExportOptions div on page load
+        var existingExportOptions = document.getElementById('existingExportOptions');
+        existingExportOptions.style.display = 'none';
+    });
+
+  
+    function ShowHideExistingDiv() {
+        var TableNameDiv = document.getElementById('DivTableName');
+        var parentDiv = document.getElementById('ExpertForm');
+        var newInsertOptions = document.getElementById('newInsertOptions');
+        var existingExportOptions = document.getElementById('existingExportOptions');
+
+        var selectedInsertType = document.querySelector('input[name="insertType"]:checked').value;
+
+        if (selectedInsertType === 'Existing') {
+            parentDiv.style.display = 'block';
+            existingExportOptions.style.display = 'block';
+            newInsertOptions.style.display = 'none';
+            TableNameDiv.style.display = 'none';
+        } else {
+            TableNameDiv.style.display = 'block';
+            parentDiv.style.display = 'block';
+            existingExportOptions.style.display = 'none';
+            newInsertOptions.style.display = 'block';
+        }
+    }
+
+</script>
+
+@*Table Bind*@
+<script>
+    var SourceTYpee = '@ViewBag.DisplaySection';
+        var tableDropdownData = null;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById('ExpertForm');
+            if (form) {
+                const formData = new FormData(form);
+                formData.append('input', "");
+
+                processJsonData(formData);
+               
+            } else {
+                console.error('Form with id "ExpertForm" not found.');
+            }
+        });
+
+      function processJsonData(formData) {
+                                    fetch('@Url.Action("GetJsonData", "DataMapping")', {
+                                        method: 'POST',
+                                        body: formData
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+
+
+
+
+                                      
+                                        var IsSuccessful = data.isSuccessfullyCompile;
+                                        if (IsSuccessful)
+                                        {
+                                            let dataMapping = document.getElementById("DataMapping");
+                                            if (dataMapping != null && dataMapping != undefined) {
+                                                dataMapping.disabled = false;
+                                            }
+
+                                            // Check if ListOfProperty is defined and is an array
+                                            const listOfProperty = data.listOfProperty;
+                                            if (Array.isArray(listOfProperty)) {
+                                                const sourceGridBody = document.querySelector("#SourceGrid tbody");
+                                                const NewGridBody = document.querySelector("#NewGrid tbody");
+
+                                                sourceGridBody.innerHTML = ""; // Clear previous content
+                                                NewGridBody.innerHTML = "";
+
+                                                listOfProperty.forEach(property => {
+                                                    const row = document.createElement("tr");
+                                                    const rowNewExport = document.createElement("tr");
+
+                                                    const columnNameCell = document.createElement("td");
+                                                    columnNameCell.textContent = property.column_Name;
+
+                                                    const columnTypeCell = document.createElement("td");
+                                                    columnTypeCell.textContent = property.column_Type;
+
+                                                    const tableNameCell = document.createElement("td");
+                                                    const tableDropdown = document.createElement("select");
+                                                    // tableDropdown.classList.add("form-control");
+
+                                                    const tableConstraintTypeCell = document.createElement("td");
+                                                    // Create checkboxes
+                                                    // Create checkboxes
+                                                    const isNullCheckbox = document.createElement("input");
+                                                    isNullCheckbox.type = "checkbox";
+                                                    isNullCheckbox.name = "Null";
+                                                    isNullCheckbox.classList.add("form-check-input", "me-2");
+                                                    isNullCheckbox.style.marginLeft = "-30px"; // Add custom style
+
+
+                                                    const isIdentityCheckbox = document.createElement("input");
+                                                    isIdentityCheckbox.type = "checkbox";
+                                                    isIdentityCheckbox.name = "Identity";
+                                                    isIdentityCheckbox.classList.add("form-check-input", "me-2");
+                                                    isIdentityCheckbox.style.marginLeft = "-30px"; // Add custom style
+
+                                                    const isPrimaryCheckbox = document.createElement("input");
+                                                    isPrimaryCheckbox.type = "checkbox";
+                                                    isPrimaryCheckbox.name = "Primary";
+                                                    isPrimaryCheckbox.classList.add("form-check-input", "me-2");
+                                                    isPrimaryCheckbox.style.marginLeft = "-30px"; // Add custom style
+
+                                                    // Add click event listener
+                                                    isPrimaryCheckbox.addEventListener('click', function () {
+                                                        
+                                                        validatePrimaryKeyAndIdentityColumns();
+                                                    });
+                                                    const isIdentityLabel = document.createElement("label");
+                                                    isIdentityLabel.textContent = "Is Identity";
+                                                    isIdentityLabel.classList.add("form-check-label", "me-3");
+                                                    isIdentityLabel.insertBefore(isIdentityCheckbox, isIdentityLabel.firstChild);
+                                                    isIdentityLabel.style.marginLeft = "120px";
+                                                    // Add click event listener
+                                                    isIdentityLabel.addEventListener('click', function () {
+
+                                                        if (!validatePrimaryKeyAndIdentityColumns()) {
+                                                            event.target.checked = !event.target.checked;
+                                                        }
+                                                    });
+
+
+                                                    // Create labels for checkboxes
+                                                    const isNullLabel = document.createElement("label");
+                                                    isNullLabel.textContent = "Is Null";
+                                                    isNullLabel.classList.add("form-check-label", "me-3");
+                                                    isNullLabel.insertBefore(isNullCheckbox, isNullLabel.firstChild);
+                                                    isNullLabel.style.marginLeft = "120px";
+                                                    // Add click event listener
+                                                    isNullLabel.addEventListener('click', function () {
+
+                                                        if (!validatePrimaryKeyAndIdentityColumns()) {
+                                                            event.target.checked = !event.target.checked;
+                                                        }
+                                                    });
+
+
+
+                                                    const isPrimaryLabel = document.createElement("label");
+                                                    isPrimaryLabel.textContent = "Is Primary";
+                                                    isPrimaryLabel.classList.add("form-check-label", "me-3", "gap-3");
+                                                    isPrimaryLabel.insertBefore(isPrimaryCheckbox, isPrimaryLabel.firstChild);
+                                                    isPrimaryLabel.style.marginLeft = "120px";
+                                                    // Add click event listener
+                                                    isPrimaryLabel.addEventListener('change', function () {
+
+                                                        if (!validatePrimaryKeyAndIdentityColumns()) {
+                                                            event.target.checked = !event.target.checked;
+                                                        }
+                                                    });
+
+                                                    // Create a div to hold the checkboxes and labels in a single line
+                                                    const checkboxContainer = document.createElement("div");
+                                                    checkboxContainer.classList.add("d-flex", "align-items-center");
+                                                    checkboxContainer.appendChild(isNullLabel);
+                                                    checkboxContainer.appendChild(isIdentityLabel);
+                                                    checkboxContainer.appendChild(isPrimaryLabel);
+
+                                                    // Append the container to the table cell
+                                                    tableConstraintTypeCell.appendChild(checkboxContainer);
+
+                                                    // Append checkboxes and labels to the table cell
+                                                   
+                                                  
+
+                                                    // Append the dropdown to the table cell
+                                                    tableNameCell.appendChild(tableDropdown);
+
+
+                                                    const tableColumnCelltxt = document.createElement("td");
+                                                    const textBox = document.createElement("input");
+                                                    textBox.value = property.column_Name;
+
+                                                    //tableDropdown.classList.add("form-control");
+                                                    textBox.classList.add("form-control");
+
+                                                    tableNameCell.appendChild(tableDropdown);
+                                                    
+                                                    tableColumnCelltxt.appendChild(textBox);
+
+                                                    // Populate table dropdown options
+                                                    if (tableDropdownData) {
+                                                        tableDropdownData.forEach(table => {
+                                                            const option = document.createElement("option");
+                                                            option.value = table.name;
+                                                            option.textContent = table.name;
+                                                            tableDropdown.appendChild(option);
+                                                        });
+                                                    } else {
+                                                        console.error('tableDropdownData is not available.');
+                                                    }
+
+                                                    const columnDropdownCell = document.createElement("td");
+                                                    const columnDropdown = document.createElement("select");
+                                                    //columnDropdown.classList.add("column-dropdown");
+                                                    columnDropdown.classList.add("form-control");
+
+                                                    //tableDropdown.classList.add("form-control");
+                                                    columnDropdownCell.appendChild(columnDropdown);
+
+                                                    // Append cells to the row
+                                                    row.appendChild(columnNameCell);
+                                                    row.appendChild(columnTypeCell);
+                                                    row.appendChild(tableNameCell);
+                                                    row.appendChild(columnDropdownCell);
+
+                                                    rowNewExport.appendChild(columnNameCell);
+                                                    rowNewExport.appendChild(columnTypeCell);
+                                                    rowNewExport.appendChild(tableColumnCelltxt);
+                                                    rowNewExport.appendChild(tableConstraintTypeCell);
+
+                                                    sourceGridBody.appendChild(row);
+                                                    NewGridBody.appendChild(rowNewExport);
+
+                                                    // Event listener for table dropdown change
+                                                    tableDropdown.addEventListener('change', function () {
+                                                        const selectedTable = this.value;
+                                                        fetchColumnsByTable(selectedTable, columnDropdown);
+                                                    });
+                                                });
+                                            } else {
+                                                console.error('listOfProperty is not an array:', listOfProperty);
+                                            }
+
+                                            // Dynamically add rows to the destination grid
+                                            populateDestinationGrid(data.listOfProperty);
+
+                                            // Populate table name dropdowns
+                                            populateTableDropdowns(data.listOfTable);
+
+                                            // Store data.listOfTable in the variable
+                                            tableDropdownData = data.listOfTable;
+
+                                            document.getElementById('InsertButton').hidden = false;
+                                            document.getElementById('NewGrid').hidden = false;
+
+                                            document.getElementById('loader').hidden = true;
+                                            //InsertButton
+                                           // document.getElementById('InsertButton').disabled = 'false';
+
+                                        } else {
+                                            document.getElementById('existingExportOptions').style.display = 'none'; // or 'none' to hide it initially
+                                        }
+                                       // document.getElementById("compileButton").disabled = false;
+                                    })
+                                    .catch(error => console.error('Error:', error));
+}
+
+
+
+
+</script>
+
+@*Data Push To DataBase*@
+<script>
+    function validateTable() {
+        const table = document.getElementById("SourceGrid");
+        const rows = table.querySelectorAll("tbody tr");
+        let isValid = true;
+
+        rows.forEach(row => {
+            const tableDropdown = row.querySelector("td:nth-child(3) select");
+            if (tableDropdown.value === "") {
+                isValid = false;
+                tableDropdown.classList.add("is-invalid");
+            } else {
+                tableDropdown.classList.remove("is-invalid");
+            }
+        });
+
+        if (!isValid) {
+            alert("Please select All TableName.");
+        }
+
+        return isValid;
+    }
+
+     function ExportDataInsert()
+ {
+
+
+               if (SourceTYpee != 'File') {
+
+
+                   var selectElement = document.querySelector('input[name="insertType"]:checked').value;
+                  // const selectElement = document.getElementById('InsertType');
+                   if (selectElement !== 'Existing') {
+                       if (document.getElementById('txtTable').value == "") {
+                           alert("Please Write Table Name");
+                           return;
+                       }
+                   }
+                   const dataToSend = {};
+                   var columnNames = "";
+                   if (selectElement === 'Existing') {
+
+                       if (!validateTable()) {
+                           return;
+                       }
+
+
+
+                       // Function to get data from SourceGrid
+                       function getSourceGridData() {
+                           const sourceGrid = document.getElementById('SourceGrid').getElementsByTagName('tbody')[0];
+                           const rows = sourceGrid.getElementsByTagName('tr');
+                           let sourceData = [];
+                           for (let row of rows) {
+                               const cells = row.getElementsByTagName('td');
+                               sourceData.push({
+                                   fieldName: cells[0].innerText,
+                                   dataType: cells[1].innerText
+                               });
+                           }
+                           return sourceData;
+                       }
+
+                       // Function to get data from DestinationGrid
+                       function getDestinationGridData() {
+                           const destinationGrid = document.getElementById('SourceGrid').getElementsByTagName('tbody')[0];
+                           const rows = destinationGrid.getElementsByTagName('tr');
+                           let destinationData = [];
+                           for (let row of rows) {
+                               const cells = row.getElementsByTagName('td');
+
+                               const tableNameCell = cells[2];
+                               let tableName;
+                               const tableSelectElement = tableNameCell.querySelector('select');
+                               if (tableSelectElement) {
+                                   tableName = tableSelectElement.value;
+                               } else {
+                                   tableName = tableNameCell.innerText.trim();
+                               }
+
+                               const columnNameCell = cells[3];
+                               let columnName;
+                               const columnSelectElement = columnNameCell.querySelector('select');
+                               if (columnSelectElement) {
+                                   columnName = columnSelectElement.value;
+                               } else {
+                                   columnName = columnNameCell.innerText.trim();
+                               }
+
+                               destinationData.push({
+                                   tableName: tableName,
+                                   columnName: columnName
+                               });
+                           }
+                           return destinationData;
+                       }
+
+                       // Collect data from both tables
+                       const sourceData = getSourceGridData();
+                       const destinationData = getDestinationGridData();
+
+                       // Ensure both grids have the same number of rows
+                       if (sourceData.length !== destinationData.length) {
+                           alert('The number of rows in SourceGrid and DestinationGrid do not match.');
+                           return;
+                       }
+
+                       // Create a mapping
+                       let mapping = [];
+                       for (let i = 0; i < sourceData.length; i++) {
+                           mapping.push({
+                               source: sourceData[i],
+                               destination: destinationData[i]
+                           });
+                       }
+
+
+                       const tableName = document.getElementById('txtTable').value;
+
+                       // Construct data to send
+                       dataToSend.mapping = mapping;
+
+                       dataToSend.TableName = tableName;
+
+                   }
+
+                   else {
+                       // Handle other cases as needed
+                      // const inputValue = document.getElementById('Input').value;
+                       const tableName = document.getElementById('txtTable').value;
+                      // const databaseType = document.getElementById('DataBaseType').value;
+
+                      // dataToSend.inputValue = inputValue;
+                       dataToSend.TableName = tableName;
+                       //  dataToSend.DatabaseType = databaseType;
+
+
+                       dataToSend.List_NewColumnNameWithType = getTextboxValuesFromNewGrid();
+
+
+
+
+                   }
+
+                   // Store the mapping (here we simply log it to the console)
+                   console.log('Data to send:', dataToSend);
+
+                   // Send the data to the server
+                   fetch('/DataMapping/PostMappingData', {
+                       method: 'POST',
+                       headers: {
+                           'Content-Type': 'application/json'
+                       },
+                       body: JSON.stringify(dataToSend)
+                   })
+                       .then(response => response.text())  // Get the response text
+                       .then(data => {
+                           console.log('Response:', data);
+                           if (data === "Success") {
+
+                              // parent.ClosePopupFromChild("The Datamapping process was successfully performed.");
+
+
+                               parent.ClosePopupFromChild("The Mapping was successfully configured");
+                               // Handle success case
+                               //alert("Operation successful!");
+                               // Pass data in the URI
+                               //location.href = "/PipelineDashBoard/Index?status=" + encodeURIComponent(data);
+                           } else {
+                               parent.ClosePopupFromChild("The Datamapping process was failed.");
+
+                               // Handle error case
+                               // Pass data in the URI
+                               //location.href = "/PipelineDashBoard/Index?status=" + encodeURIComponent("Fail");
+                              // alert("Error: " + data);
+                           }
+                       })
+                       .catch((error) => {
+                           console.error('Fetch error:', error);
+                           alert('Network error: ' + error.message);
+                           document.getElementById('InsertButton').disabled = false;
+                       });
+               }
+               ////To Handel File Data
+               else {
+
+                         const selectElement = document.getElementById('InsertType');
+                         if (selectElement !== 'Existing') {
+                             if (document.getElementById('txtTable').value == "") {
+                                 alert("Please Write Table Name");
+                                 return;
+                             }
+                         }
+
+                         const dataToSend = {};
+                         const form = document.getElementById('compileForm');
+                         const formData = new FormData(form);
+                         if (selectElement === 'Existing') {
+                             // Function to get data from SourceGrid
+                             function getSourceGridData() {
+                                 const sourceGrid = document.getElementById('SourceGrid').getElementsByTagName('tbody')[0];
+                                 const rows = sourceGrid.getElementsByTagName('tr');
+                                 let sourceData = [];
+                                 for (let row of rows) {
+                                     const cells = row.getElementsByTagName('td');
+                                     sourceData.push({
+                                         fieldName: cells[0].innerText,
+                                         dataType: cells[1].innerText
+                                     });
+                                 }
+                                 return sourceData;
+                             }
+
+                             // Function to get data from DestinationGrid
+                             function getDestinationGridData() {
+                                 const destinationGrid = document.getElementById('DestinationGrid').getElementsByTagName('tbody')[0];
+                                 const rows = destinationGrid.getElementsByTagName('tr');
+                                 let destinationData = [];
+                                 for (let row of rows) {
+                                     const cells = row.getElementsByTagName('td');
+
+                                     const tableNameCell = cells[0];
+                                     let tableName;
+                                     const tableSelectElement = tableNameCell.querySelector('select');
+                                     if (tableSelectElement) {
+                                         tableName = tableSelectElement.value;
+                                     } else {
+                                         tableName = tableNameCell.innerText.trim();
+                                     }
+
+                                     const columnNameCell = cells[1];
+                                     let columnName;
+                                     const columnSelectElement = columnNameCell.querySelector('select');
+                                     if (columnSelectElement) {
+                                         columnName = columnSelectElement.value;
+                                     } else {
+                                         columnName = columnNameCell.innerText.trim();
+                                     }
+
+                                     destinationData.push({
+                                         tableName: tableName,
+                                         columnName: columnName
+                                     });
+                                 }
+                                 return destinationData;
+                             }
+
+                             // Collect data from both tables
+                             const sourceData = getSourceGridData();
+                             const destinationData = getDestinationGridData();
+
+                             // Ensure both grids have the same number of rows
+                             if (sourceData.length !== destinationData.length) {
+                                 alert('The number of rows in SourceGrid and DestinationGrid do not match.');
+                                 return;
+                             }
+
+                             // Create a mapping
+                             let mapping = [];
+                             for (let i = 0; i < sourceData.length; i++) {
+                                 mapping.push({
+                                     source: sourceData[i],
+                                     destination: destinationData[i]
+                                 });
+                             }
+
+                             // Get other input values
+                             const inputValue = document.getElementById('Input').value;
+                             const tableName = document.getElementById('txtTable').value;
+                             const databaseType = document.getElementById('DataBaseType').value;
+
+                             // Construct data to send
+                             dataToSend.mapping = mapping;
+                             dataToSend.inputValue = inputValue;
+                             dataToSend.TableName = tableName;
+                             dataToSend.DatabaseType = databaseType;
+                         }
+
+                         else {
+                             // Handle other cases as needed
+                             const inputValue = document.getElementById('Input').value;
+                             const tableName = document.getElementById('txtTable').value;
+                             const databaseType = document.getElementById('DataBaseType').value;
+
+                             dataToSend.inputValue = inputValue;
+                             dataToSend.TableName = tableName;
+                             dataToSend.DatabaseType = databaseType;
+
+
+                                 }
+                         // Store the mapping (here we simply log it to the console)
+                         console.log('Data to send:', dataToSend);
+
+                         // Send the data to the server
+                         // fetch('/DataMapping/PostMappingData', {
+
+                              fetch('@Url.Action("ExportExcel", "DataMapping")', {
+                                  method: 'POST',
+                                  headers: {
+                                      'Content-Type': 'application/json'
+                                  },
+
+                                  body: JSON.stringify(dataToSend)
+                         })
+                             .then(response => {
+                                 if (!response.ok) {
+                                     return response.text().then(text => {
+                                         throw new Error('Network response was not ok: ' + response.status + ' ' + text);
+                                     });
+                                 }
+                                 return response.json();
+                             })
+                             .then(data => {
+                                 console.log('Success:', data);
+                                 // Handle success response
+                                 const outputElement = document.getElementById('Output');
+                                 outputElement.innerHTML = ''; // Clear previous messages
+                                 const outputMessages = data.messages;
+                                 outputMessages.forEach(message => {
+                                     outputElement.innerHTML += message + "<br>";
+                                 });
+                             })
+                             .catch((error) => {
+                                 console.error('Error:', error);
+                                 // Optionally handle error response
+                             });
+
+
+
+               }
+    }
+
+
+   
+
+    function getTextboxValuesFromNewGrid() {
+
+        if (!validatePrimaryKeyAndIdentityColumns()) {
+            return [];
+        }
+
+
+
+        const newGridTable = document.getElementById('NewGrid');
+        const rows = newGridTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        const columnDetailsList = [];
+
+
+        for (let row of rows) {
+            const columnTypeCell = row.getElementsByTagName('td')[1];
+            const columnNameTextbox = row.getElementsByTagName('td')[2].getElementsByTagName('input')[0];
+
+            const Original_FieldName = row.getElementsByTagName('td')[0];
+
+            // Get checkbox values
+            const isNullCheckbox = row.querySelector('input[name="Null"]');
+            const isIdentityCheckbox = row.querySelector('input[name="Identity"]');
+            const isPrimaryCheckbox = row.querySelector('input[name="Primary"]');
+
+            // Concatenate checkbox values
+            let constraints = '';
+            if (isNullCheckbox && isNullCheckbox.checked) {
+                constraints += 'Null ';
+            }
+            if (isIdentityCheckbox && isIdentityCheckbox.checked) {
+                constraints += 'Identity ';
+            }
+            if (isPrimaryCheckbox && isPrimaryCheckbox.checked) {
+                constraints += 'Primary ';
+            }
+            constraints = constraints.trim(); // Remove trailing space
+
+
+
+
+            if (columnTypeCell && columnNameTextbox) {
+                const columnType = columnTypeCell.textContent.trim();
+                const columnName = columnNameTextbox.value;
+                const OriginalColumnNmae = Original_FieldName.textContent.trim();
+                const Source = {
+                    Original_FieldName: OriginalColumnNmae,
+                    FieldName: columnName,
+                    DataType: columnType,
+                    constraints: constraints
+
+                };
+                columnDetailsList.push(Source);
+            }
+        }
+
+        return columnDetailsList;
+    }
+
+</script>
+<script>
+
+   
+    function validatePrimaryKeyAndIdentityColumns() {
+        const newGridTable = document.getElementById('NewGrid');
+        const rows = newGridTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        let primaryKeyCount = 0;
+        let identityColumnCount = 0;
+
+        for (let row of rows) {
+
+            const isNullCheckbox = row.querySelector('input[name="Null"]');
+            const isIdentityCheckbox = row.querySelector('input[name="Identity"]');
+            const isPrimaryCheckbox = row.querySelector('input[name="Primary"]');
+
+            if (isIdentityCheckbox && isIdentityCheckbox.checked) {
+                identityColumnCount++;
+                if (isNullCheckbox && isNullCheckbox.checked) {
+                    // alert("An identity column cannot be marked as Null.");
+                    return false;
+                }
+            }
+
+            if (isPrimaryCheckbox && isPrimaryCheckbox.checked) {
+                primaryKeyCount++;
+                if (isNullCheckbox && isNullCheckbox.checked) {
+                    // alert("A primary key column cannot be marked as Null.");
+                    return false;
+                }
+            }
+
+
+            //if (isIdentityCheckbox && isIdentityCheckbox.checked) {
+            //    identityColumnCount++;
+            //}
+            //if (isPrimaryCheckbox && isPrimaryCheckbox.checked) {
+            //    primaryKeyCount++;
+            //}
+        }
+
+        // Validation for only one primary key and one identity column
+        if (primaryKeyCount > 1) {
+           // alert("Only one primary key is allowed.");
+            return false;
+        }
+
+        if (identityColumnCount > 1) {
+            //alert("Only one identity column is allowed.");
+            return false;
+        }
+
+        return true;
+    }
+
+</script>

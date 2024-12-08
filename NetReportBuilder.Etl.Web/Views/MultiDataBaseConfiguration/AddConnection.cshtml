@@ -1,0 +1,405 @@
+﻿@{
+    ViewData["Title"] = "MultiDataBaseConfiguration";
+    // Layout = "_LayoutDBConfiguration";
+}
+
+
+@{
+    ViewData["Title"] = "Employee";
+
+}
+<head>
+    <style>
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid blue;
+            border-right: 16px solid green;
+            border-bottom: 16px solid red;
+            width: 120px;
+            height: 120px;
+            position: fixed; /* Keep loader fixed in the center */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            z-index: 9999; /* Ensure it's on top of other elements */
+        }
+
+        #loaderOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+            z-index: 9998; /* Just behind the loader */
+            display: none; /* Initially hidden */
+        }
+
+        #content {
+            display: block;
+            width: 60%;
+            margin-left: 387px;
+            background-color: #637a8745;
+            padding-left: 124px;
+            padding-right: 124px;
+            padding-bottom: 30px;
+            padding-top: 30px;
+        }
+        .Heading {
+            align-content: center;
+            text-align: -webkit-center;
+            size: letter;
+           
+            font-size: xx-large;
+            text-decoration: underline;
+            color: #006096;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<!-- Loader that will be hidden initially -->
+<div id="loaderOverlay"></div>
+<div class="loader" id="loader" style="display: none;"></div>
+
+<div id="content">
+    <div class="Heading">ADD CONNECTION</div>
+    <div class="row">
+        @Html.AntiForgeryToken()
+        @*Write code here*@
+    </div>
+
+    <div>
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+            <a class="nav-item nav-link active" asp-controller="MultiDataBaseConfiguration" asp-action="AddConnection">Add</a>
+            <a class="nav-item nav-link" asp-controller="MultiDataBaseConfiguration" asp-action=ViewConnection>View</a>
+        </ul>
+    </div>
+    <br />
+    <br />
+    <br />
+    <form id="form">
+        <div class="form-group row">
+            <label for="DatabaseType" class="col-12 col-md-2 col-xl-2 mb-3 control-label">Database Type:</label>
+            <div class="col-12 col-md-6 col-xl-8 mb-3">
+                <select id="DatabaseType" name="DatabaseType" class="form-select" onchange="HideShowPort()">
+                    <option value="Select Database">~Select Database~</option>
+                    <option value="SqlServer">SqlServer</option>
+                    <option value="Oracle">Oracle</option>
+                    <option value="MySQL">MySQL</option>
+                    <option value="Postgre">Postgre</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="DatabaseName" class="col-12 col-md-2 col-xl-2 mb-3 control-label">Database Name:</label>
+            <div class="col-12 col-md-6 col-xl-8 mb-3">
+                <input type="text" id="DatabaseName" name="DatabaseName" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="HostName" class="col-12 col-md-2 col-xl-2 mb-3 control-label">Host Name:</label>
+            <div class="col-12 col-md-6 col-xl-8 mb-3">
+                <input type="text" id="HostName" name="HostName" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="Authentication" class="col-12 col-md-2 col-xl-2 mb-3 control-label">Authentication:</label>
+            <div class="col-12 col-md-6 col-xl-8 mb-3">
+                <select id="Authentication" name="Authentication" class="form-select" onchange="ManagePassword()">
+                    <option value="Select Authentication">~Select Authentication~</option>
+                    <option value="Password">Password</option>
+                    <option value="integrated">integrated</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="UserName" class="col-12 col-md-2 col-xl-2 mb-3 control-label">User Name:</label>
+            <div class="col-12 col-md-6 col-xl-8 mb-3">
+                <input type="text" id="UserName" name="UserName" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="Password" class="col-12 col-md-2 col-xl-2 mb-3 control-label">Password:</label>
+            <div class="col-12 col-md-6 col-xl-8 mb-3">
+                <input type="password" id="Password" name="Password" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="Port" class="col-12 col-md-2 col-xl-2 mb-3 control-label">Port:</label>
+            <div class="col-12 col-md-6 col-xl-8 mb-3">
+                <input type="text" id="Port" name="Port" class="form-control">
+            </div>
+        </div>
+        <button id="testConnectionButton" class="btn btn-primary" type="button" onclick="connectDatabase()">Test Connection</button>
+        <button id="connectButton" class="btn btn-success" type="button" disabled onclick="Save_tbl_AddDatabaseConfigurationsPipeline()">Save</button>
+
+
+        <input id="hdntbl_AddDatabaseConfigurationsPipeline" type="hidden" value="0" />
+    </form>
+
+</div>
+<script>
+
+    function ManagePassword() {
+
+
+        var userIdField = document.getElementById('UserName');
+        var passwordField = document.getElementById('Password');
+
+        if (document.getElementById("Authentication").value === 'integrated') {
+            userIdField.readOnly = true;
+            passwordField.readOnly = true;
+            userIdField.value = '';  // Optionally clear the fields
+            passwordField.value = '';  // Optionally clear the fields
+        } else {
+            userIdField.readOnly = false;
+            passwordField.readOnly = false;
+        }
+
+
+    }
+
+    function HideShowPort() {
+        var PortField = document.getElementById('Port');
+
+
+        if (document.getElementById("DatabaseType").value === 'SqlServer') {
+
+            PortField.readOnly = true;
+            PortField.value = '';  // Optionally clear the fields
+
+        } else {
+
+            PortField.readOnly = false;
+
+
+
+        }
+    }
+
+
+    function connectDatabase() {
+
+
+            $('#loader').show(); // Show loader
+            $('#loaderOverlay').show(); // Show overlay
+
+
+
+
+        document.getElementById("testConnectionButton").disabled = true;
+
+
+        var jsonData = {
+
+            Id: $('#hdntbl_AddDatabaseConfigurationsPipeline').val(),
+
+            DatabaseType: $("#DatabaseType").val(),
+            DatabaseName: $("#DatabaseName").val(),
+            HostName: $("#HostName").val(),
+            Authentication: $("#Authentication").val(),
+            UserName: $("#UserName").val(),
+            Password: $("#Password").val(),
+            Port: $("#Port").val(),
+
+        };
+
+    $.ajax({
+        url: '@Url.Content("~/MultiDataBaseConfiguration/TestDatabsesInformations")',
+        type: 'GET',
+        data: jsonData,
+        success: function (responseData) {
+            console.log('Response received:', responseData);
+            document.getElementById("testConnectionButton").disabled = false;
+
+
+            if (responseData.isSucess) {
+
+
+                document.getElementById("connectButton").disabled = false;
+
+                Swal.fire({
+
+                    text: responseData.messgae,
+                    icon: "success"
+                });
+
+
+
+                $('#loader').hide();
+                $('#loaderOverlay').hide();
+
+
+
+
+            }
+
+
+
+
+
+            else {
+                document.getElementById("connectButton").disabled = true;
+
+                  document.getElementById("testConnectionButton").disabled = false;
+
+                //console.error('Database connection failed:', responseData.message);
+                Swal.fire({
+
+                    text: responseData.messgae,
+                    icon: "warning"
+                });
+
+
+                $('#loader').hide();
+                $('#loaderOverlay').hide();
+                // Handle failure scenario here
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            document.getElementById("connectButton").disabled = true;
+
+            document.getElementById("testConnectionButton").disabled = false;
+
+            Swal.fire({
+
+                text: `Error`,
+                icon: "error"
+            });
+
+            $('#loader').hide();
+            $('#loaderOverlay').hide();
+        }
+    });
+}
+</script>
+
+
+<script>
+$(document).ready(function () {
+        function getUrlVars() {
+            var vars = {};
+            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                vars[key] = decodeURIComponent(value);
+            });
+            return vars;
+        }
+        var id = getUrlVars()["strid"];
+
+        if (id != undefined || id != null) {
+            Edit_tbl_AddDatabaseConfigurationsPipeline(decryptData(id));
+         }
+});
+
+
+
+
+        function decryptData(encryptedData) {
+            var decryptedBytes = CryptoJS.AES.decrypt(encryptedData, 'secret_key');
+            var decryptedString = decryptedBytes.toString(CryptoJS.enc.Utf8);
+            var decryptedObject = JSON.parse(decryptedString);
+            var originalData = decryptedObject.data;
+            var decryptedInteger = parseInt(originalData, 10);
+            return decryptedInteger;
+    }
+
+    function Edit_tbl_AddDatabaseConfigurationsPipeline(id) {
+        $.ajax({
+            type: "Get",
+            dataType: "json",
+            url: '@Url.Action("GetByID_tbl_AddDatabaseConfigurationsPipeline", "MultiDataBaseConfiguration")',
+            data: { "Id": id },
+            success: function (Result) {
+                var data1 = JSON.parse(Result);
+   $("#hdntbl_AddDatabaseConfigurationsPipeline").val(data1.Id);
+             $('#PipeLineId').val(data1.PipeLineId);
+					$('#DatabaseType').val(data1.DatabaseType);
+					$('#DatabaseName').val(data1.DatabaseName);
+					$('#HostName').val(data1.HostName);
+					$('#Authentication').val(data1.Authentication);
+					$('#UserName').val(data1.UserName);
+					$('#Password').val(data1.Password);
+					$('#Port').val(data1.Port);
+
+            },
+            error: function (Message) {
+                alert(Message);
+            }
+        });
+    }
+
+
+
+
+			function Save_tbl_AddDatabaseConfigurationsPipeline() {
+
+
+					var MultiDataBaseConfiguration ={
+
+					 Id:$('#hdntbl_AddDatabaseConfigurationsPipeline').val(),
+
+					DatabaseType:$("#DatabaseType").val(),
+					DatabaseName:$("#DatabaseName").val(),
+					HostName:$("#HostName").val(),
+					Authentication:$("#Authentication").val(),
+					UserName:$("#UserName").val(),
+					Password:$("#Password").val(),
+					Port:$("#Port").val(),
+
+				};
+			$.ajax({
+				type: "POST",
+                url: "/MultiDataBaseConfiguration/tbl_AddDatabaseConfigurationsPipeline",
+			beforeSend: function (xhr) {
+					xhr.setRequestHeader("XSRF-TOKEN",
+						$('input:hidden[name="__RequestVerificationToken"]').val());
+				},
+			data:MultiDataBaseConfiguration,
+			content: 'application/json;charset=utf-8',
+			dataType: "json",
+                success: function (result) {
+                    if (result.isSucess) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: result.messgae.responseMessage,
+                            text: result.messgae.responseMessage,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.href ="/MultiDataBaseConfiguration/ViewConnection";
+                            }
+                        })
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: result.messgae.responseMessage,
+                            text: result.messgae.responseMessage,
+                        })
+
+                    }
+
+			},
+			error: function (result) {
+						Swal.fire({
+							icon: 'error',
+                            title: result.messgae.responseMessage,
+                            text: result.messgae.responseMessage,
+						});
+					},
+			});
+			}
+
+</script>
+

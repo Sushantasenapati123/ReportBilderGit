@@ -1,0 +1,2879 @@
+﻿@model NetReportBuilder.ReportUI.Models.ReportConfigurationModel.ReportTypes
+@{
+    ViewData["Title"] = "ReportBuilderUI";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var IconList = ViewBag.Icons as List<string>;
+    var gridhtml = ViewBag.GridHTML as string;
+}
+<link href="~/wwwroot/css/layout.css" rel="stylesheet" />
+<link href="~/css/layout.css" rel="stylesheet" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- top chart bar  -->
+<div class="top_chartbar">
+    <div class="d-flex align-items-center justify-content-between flex-wrap">
+        <div class="icon">
+            <ul>
+                <li> <a href="javascript:void(0)" title="New" data-bs-toggle="modal" data-bs-target="#new_data"> <i class="bi bi-file-earmark-plus"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Save"> <i class="bi bi-floppy"></i> </a>  </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+                <li> <a href="javascript:void(0)" title="Cut"> <i class="bi bi-scissors"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Copy"> <i class="bi bi-copy"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Paste"> <i class="bi bi-clipboard"></i>  </a>  </li>
+                <li> <a href="javascript:void(0)" title="Delete"> <i class="bi bi-trash"></i> </a>  </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+                <li> <a href="javascript:void(0)" title="Undo"> <i class="bi bi-arrow-90deg-left"></i>  </a>  </li>
+                <li> <a href="javascript:void(0)" title="Redo"> <i class="bi bi-arrow-90deg-right"></i> </a>  </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+                <li> <a href="javascript:void(0)" title="Zoom Out"> <i class="bi bi-zoom-out"></i>  </a>  </li>
+                <li> <a href="javascript:void(0)" title="Redo"> 100% </a>  </li>
+                <li> <a href="javascript:void(0)" title="Zoom In"> <i class="bi bi-zoom-in"></i> </a>  </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+                <li>
+                    <div class="select-dropcustom">
+                        <a href="javascript:void(0)" title="Order" class="select-dropcustom__button">  <i class="bi bi-window-stack"></i>  <i class="bi bi-chevron-down ms-1"></i> </a>
+                        <ul class="select-dropcustom__list">
+                            <li data-value="1" class="select-dropcustom__list-item"><i class=" me-2 bi bi-skip-backward"></i> Send Backward </li>
+                            <li data-value="2" class="select-dropcustom__list-item"> <i class=" me-2 bi bi-skip-forward"></i> Bring Forward </li>
+                            <li data-value="3" class="select-dropcustom__list-item"> <i class=" me-2 bi bi-back"></i> Send To back</li>
+                            <li data-value="4" class="select-dropcustom__list-item"> <i class=" me-2 bi bi-front"></i> Bring To Front</li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+                <li> <a href="javascript:void(0)" title="Center Horizontal">   <i class="bi bi-textarea"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Center Vertical">   <i class="bi bi-vr"></i> </a>  </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+                <li> <a href="javascript:void(0)" title="Left Align">   <i class="bi bi-align-start"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Center Align">   <i class="bi bi-align-center"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Right Align">   <i class="bi bi-align-end"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Top Align">   <i class="bi bi-align-top"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Middle Align">   <i class="bi bi-align-middle"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Bottom Align">   <i class="bi bi-align-bottom"></i> </a>  </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+                <li> <a href="javascript:void(0)" title="Center Horizontal">    <i class="bi bi-distribute-horizontal"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Center Vertical">   <i class="bi bi-distribute-vertical"></i> </a>  </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+                <li> <a href="javascript:void(0)" title="Align to Grid">   <i class="bi bi-columns"></i> </a>  </li>
+                <li> <a href="javascript:void(0)" title="Size to Grid">   <i class="bi bi-grid"></i> </a>  </li>
+                <li>
+                    <div class="e-separator"></div>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary btn-sm" title="Preview"> <i class="bi bi-eye"></i> Preview </button>
+        </div>
+    </div>
+</div>
+<!-- left side bar -->
+<div class="col leftchart__section" id="dashbrdGroups">
+    <div class="collapse_icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse"> <i class="bi bi-chevron-left"></i> </div>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="b-dashboard-content mCustomScrollbar" data-mcs-theme="dark">
+            <nav class="b-dashboard-menu">
+                <ul>
+                    <li class="-is-active">
+                        <a href="#" class="active__items active" title="Data Regions"> Add Portlate </a>
+                        <ul class="custom__grid">
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="javascript:(void:0)" title="Add Portlate" id="addprt">
+                                    <div class="block__grid">
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul>
+                    @*<li class="-is-active">
+                            <a href="#" class="active__items" title="Data Regions"> Data Regions </a>
+                            <ul class="custom__grid">
+                                <li class="grid__list">
+                                    <a class="drawflow__txt table_creation" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Column">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/table.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Table </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt list_data" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="List">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/list-box.svg" alt="Column Icon">
+                                        </div>
+                                        <label> List </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt matrix_data" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Matrix">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/matrix.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Matrix </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt map_data" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Map">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/map.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Map </label>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>*@
+                    <li class="-is-active">
+                        <a href="#" class="active__items" title="Comparison"> Comparison </a>
+                        <ul class="custom__grid">
+                            <li class="grid__list">
+                                <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Column" onclick="GetColumnChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/column.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Column </label>
+                                </a>
+                            </li>
+                            <li class="grid__list">
+                                <a class="drawflow__txt bar_charts" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Bar" onclick="GetBarChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/bar.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Bar </label>
+                                </a>
+                            </li>
+                            <li class="grid__list">
+                                <a class="drawflow__txt stacked_charts" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Column" onclick="GetStackedColumnChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/stacked-column.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Stacked Column </label>
+                                </a>
+                            </li>
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Bar" onclick="GetStackedBarChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/stacked-bar.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Stacked Bar </label>
+                                </a>
+                            </li>
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Column 100%">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/100-stacked-column.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Stacked Column 100% </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Bar 100%">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/100-stackedbar.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Stacked Bar 100% </label>
+                                    </a>
+                                </li>*@
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Range Column" onclick="GetRangeColumnChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/range-column.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Range Column </label>
+                                </a>
+                            </li>
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Range Bar ">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/range-bar.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Range Bar </label>
+                                    </a>
+                                </li>*@
+                        </ul>
+                    </li>
+                    <li class="-is-active">
+                        <a href="#" class="active__items" title="Proportion"> Proportion </a>
+                        <ul class="custom__grid">
+                            <li class="grid__list">
+                                <a class="drawflow__txt pie_charts" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Pie" onclick="GetPieChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/pie.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Pie </label>
+                                </a>
+                            </li>
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt exploded_pie" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Exploded Pie">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/exploded-pie.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Exploded Pie </label>
+                                    </a>
+                                </li>*@
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Doughnut Chart" onclick="GetDonutChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/doughnut.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Doughnut Chart </label>
+                                </a>
+                            </li>
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Pyramid" onclick="GetPyramidChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/pramid.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Pyramid </label>
+                                </a>
+                            </li>
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Funnel" onclick="GetFunnelChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/exploded-pie.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Funnel </label>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="-is-active">
+                        <a href="#" class="active__items" title="Distribution"> Distribution </a>
+                        <ul class="custom__grid">
+                            <li class="grid__list">
+                                <a class="drawflow__txt area_charts" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Area" onclick="GetAreaChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/area.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Area </label>
+                                </a>
+                            </li>
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt smooth_area" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Smooth Area">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/smooth-area.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Smooth Area </label>
+                                    </a>
+                                </li>*@
+                            <li class="grid__list">
+                                <a class="drawflow__txt stacked_areachart" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Ared" onclick="GetStackedAreaChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/stacked-area.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Stacked Area </label>
+                                </a>
+                            </li>
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Scatters" onclick="GetScatterChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/scatter.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Scatters </label>
+                                </a>
+                            </li>
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Bubble" onclick="GetBubbleChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/bubbles.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Bubble </label>
+                                </a>
+                            </li>
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Area 100%">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/100-stacked.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Stacked Area 100% </label>
+                                    </a>
+                                </li>*@
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Range Area">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/range-area.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Range Area </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Smooth Range Area">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/smooth-range-area.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Smooth Range Area </label>
+                                    </a>
+                                </li>*@
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Line" onclick="GetLineChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/line2.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Line </label>
+                                </a>
+                            </li>
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Smooth Line">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/smooth-line.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Smooth Line </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Striped Line">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/stepped-line.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Striped Line </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Line with Markers">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/line-with-markers.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Line with Markers </label>
+                                    </a>
+                                </li>*@
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="SmoothLIne with Markers">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/smoothline-with-markers.svg" alt="Column Icon">
+                                        </div>
+                                        <label> SmoothLIne with Markers </label>
+                                    </a>
+                                </li>*@
+
+                            <li class="grid__list">
+                                <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Polar" onclick="GetPolarChart()">
+                                    <div class="icon__graph">
+                                        <img src="../images/svg/polar.svg" alt="Column Icon">
+                                    </div>
+                                    <label> Polar </label>
+                                </a>
+                            </li>
+                            @*<li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Radar">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/radar.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Radar </label>
+                                    </a>
+                                </li>*@
+                        </ul>
+                    </li>
+                    @*<li class="-is-active">
+                            <a href="#" class="active__items" title="KPI"> KPI </a>
+                            <ul class="custom__grid">
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Data bar ">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/data-bar.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Data bar </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Spark Line">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/sparkline.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Spark Line </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Indicator">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/indicator.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Indicator </label>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="-is-active">
+                            <a href="#" class="active__items" title="Deviations"> Deviations </a>
+                            <ul class="custom__grid">
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Radial Gaque">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/radial-gauge.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Radial Gaque </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Linear Gaque">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/sparkline.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Linear Gaque </label>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="-is-active">
+                            <a href="#" class="active__items" title="Sub Reports"> Sub Reports </a>
+                            <ul class="custom__grid">
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Sub Report">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/subreport.svg" alt="Column Icon">
+                                        </div>
+                                        <label> Sub Report </label>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="-is-active">
+                            <a href="#" class="active__items" title="Bar Codes"> Bar Codes </a>
+                            <ul class="custom__grid">
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="10 Barcode">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/barcode.svg" alt="Column Icon">
+                                        </div>
+                                        <label> 10 Barcode </label>
+                                    </a>
+                                </li>
+                                <li class="grid__list">
+                                    <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="2D Barcode">
+                                        <div class="icon__graph">
+                                            <img src="../images/svg/qrbarcode.svg" alt="Column Icon">
+                                        </div>
+                                        <label> 2D Barcode </label>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>*@
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- ------------------------------- -->
+</div>
+<!--  left side bar -->
+<!-- body part -->
+<div class='dashboard'>
+    <div class="chart_right" id="colRight">
+        <div class='dashboard-app'>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="card border-0 dashboard-bg">
+                        <div class="card-body p-0 grid__bgmain" id="grids">
+                            @*<div class="form_builder_area"></div>*@
+                            @if (gridhtml != null)
+                            {
+                                @Html.Raw(System.Web.HttpUtility.HtmlDecode(gridhtml))
+                            }
+                            else
+                            {
+                                <div class="grid-stack mt-1"></div>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-3 px-3">
+                        @*<div id="divTest">hello</div>*@
+                        <button class="btn btn-primary me-2" title="Save" id="btnsavedesign">Save</button>
+                        <button class="btn btn-danger" title="Clear" id="btnclear">Clear</button>
+                        <button class="btn btn-primary me-2" title="Preview" id="btnPreview" @*onclick="showpreview()"*@ style="display:none;">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- body part -->
+<!-- right side bar -->
+<div class="dashboard-nav">
+    <div class="collapse_icon_right" data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse"> <i class="bi bi-chevron-right"></i> </div>
+    <!-- tabing section start -->
+    <nav class="dashboard-nav-list">
+        <div class="tab_dashboard">
+            <ul class="nav nav-tabs"
+                id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active"
+                            id="home-tab"
+                            data-bs-toggle="tab" data-bs-target="#home"
+                            type="button" role="tab"
+                            aria-controls="home" aria-selected="true">
+                        Chart
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link"
+                            id="profile-tab"
+                            data-bs-toggle="tab" data-bs-target="#profile"
+                            type="button" role="tab"
+                            aria-controls="profile" aria-selected="false">
+                        Theme
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link"
+                            id="contact-tab"
+                            data-bs-toggle="tab" data-bs-target="#contact"
+                            type="button" role="tab"
+                            aria-controls="contact" aria-selected="false">
+                        Tab 3
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <p>
+                        <center><h5><b>Chart Configuration</b></h5></center>
+                    </p>
+                    <div class="col-xs-12 col-md-12 col-xl-12">
+                        <input type="hidden" id="hdnConfigurationId" />
+                        <input type="hidden" id="hdnDivId" value="1" />
+                        <input type="hidden" id="hdnDivModifyId" value="1" />
+                        <input id="hdncolordivjson" value="@ViewBag.colordivjson" type="hidden" />
+                        <div class="form-group row">
+                            @*TableName*@
+                            <div id="TableData" class="col-xs-12 col-md-10 col-xl-10">
+                                <label class="control-label">Data Source<span class="text-danger">*</span></label>
+                                <select id="ddlDataSource" class="form-control" onchange="GetColumnsByTable()" asp-items="@(new SelectList(ViewBag.DataSource, "order", "name"))">
+                                    <option value="0">Select Data Source</option>
+                                </select>
+                            </div>
+                            @*ReportType*@
+                            <div class="col-xs-12 col-md-6 col-xl-6" style="display:none;">
+                                <label class="control-label">Report Type<span class="text-danger">*</span></label><br />
+                                <select id="reportType" name="reportType" class="form-control">
+                                    <option value="0" selected>Select Report Type</option>
+                                    @if (Model.ReportType != null)
+                                    {
+                                        @foreach (var reportType in Model.ReportType)
+                                        {
+                                            <option value="@reportType.Name">@reportType.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <!--<div class="form-group row">-->
+                        @*ChartType/Grid/Summary*@
+                        <!--<div class="col-xs-12 col-md-12 col-xl-12">
+                                <div class="w3-panel w3-card">
+                                    <span id="ChangeHeader"></span>
+                                    <div id="reportDetails" class="form-group row">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-md-12 col-xl-12">
+                                @*ChartConfiguration*@
+                                <div class="w3-panel w3-card">
+                                    <p>
+                                        <div id="AxisConfiguration">
+                                            <div class="title_txt"><center><b>Report Configuration</b></center></div>
+                                            <div class="form-group row">
+                                                <div class="col-xs-12 col-md-10 col-xl-10">
+                                                    <label class="control-label">Title<span class="text-danger">*</span></label>
+                                                    <input type="text" id="txtTitle" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-xs-12 col-md-6 col-xl-6">
+                                                    <label class="control-label">X-Axis<span class="text-danger">*</span></label>
+                                                    <select id="ddlXAxis" class="form-control">
+                                                        <option value="0" selected>Select X-Axis</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-xs-12 col-md-6 col-xl-6">
+                                                    <label class="control-label">X-Axis Title<span class="text-danger">*</span></label>
+                                                    <input type="text" id="txtXAxisTitle" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div id="newinput" class="form-group row">
+                                                <input type="hidden" id="hdnYaxiscount" value="0" />
+                                                <div class="col-xs-12 col-md-4 col-xl-4">
+                                                    <label class="control-label">Y-Axis<span class="text-danger">*</span></label>
+                                                    <select id="ddlYAxis" class="form-control">
+                                                        <option value="0" selected>Select Y-Axis</option>
+                                                    </select>
+
+                                                </div>
+                                                <div class="col-xs-12 col-md-8 col-xl-8">
+                                                    <label class="control-label">Y-Axis Title<span class="text-danger">*</span></label>
+                                                    <div class="row">
+                                                        <div class="col-xs-12 col-md-4 col-xl-4">
+                                                            <input type="text" id="txtYAxisTitle" class="form-control">
+                                                        </div>
+                                                        <div class="col-xs-12 col-md-4 col-xl-4">
+                                                            <button id="rowAdder" type="button" class="btn btn-dark pull-right">
+                                                                <span class="bi bi-plus-square-dotted">
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-12 col-md-12 col-xl-12">
+                                @*BUTTONS*@
+                                <div class="col-md-12 mt-3">
+                                    <button class="btn btn-primary mb-1 me-2" id="btnApply">Apply</button>
+                                    @*<button class="btn btn-danger mb-1" id="btnSave">Save</button>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-12 col-md-12 col-xl-12">
+                                @*GridView*@
+                                <div class="w3-panel w3-card" id="GridReport" style="display:none;">
+                                    <p>
+                                        <div>
+                                            <table id="dataGrid" class="table table-bordered">
+                                                <thead>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade"
+                     id="profile"
+                     role="tabpanel" aria-labelledby="profile-tab">
+                    <p>
+                        <center><h5><b>Theme Configuration</b></h5></center>
+                    </p>
+                    <div class="col-xs-12 col-md-12 col-xl-12">
+                        <div class="form-group row">
+                            @*BackGround Color*@
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label">Background Color</label>
+                                <input type="color" id="txtBackgroundColor" onchange="updateStylesInlineCode()" class="form-control">
+                            </div>
+                            @*Font Color*@
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label">Font Color</label>
+                                <input type="color" id="txtFontColor" class="form-control" onchange="updateStylesInlineCode()">
+                            </div>
+                        </div><br />
+                        <div class="form-group row">
+                            @*Icon Image*@
+                            <label class="title_txt">Icon Image</label>
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="form-check-label" for="imageOption">
+                                    <input type="radio" class="form-check-input" id="imageOption" name="option" value="Image" onclick="toggleUpload('image')"> Image
+                                </label>
+                                <label class="form-check-label" for="iconOption">
+                                    <input type="radio" class="form-check-input" id="iconOption" name="option" value="Icon" onclick="toggleUpload('icon')"> Icon
+                                </label>
+                            </div>
+                            @*FileUpload*@
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <div id="uploadSection" class="form-group row hidden">
+                                    <label for="fileUpload" class="control-label">Upload Image</label><br />
+                                    <input type="file" id="myFile" name="filename">
+                                </div>
+                                @*TextBox For Icon*@
+                                <div id="textboxSection" class="form-group row hidden">
+                                    <label for="iconText" class="control-label">Icon Text</label>
+                                    <input list="text_editors" id="iconText" class="form-control" oninput="showIcon()" value="" />
+                                    <datalist id="text_editors">
+                                        <select multiple size=8>
+                                            @foreach (var item in IconList)
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
+                                        </select>
+                                    </datalist>
+                                </div>
+                            </div>
+                        </div><br />
+                        @*Font Style*@
+                        <label class="title_txt">Font Style</label>
+                        <div class="form-group row">
+                            @*TextArea*@
+                            <div class="col-xs-12 col-md-12 col-xl-12">
+                                <label class="control-label">Header</label><br />
+                                <input type="text" id="txtInputText" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label">Font Style</label><br />
+                                <select class="form-select" id="ddlFontStyle" onchange="updateStylesInlineCode()">
+                                    <option value="0" selected>Select</option>
+                                    <option value="1">Serif</option>
+                                    <option value="2">Sans-serif</option>
+                                    <option value="3">Monospace</option>
+                                    <option value="4">Cursive</option>
+                                    <option value="5">Fantasy</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label">Font Size</label><br />
+                                <input type="number" id="txtFontSize" class="form-control">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <label class="title_txt">Border Style</label>
+                            @*Border Style*@
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label">Border Style</label>
+                                <select class="form-select" id="ddlBorderStyle" onchange="updateStylesInlineCode()">
+                                    <option value="0" selected>Select</option>
+                                    <option value="Dotted">Dotted</option>
+                                    <option value="Solid">Solid</option>
+                                    <option value="Double">Double</option>
+                                    <option value="Hidden">Hidden</option>
+                                    <option value="Inset">Inset</option>
+                                    <option value="Outset">Outset</option>
+                                </select>
+                            </div>
+                            @*BorderRadius*@
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label"><b>Border Radius</b></label>
+                                <input type="number" id="txtBorderRadius" class="form-control">
+                            </div>
+                        </div><br />
+                        <div class="form-group row">
+                            @*Border Width*@
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label">Border Width</label>
+                                <input type="number" id="txtBorderWidth" class="form-control">
+                            </div>
+                            @*Border Height*@
+                            <div class="col-xs-12 col-md-6 col-xl-6">
+                                <label class="control-label"><b>Border Height</b></label>
+                                <input type="number" id="txtBorderHeight" class="form-control">
+                            </div>
+                        </div><br />
+                        <div class="form-group row">
+                            <label class="title_txt"> Margin </label>
+                            <div class="col-xs-12 col-md-12 col-xl-12">
+                                @*Table (Margin Of Text,Width & Height of div & Innerline CSS)*@
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td>
+                                            <label class="control-label"> Left</label>
+                                            <input class="form-control" type="number" id="txtleftmargin" />
+                                        </td>
+                                        <td>
+                                            <label class="control-label"> Right</label>
+                                            <input class="form-control" type="number" id="txtrightmargin" />
+                                        </td>
+                                        <td>
+                                            <label class="control-label"> Top</label>
+                                            <input class="form-control" type="number" id="txttopmargin" />
+                                        </td>
+                                        <td>
+                                            <label class="control-label"> Bottom</label>
+                                            <input class="form-control" type="number" id="txtbottommargin" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"><label class="control-label">Background Image</label><input type="file" id="bgImageInput" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"><label class="control-label"> CSS</label> <textarea cols="3" rows="3" class="form-control" id="txtInclineCSS"></textarea></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div><br />
+                        @*BUTTONS*@
+                        <div class="form-group row">
+                            <div class="col-12 col-md-12 col-xl-12">
+                                @*<button class="btn btn-primary mb-1" title="Save" id="btnSaved">Save</button>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade"
+                     id="contact"
+                     role="tabpanel" aria-labelledby="contact-tab">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquam id diam maecenas ultricies mi eget mauris pharetra. Tincidunt lobortis
+                    </p>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- tabing section end -->
+</div>
+<!-- right side bar -->
+
+
+<script src="js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+<script src="https://malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
+
+
+<script src="~/gridstack/js/gridstack-all.js"></script>
+<script src="~/gridstack/js/gridstack-poly.js"></script>
+<script src="~/js/ReportBuilderUIConfig.js"></script>
+<script src="~/js/form_builder.js"></script>
+@*<script src="~/js/report-chart.js"></script>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<!--  Chart Configuration -->
+    <!--<script>
+        //Adding Add More Option In Y-Axis and Y-Axis Title
+        $("#rowAdder").click(function () {
+            $("#hdnYaxiscount").val(parseFloat($("#hdnYaxiscount").val() + 1));//Dynamic Id for Dynamic Dropdown
+            newRowAdd =
+                '<div class="form-group row" id="row">'
+            + '<div class="col-xs-12 col-md-4 col-xl-4">'
+            + '<label class="control-label">Y-Axis<span class="text-danger">*</span></label>'
+            + '<select id="ddlYAxis-' + $("#hdnYaxiscount").val() + '" class="form-control">'
+            + '    <option value="0" selected>Select Y-Axis</option>'
+            + '</select>'
+            + '</div >'
+            + '<div class="col-xs-12 col-md-8 col-xl-8">'
+            + '      <label class="control-label">Y-Axis Title<span class="text-danger">*</span></label>'
+            + '      <div class="row">'
+            + '          <div class="col-xs-12 col-md-4 col-xl-4">'
+            + '              <input type="text" id="txtYAxisTitle-' + $("#hdnYaxiscount").val() + '" class="form-control">'
+            + '          </div>'
+            + '          <div class="col-xs-12 col-md-4 col-xl-4">'
+            + '<button class="btn btn-danger" id="DeleteRow" type ="button">'
+           + '<i class="fa fa-trash-o"></i></button>'
+            + '          </div>'
+            + '      </div>'
+            + '  </div>'
+            +'</div> ';
+            $('#newinput').append(newRowAdd);
+            GetColumnsByTableById('ddlYAxis-' + $("#hdnYaxiscount").val());
+        });
+        $("body").on("click", "#DeleteRow", function () {
+            $("#hdnYaxiscount").val(parseFloat($("#hdnYaxiscount").val() - 1))
+            $(this).parents("#row").remove();
+        })
+
+        //Bind Y-Axis Dropdown Using Dynamic Id
+        function GetColumnsByTableById(id) {
+            if ($('#ddlDataSource').val() != '') {
+                $.ajax({
+                    url: "/ReportBuilderUI/Get_ColumnsByTable?order=" + $('#ddlDataSource').val(),
+                    type: "GET",
+                    success: function (result) {
+                        data = result;
+                        var v = "<option value='0'>--Select--</option>";
+                        $.each(data, function (i, item) {
+                            v += "<option value=" + item.order + ">" + item.name + "</option>";
+                        });
+                        $("#" + id).html(v);
+
+                        //Selected Y-Axis
+                        var YAxis = getUrlVars()["YAxis"];
+                        if (YAxis != undefined) {
+                            $("#ddlYAxis option").each(function () {
+                                if ($(this).text() == YAxis) {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+                        }
+                    },
+                    error: function (error) {
+                        jsonValue = jQuery.parseJSON(error.responseText);
+                        alert("Error : " + jsonValue);
+                    }
+                });
+            }
+        }
+
+        //BindTableAndTableColumn
+        function GetColumnsByTable() {
+            if ($('#ddlDataSource').val() != '') {
+                $.ajax({
+                    url: "/ReportBuilderUI/Get_ColumnsByTable?order=" + $('#ddlDataSource').val(),
+                    type: "GET",
+                    success: function (result) {
+                        data = result;
+                        var v = "<option value='0'>--Select--</option>";
+                        $.each(data, function (i, item) {
+                            v += "<option value=" + item.order + ">" + item.name + "</option>";
+                        });
+                        $("#ddlXAxis").html(v);
+                        $("#ddlYAxis").html(v);
+
+                        //Selected X-Axis
+                        var XAxis = getUrlVars()["XAxis"];
+                        if (XAxis != undefined) {
+                            $("#ddlXAxis option").each(function () {
+                                if ($(this).text() == XAxis) {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+                        }
+
+
+                        //Selected Y-Axis
+                        var YAxis = getUrlVars()["YAxis"];
+                        if (YAxis != undefined) {
+                            $("#ddlYAxis option").each(function () {
+                                if ($(this).text() == YAxis) {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+                        }
+                        // Call the function to populate the dropdown
+                    },
+                    error: function (error) {
+                        jsonValue = jQuery.parseJSON(error.responseText);
+                        alert("Error : " + jsonValue);
+                    }
+                });
+                BindTable();
+            }
+        }
+
+        //Bind Table Using DataBase
+        function BindTable() {
+            if ($('#ddlDataSource').val() != "0") {
+            $.ajax({
+                url: "/ReportBuilderUI/TableDetail?DataSource=" + $('#ddlDataSource option:selected').text(),
+                type: "GET",
+                success: function (result) {
+                    var response = JSON.parse(result);
+                    var tablehead = $('#dataGrid thead');
+                    tablehead.empty(); // Clear the table head
+                    var rowHeaderhtml = '<tr style="font-weight:bold;border: 1px solid black; background-color: #EEE;">';
+                    for (var i = 0; i < response.thead.length; i++) {
+                        rowHeaderhtml += '<th>' + response.thead[i] + '</th>';
+                    }
+                    var rowHeaderhtml = rowHeaderhtml + '</tr>';
+                    tablehead.append(rowHeaderhtml);
+
+                    var tablebody = $('#dataGrid tbody');
+                    tablebody.empty(); // Clear the table head
+                    for (var j = 0; j < response.tbody.length; j++) {
+                        var rowBodyhtml = '<tr>';
+                        for (var i = 0; i < response.thead.length; i++) {
+                            if (i == 0) {
+                                rowBodyhtml += '<th>' + response.tbody[j][response.thead[i]] + '</th>';
+                            }
+                            else {
+                                rowBodyhtml += '<td>' + response.tbody[j][response.thead[i]] + '</td>';
+                            }
+                        }
+                        var rowBodyhtml = rowBodyhtml + '</tr>';
+                        tablebody.append(rowBodyhtml);
+                    }
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("Error : " + jsonValue);
+                }
+            });
+            }
+        }
+
+        //Bind Report  Using Report Type
+        document.getElementById("reportType").addEventListener("change", function () {
+         var selectedType = this.value;
+
+            var reportDetailsDiv = document.getElementById("reportDetails");
+            reportDetailsDiv.innerHTML = '';
+            // Change Header Using Report Type
+            var reportChangeHeader = document.getElementById("ChangeHeader");
+            if (selectedType === "Grid") {
+                reportChangeHeader.innerHTML = "Grid";
+                reportChangeHeader.classList.add('center-text');
+            } else if (selectedType === "Summary") {
+                reportChangeHeader.innerHTML = "Summary";
+                reportChangeHeader.classList.add('center-text');
+            } else if (selectedType === "Chart") {
+                reportChangeHeader.innerHTML = "Charts";
+                reportChangeHeader.classList.add('center-text');
+            }
+            // Assuming reportTypes is already defined and available as a global variable
+            var reportTypes = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportType))');
+            var selectedReportType = reportTypes.find(rt => rt.Name === selectedType);
+            if (selectedReportType) {
+                displayBlocks(selectedReportType);
+            }
+        });
+
+        //Bind Images  Using Report Type
+        function displayBlocks(reportType) {
+            var blockHtml = '<div class="report-group"><div class="report-block">';
+
+            if (reportType.SubReports && reportType.SubReports.SubReport.length > 0) {
+                reportType.SubReports.SubReport.forEach(function (subReport) {
+                    blockHtml += '<div class="report-item" onclick="changeBackgroundColor(this)" id="' + subReport.Name +'" >';
+                    blockHtml += '<img src="/Image/' + subReport.Icon + '" alt="' + subReport.Name + '">';
+                    blockHtml += '<h3>' + subReport.Name + '</h3>';
+                    blockHtml += '</div>';
+                });
+            } else if (reportType.SubReport) {
+                blockHtml += '<div class="report-item" onclick="changeBackgroundColor(this)">';
+                blockHtml += '<img src="/Image/' + reportType.SubReport.Icon + '" alt="' + reportType.SubReport.Name + '">';
+                blockHtml += '<h3>' + reportType.SubReport.Name + '</h3>';
+                blockHtml += '</div>';
+            }
+
+            blockHtml += '</div></div>';
+
+            // Clear previous blocks and add the new ones
+            var reportDetailsDiv = document.getElementById("reportDetails");
+            reportDetailsDiv.innerHTML = blockHtml;
+        }
+
+        // Global variable to store the selected div
+        var selectedDiv = null;
+        // Change Background Color Of Image While Select
+        function changeBackgroundColor(element) {
+            // Reset background color for all report-item divs
+            var reportItems = document.querySelectorAll('.report-item');
+
+            reportItems.forEach(function (item) {
+                item.style.backgroundColor = ''; // Reset to default
+            });
+
+            // Set background color to green for the selected div
+            element.style.backgroundColor = 'lightgreen';
+            // Store the selected div reference
+            selectedDiv = element;
+        }
+
+        //Apply Button To Show The Report
+        $("#btnApply").click(function () {
+
+            var yaxis = [];
+            var yaxistitle = [];
+            yaxis.push($('#ddlYAxis :selected').text());
+            yaxistitle.push($('#txtYAxisTitle').val());
+            for (var k = 0; k < $("#hdnYaxiscount").val().length; k++) {
+                yaxis.push($('#ddlYAxis-' + $("#hdnYaxiscount").val() + ' :selected').text());
+                yaxistitle.push($('#txtYAxisTitle-' + $("#hdnYaxiscount").val() + '').val());
+            }
+            if (selectedDiv) {
+                     var chartType = selectedDiv.querySelector('h3').textContent; // Assuming the h3 contains the chart type
+                     switch (chartType) {
+                         case "line":
+                             genericchart('line', document.getElementById("txtTitle").value, $('#ddlXAxis :selected').text(), document.getElementById("txtXAxisTitle").value, yaxis, yaxistitle);
+                             break;
+                         case "area":
+                             genericchart('area', document.getElementById("txtTitle").value, $('#ddlXAxis :selected').text(), document.getElementById("txtXAxisTitle").value,$('#ddlYAxis :selected').text(), document.getElementById("txtYAxisTitle").value);
+                             break;
+                         case "column":
+                             genericchart('column', document.getElementById("txtTitle").value, $('#ddlXAxis :selected').text(), document.getElementById("txtXAxisTitle").value,$('#ddlYAxis :selected').text(), document.getElementById("txtYAxisTitle").value);
+                             break;
+                         case "bar":
+                             genericchart('bar', document.getElementById("txtTitle").value, $('#ddlXAxis :selected').text(), document.getElementById("txtXAxisTitle").value, $('#ddlYAxis :selected').text(), document.getElementById("txtYAxisTitle").value);
+                             break;
+                         case "pie":
+                             genericchart('pie', document.getElementById("txtTitle").value, $('#ddlXAxis :selected').text(), document.getElementById("txtXAxisTitle").value,$('#ddlYAxis :selected').text(), document.getElementById("txtYAxisTitle").value);
+                             break;
+                         case "bubble":
+                             genericchart('bubble', document.getElementById("txtTitle").value,$('#ddlXAxis :selected').text(), document.getElementById("txtXAxisTitle").value,$('#ddlYAxis :selected').text(), document.getElementById("txtYAxisTitle").value);
+                             break;
+                         case "scatter":
+                             genericchart('scatter', document.getElementById("txtTitle").value,$('#ddlXAxis :selected').text(), document.getElementById("txtXAxisTitle").value,$('#ddlYAxis :selected').text(), document.getElementById("txtYAxisTitle").value);
+                             break;
+                         default:
+                             alert("Unknown chart type");
+                     }
+            }
+            else
+            {
+                 alert("Please select a chart type.");
+            }
+        });
+        //JsonSave
+        function saveJson() {
+            var fileData = new FormData();
+            fileData.append("PortletId", $('#hdnDivModifyId').val());
+            fileData.append("DataSourceText", $('#ddlDataSource option:selected').text());
+            fileData.append("DataSourceValue", $('#ddlDataSource option:selected').val());
+            fileData.append("ReportTypeText", $('#reportType option:selected').text());
+            fileData.append("ReportTypeValue", $('#reportType option:selected').val());
+            if (selectedDiv != null) {
+                fileData.append("ReportDetails", selectedDiv.textContent.toString());
+            }
+            fileData.append("Title", $('#txtTitle').val());
+            fileData.append("XAxisText", $('#ddlXAxis option:selected').text());
+            fileData.append("XAxisValue", $('#ddlXAxis option:selected').val());
+            fileData.append("XAxisTitle", $('#txtXAxisTitle').val());
+            fileData.append("YAxisText", $('#ddlYAxis option:selected').text());
+            fileData.append("YAxisValue", $('#ddlYAxis option:selected').val());
+            fileData.append("YAxisTitle", $('#txtYAxisTitle').val());
+            fileData.append("BackgroundColor", $('#txtBackgroundColor').val());
+            fileData.append("FontColor", $('#txtFontColor').val());
+            fileData.append("FontStyleText", $('#ddlFontStyle option:selected').text());
+            fileData.append("FontStyleValue", $('#ddlFontStyle option:selected').val());
+            var files = $('#myFile').prop("files");
+            fileData.append("ImageFile", files[0]);
+            fileData.append("Icon", $('#iconText').val());
+            fileData.append("BorderWidth", $('#txtBorderWidth').val());
+            fileData.append("BorderStyleText", $('#ddlBorderStyle option:selected').text());
+            fileData.append("BorderStyleValue", $('#ddlBorderStyle option:selected').val());
+            fileData.append("BorderRadius", $('#txtBorderRadius').val());
+            fileData.append("BorderHeight", $('#txtBorderHeight').val());
+            fileData.append("TextMarginLeft", $('#txtleftmargin').val());
+            fileData.append("TextMarginRight", $('#txtrightmargin').val());
+            fileData.append("TextMarginTop", $('#txttopmargin').val());
+            fileData.append("TextMarginBottom", $('#txtbottommargin').val());
+            var bgfiles = $('#bgImageInput').prop("files");
+            fileData.append("BackgroundImageFile", bgfiles[0]);
+            fileData.append("CSSInlineCode", $('#txtInclineCSS').val());
+            $.ajax({
+                url: '/ReportBuilderUI/ThemeConfigurationSave',
+                type: 'POST',
+                data: fileData,
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                success: function (response) {
+                    $.ajax({
+                        url: '/ReportBuilderUI/AddDashboardConfigurationDetails',
+                        type: 'POST',
+                        data: fileData,
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        success: function (response) {
+                            alert('Configuration Data Save Successfully ');
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error: ' + xhr.responseText);
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert('Error: ' + xhr.responseText);
+                }
+            });
+        }
+        //Bind Chart
+        function genericchart(charttype, charttitle, xaxisname, xaxistitle, yaxisname, yaxistitle) {
+            Highcharts.getJSON('/ReportBuilderUI/TableDetail?DataSource=' + $('#ddlDataSource option:selected').text(), function (response) {
+                var xaxis = [];
+                var yaxis = [];
+                var yaxisdata = {};
+                for (var j = 0; j < response.tbody.length; j++) {
+                    for (var i = 0; i < response.thead.length; i++) {
+                        if (xaxisname == response.thead[i]) {
+                            xaxis.push(response.tbody[j][response.thead[i]]);
+                        }
+                        for (var k = 0; k <= yaxisname.length; k++) {
+                            if (yaxisname[k] == response.thead[i]) {
+                                yaxisdata.name = yaxistitle[k];
+                                yaxis.push(response.tbody[j][response.thead[i]]);
+                            }
+                        }
+                    }
+                    yaxisdata.data=yaxis;
+                }
+                Highcharts.chart('container' + $('#hdnDivModifyId').val() +'', {
+                    chart: {
+                        type: charttype,
+                    },
+                    title: {
+                        text: charttitle,
+                        align: 'center'
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    xAxis: {
+                       categories: xaxis,
+                        type: xaxis,
+                        title: {
+                            text: xaxistitle
+                        }
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        type: yaxis,
+                        title: {
+                            text: yaxistitle
+                        }
+                    },
+                    series: [yaxisdata]
+                    //series: [{
+                    //    name: yaxisname,
+                    //    data: yaxis
+                    //}]
+                });
+            });
+        }
+
+        //Multiple Data Series Chart
+        function genericcharttt(charttype, charttitle, xaxis, xaxistitle, yaxis, yaxistitle) {
+            Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+                data: {
+                    table: 'dataGrid'
+                },
+                chart: {
+                    type: charttype
+                },
+                title: {
+                    text: charttitle,
+                    align: 'center'
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: xaxis,
+                    type: xaxis,
+                    title: {
+                        text: xaxistitle
+                    }
+                },
+                yAxis:[{
+                    title: {
+                        text: yaxistitle,
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    labels: {
+                        format: '{value}°C',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    opposite: true
+                },{ // Secondary yAxis
+                        title: {
+                        text: yaxistitle,
+                            style: {
+                                color: Highcharts.getOptions().colors[0]
+                            }
+                        },
+                        labels: {
+                            format: '{value} mm',
+                            style: {
+                                color: Highcharts.getOptions().colors[0]
+                            }
+                        }
+
+                }, { // Tertiary yAxis
+                        title: {
+                        text: yaxistitle,
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        labels: {
+                            format: '{value} mb',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        opposite: true
+
+                }],
+                tooltip: {
+                    shared: true
+                },
+
+                series: [{
+                    name: yaxis,
+                    type: charttype,
+                    yAxis: 1,
+                    tooltip: {
+                        valueSuffix: ' mm'
+                    }
+                }, {
+                    name: 'Sea-Level Pressure',
+                    type: 'spline',
+                    yAxis: 2,
+                    marker: {
+                        enabled: true
+                    },
+                    dashStyle: 'shortdot',
+                    tooltip: {
+                        valueSuffix: ' mb'
+                    }
+                }, {
+                    name: 'Temperature',
+                    type: 'spline',
+                    dashStyle: 'line',
+                    tooltip: {
+                        valueSuffix: ' °C'
+                    }
+                }]
+            });
+        }
+
+        function getColumnContents(headerName) {
+            var table = $('#dataGrid');
+            var headerIndex = -1;
+
+            // Find the index of the header
+            table.find('th').each(function (index) {
+                if ($(this).text() === headerName) {
+                    headerIndex = index;
+                    return false; // Exit the loop
+                }
+            });
+
+            if (headerIndex === -1) {
+                console.log('Header not found');
+                return;
+            }
+
+            // Get the contents of the column
+            var columnContents = [];
+            table.find('tbody tr').each(function () {
+                var cell = $(this).find('th').eq(headerIndex);
+                columnContents.push(cell.text());
+            });
+
+            return columnContents;
+        }
+
+    </script>-->*@
+<!--Theme Modal -->
+<!--<script>
+    //Background Color Preview
+    document.getElementById('txtBackgroundColor').addEventListener('input', function () {
+        $("#myFile").val('');
+        /* $("#imagePreview").hide();*/
+        $("#colorDiv" + $('#hdnDivModifyId').val()).show();
+        var color = this.value;
+        document.getElementById('colorDiv' + $('#hdnDivModifyId').val()).style.backgroundColor = color;
+    });
+
+    //Font Color Preview
+    document.getElementById('txtFontColor').addEventListener('input', function () {
+        $("#myFile").val('');
+        //$("#imagePreview").hide();
+        $("#colorDiv" + $('#hdnDivModifyId').val()).show();
+        var color = this.value;
+        document.getElementById('colorDiv' + $('#hdnDivModifyId').val()).style.color = color;
+    });
+
+    //Font Style Preview
+    document.getElementById('ddlFontStyle').addEventListener('change', function () {
+        var selectedStyle = this.value.toLowerCase();
+        var colorDiv = document.getElementById('colorDiv' + $('#hdnDivModifyId').val());
+
+        // Remove all existing classes
+        //colorDiv.className = 'output';
+
+        // Add the class corresponding to the selected font style
+        if (selectedStyle === '0') {
+            colorDiv.classList.add('serif');
+        } else if (selectedStyle === '1') {
+            colorDiv.classList.add('sans-serif');
+        } else if (selectedStyle === '2') {
+            colorDiv.classList.add('monospace');
+        } else if (selectedStyle === '3') {
+            colorDiv.classList.add('cursive');
+        } else if (selectedStyle === '4') {
+            colorDiv.classList.add('fantasy');
+        }
+    });
+
+    //Font Size Preview
+    document.getElementById('txtFontSize').addEventListener('input', function () {
+        var fontSize = this.value;
+        document.getElementById('colorDiv' + $('#hdnDivModifyId').val()).style.fontSize = fontSize + 'px';
+    });
+
+    //Header
+    document.getElementById('txtInputText').addEventListener('input', function () {
+        var headerText = this.value;
+        document.getElementById('colorDiv' + $('#hdnDivModifyId').val()).textContent = headerText;
+    });
+
+    //Image Upload Preview
+    document.getElementById('myFile').addEventListener('change', function (event) {
+        $("#colorDiv" + $('#hdnDivModifyId').val()).show();
+        $("#uploadedImage" + $('#hdnDivModifyId').val()).show();
+        $("#iconDiv" + $('#hdnDivModifyId').val()).hide();
+        $("#iconText").val('');
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                //const imagePreview = document.getElementById('imagePreview');
+                const uploadedImage = document.getElementById('uploadedImage' + $('#hdnDivModifyId').val());
+                uploadedImage.src = e.target.result;
+                uploadedImage.classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    //Icon Preview
+    function showIcon() {
+        $("#myFile").val('');
+        $("#uploadedImage" + $('#hdnDivModifyId').val()).hide();
+        $("#colorDiv" + $('#hdnDivModifyId').val()).show();
+        $("#iconDiv" + $('#hdnDivModifyId').val()).show();
+        const iconText = document.getElementById('iconText').value.toLowerCase();
+        const iconDisplay = document.getElementById('iconDiv' + $('#hdnDivModifyId').val());
+        iconDisplay.innerHTML = iconText ? `<i class="${iconText} fa-2xl"></i>` : '';
+    }
+
+    //Border Preview
+    document.getElementById('ddlBorderStyle').addEventListener('change', function () {
+        var selectedStyle = this.value;
+        var targetDiv = document.getElementById('colorDiv' + $('#hdnDivModifyId').val());
+        if (selectedStyle !== '0') {
+            targetDiv.style.borderStyle = selectedStyle;
+        }
+        else {
+            targetDiv.style.borderStyle = 'solid';
+        }
+    });
+
+    //Border Width Preview
+    document.getElementById('txtBorderWidth').addEventListener('input', function () {
+        var value = this.value;
+        document.getElementById('colorDiv' + $('#hdnDivModifyId').val()).style.borderWidth = value + 'px';
+    });
+
+    //Border Radius Preview
+    document.getElementById('txtBorderRadius').addEventListener('input', function () {
+        var borderRadiusValue = this.value;
+        document.getElementById('colorDiv' + $('#hdnDivModifyId').val()).style.borderRadius = borderRadiusValue + 'px';
+    })
+
+    //Height Preview
+    document.getElementById('txtBorderHeight').addEventListener('input', function () {
+        var borderHeight = this.value;
+        document.getElementById('colorDiv' + $('#hdnDivModifyId').val()).style.borderTopWidth = borderHeight + 'px';
+        document.getElementById('colorDiv' + $('#hdnDivModifyId').val()).style.borderBottomWidth = borderHeight + 'px';
+    });
+
+    //Background Image Preview
+    document.getElementById('bgImageInput').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const bgImageDiv = document.getElementById('colorDiv' + $('#hdnDivModifyId').val());
+                bgImageDiv.style.backgroundImage = `url(${e.target.result})`;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    //Text Left Preview
+    document.getElementById('txtrightmargin').addEventListener('input', function () {
+        var marginValue = this.value;
+        document.getElementById('textdiv' + $('#hdnDivModifyId').val()).style.marginLeft = marginValue + 'px';
+    });
+
+    //Text right Preview
+    document.getElementById('txtleftmargin').addEventListener('input', function () {
+        var marginValue = this.value;
+        document.getElementById('textdiv' + $('#hdnDivModifyId').val()).style.marginRight = marginValue + 'px';
+    });
+
+    //Text Top Preview
+    document.getElementById('txtbottommargin').addEventListener('input', function () {
+        var marginValue = this.value;
+        document.getElementById('textdiv' + $('#hdnDivModifyId').val()).style.marginTop = marginValue + 'px';
+    });
+
+    //Text bottom Preview
+    document.getElementById('txttopmargin').addEventListener('input', function () {
+        var marginValue = this.value;
+        document.getElementById('textdiv' + $('#hdnDivModifyId').val()).style.marginBottom = marginValue + 'px';
+    });
+
+    //Upload image And Icon Textbox hide show
+    function toggleUpload(option) {
+        const uploadSection = document.getElementById('uploadSection');
+        const textboxSection = document.getElementById('textboxSection');
+        if (option === 'image') {
+            uploadSection.classList.remove('hidden');
+            textboxSection.classList.add('hidden');
+        } else {
+            uploadSection.classList.add('hidden');
+            textboxSection.classList.remove('hidden');
+        }
+
+    }
+
+    //CSS(InlineCSS)
+    function updateStylesInlineCode() {
+        var bgColor = document.getElementById('txtBackgroundColor').value;
+        var fontColor = document.getElementById('txtFontColor').value;
+        var selectedFontStyle = document.getElementById('ddlFontStyle').options[document.getElementById('ddlFontStyle').selectedIndex].text;
+        if (selectedFontStyle === 'Select') {
+            selectedFontStyle = '';
+        }
+        var FontSizeInputValue = document.getElementById('txtFontSize').value;
+        var TitleInputValue = document.getElementById('txtInputText').value;
+        var selectedIcon = document.getElementById('iconText').value;
+        var borderWidthValue = document.getElementById('txtBorderWidth').value;
+        var selectedBorderStyle = document.getElementById('ddlBorderStyle').options[document.getElementById('ddlBorderStyle').selectedIndex].text;
+        if (selectedBorderStyle === 'Select') {
+            selectedBorderStyle = '';
+        }
+        var borderRadiusValue = document.getElementById('txtBorderRadius').value;
+        var HeightInputValue = document.getElementById('txtBorderHeight').value;
+        var marginLeftInputValue = document.getElementById('txtrightmargin').value;
+        var marginRightInputValue = document.getElementById('txtleftmargin').value;
+        var marginTopInputValue = document.getElementById('txtbottommargin').value;
+        var marginBottomInputValue = document.getElementById('txttopmargin').value;
+
+        var bgfiles = $('#bgImageInput').prop("files");
+        var filePath = "";
+        if (bgfiles.length > 0) {
+            filePath = bgfiles[0].name;
+        }
+
+        var inlineCSS = `{
+                        background-color: ${bgColor};
+                        font-color: ${fontColor};
+                        font-family: ${selectedFontStyle};
+                        font-size:${FontSizeInputValue};
+                        input-text:${TitleInputValue};
+                        icon:<i class="${selectedIcon}"></i>;
+                        border-style: ${selectedBorderStyle};
+                        border-width: ${borderWidthValue}px;
+                        border-radius: ${borderRadiusValue}px;
+                        border-height: ${HeightInputValue}px;
+                        margin-left: ${marginLeftInputValue}px;
+                        margin-right: ${marginRightInputValue}px;
+                        margin-top: ${marginTopInputValue}px;
+                        margin-bottom: ${marginBottomInputValue}px;
+                        background-image: url(${filePath});
+                        }`;
+        document.getElementById('txtInclineCSS').innerHTML = inlineCSS;
+    }
+    // Adding event listeners for each input to update inline CSS
+    const inputs = [
+        'txtBackgroundColor', 'txtFontColor', 'ddlFontStyle', 'txtFontSize', 'txtInputText', 'iconText', 'ddlBorderStyle',
+        'txtBorderWidth', 'txtBorderRadius', 'txtBorderHeight',
+        'txtrightmargin', 'txtleftmargin', 'txtbottommargin', 'txttopmargin', 'bgImageInput'
+    ];
+
+    inputs.forEach(inputId => {
+        const inputElement = document.getElementById(inputId);
+        if (inputElement) {
+            inputElement.addEventListener('input', updateStylesInlineCode);
+        }
+    });
+</script>-->
+<!--  Dynamic Add Grid -->
+<!--<script type="text/javascript">
+    $(document).ready(function () {
+        let grid = GridStack.init({
+            cellHeight: 70,
+            acceptWidgets: true,
+            removable: '#trash', // drag-out delete class
+        });
+        GridStack.setupDragIn('.newWidget', { appendTo: 'body', helper: 'clone' });
+        grid.on('added removed change', function (e, items) {
+            let str = '';
+            items.forEach(function (item) { str += ' (x,y)=' + item.x + ',' + item.y; });
+            console.log(e.type + ' ' + items.length + ' items:' + str);
+        });
+    });
+
+    let items = [
+        // { x: 0, y: 0, w: 4, h: 2, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_1"></i></div>' },
+        // { x: 4, y: 0, w: 4, h: 4,  content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_2"></i></div>' },
+        // { x: 8, y: 0, w: 2, h: 2,  content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_3"></i></div>' },
+        // { x: 10, y: 0, w: 2, h: 2, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_4"></i></div>' },
+        // { x: 0, y: 2, w: 2, h: 2, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_5"></i></div>' },
+        // { x: 2, y: 2, w: 2, h: 4, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_6"></i></div>' },
+        // { x: 8, y: 2, w: 4, h: 2, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_7"></i></div>' },
+        // { x: 0, y: 4, w: 2, h: 2, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_8"></i></div>' },
+        // { x: 4, y: 4, w: 4, h: 2, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_9"></i></div>' },
+        // { x: 8, y: 4, w: 2, h: 2, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_10"></i></div>' },
+        // { x: 10, y: 4, w: 2, h: 2, content: '<div><i class="fa fa-paint-brush text-white"></i><i class="fa fa-gears text-white" data-toggle="modal" data-target="#pipelineModal" data-id="id_11"></i></div>' },
+    ];
+    //grid.load(items);
+
+    $('#addprt').click(function () {
+        return AddPortlet();
+    });
+
+    function AddPortlet() {
+
+        let grid = GridStack.init({
+            cellHeight: 70,
+            acceptWidgets: true,
+            removable: '#trash', // drag-out delete class
+        });
+        let divCount = parseFloat($('#hdnDivId').val());
+        let item = {
+            x: 0, y: 0, w: 4, h: 2, content: '<div  class="grid_bodyblock  output" id="colorDiv' + divCount + '"><div class="row"><div><img id="uploadedImage' + divCount + '" class="hidden" src="" style="max-width: 50px;height: 45px;" alt="Uploaded Image"><div id="iconDiv' + divCount + '"></div><div id="textdiv' + divCount + '">Preview Style</div></div><div id="ChartFinalReport"> <figure class= "highcharts-figure" > <div id="container' + divCount + '"></div></figure ></div ><div><figure class= "highcharts-figure" ><div id="container" ></div></figure ></div></div>'
+            //BackUp
+            /* x: 0, y: 0, w: 4, h: 2, content: '<div  class="grid_bodyblock  output" id="colorDiv' + divCount + '"><div class="row"><div><img id="uploadedImage' + divCount + '" class="hidden" src="" style="max-width: 50px;height: 45px;" alt="Uploaded Image"><div id="iconDiv' + divCount + '"></div><div id="textdiv' + divCount + '">Preview Style</div></div><div id="ChartFinalReport"> <figure class= "highcharts-figure" > <div id="container' + divCount + '"></div></figure ></div ></div>'*/
+        };
+        grid.addWidget(item)
+        // Update item.content with dynamic data-id
+        item.content = '<div class="grid_bodyblock" id="colorDiv' + divCount + '" data-id="id_' + divCount + '"></div>';
+        grid.engine.nodes.forEach(node => {
+            let checkitem = node.el.firstElementChild.className;
+            if (checkitem != 'handle-config') {
+                node.el.insertAdjacentHTML('afterbegin', '<div class="handle-config" id="' + divCount + '"><input  id="hdncolordivjson' + divCount + '" value="" type="hidden" /><i class="bi bi-gear" title="Settings" data-toggle="modal" data-target="#pipelineModal" data-id="id_' + divCount + '"></i></div><div class="crush_icon" title="Delete"><i class="bi bi-trash"></i></div>');
+            }
+        });
+        divCount += 1;
+        $('#hdnDivId').val(divCount);
+        // Delete icon functionality
+        $(document).on('click', '.crush_icon', function () {
+            let gridItem = $(this).closest('.grid-stack-item');
+            grid.removeWidget(gridItem[0]);
+            grid.compact();
+        });
+        grid.compact();
+        //$('#hdnDivModifyId').val(divCount);
+        //$('.dashboard-nav').toggle();
+        //$('.dashboard-bg').toggleClass('margin_right');
+        //clear();
+        return divCount;
+    }
+
+    //Setting icon click work ( Store Dynamic PotlateId)
+    $(document).on('click', '.handle-config', function () {
+        $('#hdnDivModifyId').val($(this).attr("id"));
+        $('.dashboard-nav').toggle();
+        $('.dashboard-bg').toggleClass('margin_right');
+        clear();
+    });
+    //Show Preview Btn And Redirect to Render Page
+    function showpreview() {
+        // Show the Preview button
+        document.getElementById('btnPreview').style.display = 'inline-block';
+        window.location.href = "/ReportBuilderUI/RenderReport?DashboardId=1";
+    }
+    //Clear the data after save
+    function clear() {
+        $("#ddlDataSource").val("Select");
+        $("#reportType").val("Select");
+        $("#reportDetails").val("");
+        $("#txtTitle").val("");
+        $("#ddlXAxis").val("Select");
+        $("#txtXAxisTitle").val("");
+        $("#ddlYAxis").val("Select");
+        $("#txtYAxisTitle").val("");
+        $("#dataGrid").val("");
+        $("#txtBackgroundColor").val("");
+        $("#txtFontColor").val("");
+        $("#imageOption").val("");
+        $("#iconOption").val("");
+        $("#myFile").val("");
+        $("#iconText").val("");
+        $("#ddlFontStyle").val("0");
+        $("#txtFontSize").val("");
+        $("#txtInputText").val("");
+        $("#txtBorderWidth").val("");
+        $("#ddlBorderStyle").val("0");
+        $("#txtBackgroundColor").val("");
+        $("#txtFontColor").val("");
+        $("#txtBorderRadius").val("");
+        $("#txtBorderHeight").val("");
+        $("#txtleftmargin").val("");
+        $("#txtrightmargin").val("");
+        $("#txttopmargin").val("");
+        $("#txtbottommargin").val("");
+        $("#bgImageInput").val("");
+    }
+
+</script>-->
+<!-- Save Both Chart & Theme Configuration -->
+<!--<script>
+    $('#btnsavedesign').click(function () {
+        var fileData = new FormData();
+        let items = new Array();
+        GridStack.init().engine.nodes.forEach(node => {
+            items.push({ x: node.x, y: node.y, w: node.w, h: node.h, content: node.content })
+        });
+        fileData.append("PortletId", $('#hdnDivModifyId').val());
+        fileData.append("PageLayout", JSON.stringify(items));
+        fileData.append("HTMLElement", $("#grids")[0].innerHTML);
+        fileData.append("DataSourceText", $('#ddlDataSource option:selected').text());
+        fileData.append("DataSourceValue", $('#ddlDataSource option:selected').val());
+        fileData.append("ReportTypeText", $('#reportType option:selected').text());
+        fileData.append("ReportTypeValue", $('#reportType option:selected').val());
+        if (selectedDiv != null) {
+            fileData.append("ReportDetails", selectedDiv.textContent.toString());
+        }
+        fileData.append("Title", $('#txtTitle').val());
+        fileData.append("XAxisText", $('#ddlXAxis option:selected').text());
+        fileData.append("XAxisValue", $('#ddlXAxis option:selected').val());
+        fileData.append("XAxisTitle", $('#txtXAxisTitle').val());
+        fileData.append("YAxisText", $('#ddlYAxis option:selected').text());
+        fileData.append("YAxisValue", $('#ddlYAxis option:selected').val());
+        fileData.append("YAxisTitle", $('#txtYAxisTitle').val());
+        fileData.append("BackgroundColor", $('#txtBackgroundColor').val());
+        fileData.append("FontColor", $('#txtFontColor').val());
+        fileData.append("FontStyleText", $('#ddlFontStyle option:selected').text());
+        fileData.append("FontStyleValue", $('#ddlFontStyle option:selected').val());
+        fileData.append("FontSize", $('#txtFontSize').val());
+        fileData.append("Header", $('#txtInputText').val());
+        var files = $('#myFile').prop("files");
+        fileData.append("ImageFile", files[0]);
+        fileData.append("Icon", $('#iconText').val());
+        fileData.append("BorderWidth", $('#txtBorderWidth').val());
+        fileData.append("BorderStyleText", $('#ddlBorderStyle option:selected').text());
+        fileData.append("BorderStyleValue", $('#ddlBorderStyle option:selected').val());
+        fileData.append("BorderRadius", $('#txtBorderRadius').val());
+        fileData.append("BorderHeight", $('#txtBorderHeight').val());
+        fileData.append("TextMarginLeft", $('#txtleftmargin').val());
+        fileData.append("TextMarginRight", $('#txtrightmargin').val());
+        fileData.append("TextMarginTop", $('#txttopmargin').val());
+        fileData.append("TextMarginBottom", $('#txtbottommargin').val());
+        var bgfiles = $('#bgImageInput').prop("files");
+        fileData.append("BackgroundImageFile", bgfiles[0]);
+        fileData.append("CSSInlineCode", $('#txtInclineCSS').val());
+        $.ajax({
+            url: '/ReportBuilderUI/ThemeConfigurationSave',
+            type: 'POST',
+            data: fileData,
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            success: function (response) {
+                alert('Configuration Data Save Successfully ');
+                document.getElementById('btnPreview').style.display = 'inline-block';
+            },
+            error: function (xhr, status, error) {
+                alert('Error: ' + xhr.responseText);
+            }
+        });
+    });
+</script>-->
+<!-- Show Chart In A Potlate Using Static Data -->
+<!--<script>
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async function demo(id) {
+        for (let i = 0; i < 5; i++) {
+            console.log(`Waiting ${i} seconds...`);
+            await sleep(i * 1000);
+        }
+
+        $('#hdnDivModifyId').val(id);
+        // SampleChart(id);
+        console.log('Done');
+    }
+    function GetColumnChart() {
+
+        //var id = AddPortlet();
+
+        //alert(id);
+        //demo(id);
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Corn vs wheat estimated production for 2023',
+                align: 'left'
+            },
+            xAxis: {
+                categories: ['USA', 'China', 'Brazil', 'EU', 'Argentina', 'India'],
+                crosshair: true,
+                accessibility: {
+                    description: 'Countries'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '1000 metric tons (MT)'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' (1000 MT)'
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Corn',
+                    data: [387749, 280000, 129000, 64300, 54000, 34300]
+                },
+                {
+                    name: 'Wheat',
+                    data: [45321, 140000, 10000, 140500, 19500, 113500]
+                }
+            ]
+        });
+    }
+    function GetBarChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Corn vs wheat estimated production for 2023',
+                align: 'left'
+            },
+            xAxis: {
+                categories: ['USA', 'China', 'Brazil', 'EU', 'Argentina', 'India'],
+                crosshair: true,
+                accessibility: {
+                    description: 'Countries'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '1000 metric tons (MT)'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' (1000 MT)'
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: 'Corn',
+                    data: [387749, 280000, 129000, 64300, 54000, 34300]
+                },
+                {
+                    name: 'Wheat',
+                    data: [45321, 140000, 10000, 140500, 19500, 113500]
+                }
+            ]
+        });
+    }
+    function GetPieChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Egg Yolk Composition'
+            },
+            tooltip: {
+                valueSuffix: '%'
+            },
+            plotOptions: {
+                series: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: [{
+                        enabled: true,
+                        distance: 20
+                    }, {
+                        enabled: true,
+                        distance: -40,
+                        format: '{point.percentage:.1f}%',
+                        style: {
+                            fontSize: '1.2em',
+                            textOutline: 'none',
+                            opacity: 0.7
+                        },
+                        filter: {
+                            operator: '>',
+                            property: 'percentage',
+                            value: 10
+                        }
+                    }]
+                }
+            },
+            series: [
+                {
+                    name: 'Percentage',
+                    colorByPoint: true,
+                    data: [
+                        {
+                            name: 'Water',
+                            y: 55.02
+                        },
+                        {
+                            name: 'Fat',
+                            sliced: true,
+                            selected: true,
+                            y: 26.71
+                        },
+                        {
+                            name: 'Carbohydrates',
+                            y: 1.09
+                        },
+                        {
+                            name: 'Protein',
+                            y: 15.5
+                        },
+                        {
+                            name: 'Ash',
+                            y: 1.68
+                        }
+                    ]
+                }
+            ]
+        });
+    }
+    function GetDonutChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'pie',
+                custom: {},
+                events: {
+                    render() {
+                        const chart = this,
+                            series = chart.series[0];
+                        let customLabel = chart.options.chart.custom.label;
+
+                        if (!customLabel) {
+                            customLabel = chart.options.chart.custom.label =
+                                chart.renderer.label(
+                                    'Total<br/>' +
+                                    '<strong>2 877 820</strong>'
+                                )
+                                    .css({
+                                        color: '#000',
+                                        textAnchor: 'middle'
+                                    })
+                                    .add();
+                        }
+
+                        const x = series.center[0] + chart.plotLeft,
+                            y = series.center[1] + chart.plotTop -
+                                (customLabel.attr('height') / 2);
+
+                        customLabel.attr({
+                            x,
+                            y
+                        });
+                        // Set font size based on chart diameter
+                        customLabel.css({
+                            fontSize: `${series.center[2] / 12}px`
+                        });
+                    }
+                }
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            title: {
+                text: '2023 Norway car registrations'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    borderRadius: 8,
+                    dataLabels: [{
+                        enabled: true,
+                        distance: 20,
+                        format: '{point.name}'
+                    }, {
+                        enabled: true,
+                        distance: -15,
+                        format: '{point.percentage:.0f}%',
+                        style: {
+                            fontSize: '0.9em'
+                        }
+                    }],
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Registrations',
+                colorByPoint: true,
+                innerSize: '75%',
+                data: [{
+                    name: 'EV',
+                    y: 23.9
+                }, {
+                    name: 'Hybrids',
+                    y: 12.6
+                }, {
+                    name: 'Diesel',
+                    y: 37.0
+                }, {
+                    name: 'Petrol',
+                    y: 26.4
+                }]
+            }]
+        });
+    }
+    function GetStackedColumnChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Major trophies for some English teams',
+                align: 'left'
+            },
+            xAxis: {
+                categories: ['Arsenal', 'Chelsea', 'Liverpool', 'Manchester United']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Count trophies'
+                },
+                stackLabels: {
+                    enabled: true
+                }
+            },
+            legend: {
+                align: 'left',
+                x: 70,
+                verticalAlign: 'top',
+                y: 70,
+                floating: true,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'BPL',
+                data: [3, 5, 1, 13]
+            }, {
+                name: 'FA Cup',
+                data: [14, 8, 8, 12]
+            }, {
+                name: 'CL',
+                data: [0, 2, 6, 3]
+            }]
+        });
+    }
+    function GetStackedBarChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Ferry passengers by vehicle type 2024'
+            },
+            xAxis: {
+                categories: [
+                    'January', 'February', 'March', 'April', 'May'
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                }
+            },
+            legend: {
+                reversed: true
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'Motorcycles',
+                data: [74, 27, 52, 93, 1272]
+            }, {
+                name: 'Null-emission vehicles',
+                data: [2106, 2398, 3046, 3195, 4916]
+            }, {
+                name: 'Conventional vehicles',
+                data: [12213, 12721, 15242, 16518, 25037]
+            }]
+        });
+    }
+    function GetRangeColumnChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'columnrange',
+                inverted: true
+            },
+            title: {
+                text: 'Temperature variation by month'
+            },
+            xAxis: {
+                categories: [
+                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                ]
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Temperature ( °C )'
+                }
+            },
+
+            tooltip: {
+                valueSuffix: '°C'
+            },
+
+            plotOptions: {
+                columnrange: {
+                    borderRadius: '50%',
+                    dataLabels: {
+                        enabled: true,
+                        format: '{y}°C'
+                    }
+                }
+            },
+
+            legend: {
+                enabled: false
+            },
+
+            series: [{
+                name: 'Temperatures',
+                data: [
+                    [-9.5, 8.0],
+                    [-7.8, 8.3],
+                    [-13.1, 9.2],
+                    [-4.4, 15.7],
+                    [-1.0, 20.8],
+                    [3.1, 28.4],
+                    [8.9, 27.0],
+                    [9.6, 23.0],
+                    [4.9, 19.3],
+                    [-5.2, 11.6],
+                    [-10.5, 12.0],
+                    [-12.1, 8.5]
+                ]
+            }]
+
+        });
+    }
+    function GetPyramidChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'pyramid'
+            },
+            title: {
+                text: 'Sales pyramid',
+                x: -50
+            },
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b> ({point.y:,.0f})',
+                        softConnector: true
+                    },
+                    center: ['40%', '50%'],
+                    width: '80%'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: 'Unique users',
+                data: [
+                    ['Website visits', 15654],
+                    ['Downloads', 4064],
+                    ['Requested price list', 1987],
+                    ['Invoice sent', 976],
+                    ['Finalized', 846]
+                ]
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        plotOptions: {
+                            series: {
+                                dataLabels: {
+                                    inside: true
+                                },
+                                center: ['50%', '50%'],
+                                width: '100%'
+                            }
+                        }
+                    }
+                }]
+            }
+        });
+    }
+    function GetFunnelChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'funnel'
+            },
+            title: {
+                text: 'Sales funnel'
+            },
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b> ({point.y:,.0f})',
+                        softConnector: true
+                    },
+                    center: ['40%', '50%'],
+                    neckWidth: '30%',
+                    neckHeight: '25%',
+                    width: '80%'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: 'Unique users',
+                data: [
+                    ['Website visits', 15654],
+                    ['Downloads', 4064],
+                    ['Requested price list', 1987],
+                    ['Invoice sent', 976],
+                    ['Finalized', 846]
+                ]
+            }],
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        plotOptions: {
+                            series: {
+                                dataLabels: {
+                                    inside: true
+                                },
+                                center: ['50%', '50%'],
+                                width: '100%'
+                            }
+                        }
+                    }
+                }]
+            }
+        });
+    }
+    function GetAreaChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'area'
+            },
+            title: {
+                text: 'US and USSR nuclear stockpiles'
+            },
+            xAxis: {
+                allowDecimals: false,
+                accessibility: {
+                    rangeDescription: 'Range: 1940 to 2024.'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Nuclear weapon states'
+                }
+            },
+            tooltip: {
+                pointFormat: '{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>' +
+                    'warheads in {point.x}'
+            },
+            plotOptions: {
+                area: {
+                    pointStart: 1940,
+                    marker: {
+                        enabled: false,
+                        symbol: 'circle',
+                        radius: 2,
+                        states: {
+                            hover: {
+                                enabled: true
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'USA',
+                data: [
+                    null, null, null, null, null, 2, 9, 13, 50, 170, 299, 438, 841,
+                    1169, 1703, 2422, 3692, 5543, 7345, 12298, 18638, 22229, 25540,
+                    28133, 29463, 31139, 31175, 31255, 29561, 27552, 26008, 25830,
+                    26516, 27835, 28537, 27519, 25914, 25542, 24418, 24138, 24104,
+                    23208, 22886, 23305, 23459, 23368, 23317, 23575, 23205, 22217,
+                    21392, 19008, 13708, 11511, 10979, 10904, 11011, 10903, 10732,
+                    10685, 10577, 10526, 10457, 10027, 8570, 8360, 7853, 5709, 5273,
+                    5113, 5066, 4897, 4881, 4804, 4717, 4571, 4018, 3822, 3785, 3805,
+                    3750, 3708, 3708, 3708, 3708
+                ]
+            }, {
+                name: 'USSR/Russia',
+                data: [
+                    null, null, null, null, null, null, null, null, null,
+                    1, 5, 25, 50, 120, 150, 200, 426, 660, 863, 1048, 1627, 2492,
+                    3346, 4259, 5242, 6144, 7091, 8400, 9490, 10671, 11736, 13279,
+                    14600, 15878, 17286, 19235, 22165, 24281, 26169, 28258, 30665,
+                    32146, 33486, 35130, 36825, 38582, 40159, 38107, 36538, 35078,
+                    32980, 29154, 26734, 24403, 21339, 18179, 15942, 15442, 14368,
+                    13188, 12188, 11152, 10114, 9076, 8038, 7000, 6643, 6286, 5929,
+                    5527, 5215, 4858, 4750, 4650, 4600, 4500, 4490, 4300, 4350, 4330,
+                    4310, 4495, 4477, 4489, 4380
+                ]
+            }]
+        });
+    }
+    function GetStackedAreaChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'area'
+            },
+            title: {
+                text: 'Greenhouse gases from Norwegian economic activity',
+                align: 'left'
+            },
+            yAxis: {
+                title: {
+                    useHTML: true,
+                    text: 'Million tonnes CO<sub>2</sub>-equivalents'
+                }
+            },
+            tooltip: {
+                shared: true,
+                headerFormat: '<span style="font-size:12px"><b>{point.key}</b></span>' +
+                    '<br>'
+            },
+            plotOptions: {
+                series: {
+                    pointStart: 2012
+                },
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666'
+                    }
+                }
+            },
+            series: [{
+                name: 'Ocean transport',
+                data: [
+                    13234, 12729, 11533, 17798, 10398, 12811,
+                    15483, 16196, 15060, 13365, 13301
+                ]
+            }, {
+                name: 'Households',
+                data: [
+                    6686, 6536, 6389, 6384, 6251, 5719,
+                    5611, 5040, 5079, 5088, 4988
+                ]
+
+            }, {
+                name: 'Agriculture and hunting',
+                data: [
+                    4812, 4872, 4961, 5001, 5070, 5035,
+                    5045, 5004, 5015, 5076, 4935
+                ]
+            }, {
+                name: 'Air transport',
+                data: [
+                    3502, 3844, 4139, 4351, 3802, 4020,
+                    4461, 5074, 1558, 1247, 2694
+                ]
+
+            }, {
+                name: 'Construction',
+                data: [
+                    2019, 2189, 2150, 2217, 2179, 2258,
+                    2348, 2196, 2018, 2180, 2127
+                ]
+            }]
+        });
+    }
+    function GetLineChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            title: {
+                text: 'U.S Solar Employment Growth',
+                align: 'left'
+            },
+            yAxis: {
+                title: {
+                    text: 'Number of Employees'
+                }
+            },
+            xAxis: {
+                accessibility: {
+                    rangeDescription: 'Range: 2010 to 2022'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 2010
+                }
+            },
+
+            series: [{
+                name: 'Installation & Developers',
+                data: [
+                    43934, 48656, 65165, 81827, 112143, 142383,
+                    171533, 165174, 155157, 161454, 154610, 168960, 171558
+                ]
+            }, {
+                name: 'Manufacturing',
+                data: [
+                    24916, 37941, 29742, 29851, 32490, 30282,
+                    38121, 36885, 33726, 34243, 31050, 33099, 33473
+                ]
+            }, {
+                name: 'Sales & Distribution',
+                data: [
+                    11744, 30000, 16005, 19771, 20185, 24377,
+                    32147, 30912, 29243, 29213, 25663, 28978, 30618
+                ]
+            }, {
+                name: 'Operations & Maintenance',
+                data: [
+                    null, null, null, null, null, null, null,
+                    null, 11164, 11218, 10077, 12530, 16585
+                ]
+            }, {
+                name: 'Other',
+                data: [
+                    21908, 5548, 8105, 11248, 8989, 11816, 18274,
+                    17300, 13053, 11906, 10073, 11471, 11648
+                ]
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        });
+    }
+    function GetScatterChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+            chart: {
+                type: 'scatter'
+            },
+            title: {
+                text: 'U.S Solar Employment Growth',
+                align: 'left'
+            },
+            yAxis: {
+                title: {
+                    text: 'Number of Employees'
+                }
+            },
+            xAxis: {
+                accessibility: {
+                    rangeDescription: 'Range: 2010 to 2022'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 2010
+                }
+            },
+
+            series: [{
+                name: 'Installation & Developers',
+                data: [
+                    43934, 48656, 65165, 81827, 112143, 142383,
+                    171533, 165174, 155157, 161454, 154610, 168960, 171558
+                ]
+            }, {
+                name: 'Manufacturing',
+                data: [
+                    24916, 37941, 29742, 29851, 32490, 30282,
+                    38121, 36885, 33726, 34243, 31050, 33099, 33473
+                ]
+            }, {
+                name: 'Sales & Distribution',
+                data: [
+                    11744, 30000, 16005, 19771, 20185, 24377,
+                    32147, 30912, 29243, 29213, 25663, 28978, 30618
+                ]
+            }, {
+                name: 'Operations & Maintenance',
+                data: [
+                    null, null, null, null, null, null, null,
+                    null, 11164, 11218, 10077, 12530, 16585
+                ]
+            }, {
+                name: 'Other',
+                data: [
+                    21908, 5548, 8105, 11248, 8989, 11816, 18274,
+                    17300, 13053, 11906, 10073, 11471, 11648
+                ]
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        });
+    }
+    function GetBubbleChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+
+            chart: {
+                type: 'bubble',
+                plotBorderWidth: 1,
+                zooming: {
+                    type: 'xy'
+                }
+            },
+
+            legend: {
+                enabled: false
+            },
+
+            title: {
+                text: 'Sugar and fat intake per country'
+            },
+            accessibility: {
+                point: {
+                    valueDescriptionFormat: '{index}. {point.name}, fat: {point.x}g, ' +
+                        'sugar: {point.y}g, obesity: {point.z}%.'
+                }
+            },
+
+            xAxis: {
+                gridLineWidth: 1,
+                title: {
+                    text: 'Daily fat intake'
+                },
+                labels: {
+                    format: '{value} gr'
+                },
+                plotLines: [{
+                    color: 'black',
+                    dashStyle: 'dot',
+                    width: 2,
+                    value: 65,
+                    label: {
+                        rotation: 0,
+                        y: 15,
+                        style: {
+                            fontStyle: 'italic'
+                        },
+                        text: 'Safe fat intake 65g/day'
+                    },
+                    zIndex: 3
+                }],
+                accessibility: {
+                    rangeDescription: 'Range: 60 to 100 grams.'
+                }
+            },
+
+            yAxis: {
+                startOnTick: false,
+                endOnTick: false,
+                title: {
+                    text: 'Daily sugar intake'
+                },
+                labels: {
+                    format: '{value} gr'
+                },
+                maxPadding: 0.2,
+                plotLines: [{
+                    color: 'black',
+                    dashStyle: 'dot',
+                    width: 2,
+                    value: 50,
+                    label: {
+                        align: 'right',
+                        style: {
+                            fontStyle: 'italic'
+                        },
+                        text: 'Safe sugar intake 50g/day',
+                        x: -10
+                    },
+                    zIndex: 3
+                }],
+                accessibility: {
+                    rangeDescription: 'Range: 0 to 160 grams.'
+                }
+            },
+
+            tooltip: {
+                useHTML: true,
+                headerFormat: '<table>',
+                pointFormat: '<tr><th colspan="2"><h3>{point.country}</h3></th></tr>' +
+                    '<tr><th>Fat intake:</th><td>{point.x}g</td></tr>' +
+                    '<tr><th>Sugar intake:</th><td>{point.y}g</td></tr>' +
+                    '<tr><th>Obesity (adults):</th><td>{point.z}%</td></tr>',
+                footerFormat: '</table>',
+                followPointer: true
+            },
+
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}'
+                    }
+                }
+            },
+
+            series: [{
+                data: [
+                    { x: 95, y: 95, z: 13.8, name: 'BE', country: 'Belgium' },
+                    { x: 86.5, y: 102.9, z: 14.7, name: 'DE', country: 'Germany' },
+                    { x: 80.8, y: 91.5, z: 15.8, name: 'FI', country: 'Finland' },
+                    { x: 80.4, y: 102.5, z: 12, name: 'NL', country: 'Netherlands' },
+                    { x: 80.3, y: 86.1, z: 11.8, name: 'SE', country: 'Sweden' },
+                    { x: 78.4, y: 70.1, z: 16.6, name: 'ES', country: 'Spain' },
+                    { x: 74.2, y: 68.5, z: 14.5, name: 'FR', country: 'France' },
+                    { x: 73.5, y: 83.1, z: 10, name: 'NO', country: 'Norway' },
+                    { x: 71, y: 93.2, z: 24.7, name: 'UK', country: 'United Kingdom' },
+                    { x: 69.2, y: 57.6, z: 10.4, name: 'IT', country: 'Italy' },
+                    { x: 68.6, y: 20, z: 16, name: 'RU', country: 'Russia' },
+                    {
+                        x: 65.5,
+                        y: 126.4,
+                        z: 35.3,
+                        name:
+                            'US',
+                        country: 'United States'
+                    },
+                    { x: 65.4, y: 50.8, z: 28.5, name: 'HU', country: 'Hungary' },
+                    { x: 63.4, y: 51.8, z: 15.4, name: 'PT', country: 'Portugal' },
+                    { x: 64, y: 82.9, z: 31.3, name: 'NZ', country: 'New Zealand' }
+                ],
+                colorByPoint: true
+            }]
+
+        });
+    }
+    function GetPolarChart() {
+        Highcharts.chart('container' + $('#hdnDivModifyId').val() + '', {
+
+            chart: {
+                polar: true
+            },
+
+            title: {
+                text: ' Polar Chart'
+            },
+
+            subtitle: {
+                text: 'Also known as Radar Chart'
+            },
+
+            pane: {
+                startAngle: 0,
+                endAngle: 360
+            },
+
+            xAxis: {
+                tickInterval: 45,
+                min: 0,
+                max: 360,
+                labels: {
+                    format: '{value}°'
+                }
+            },
+
+            yAxis: {
+                min: 0
+            },
+
+            plotOptions: {
+                series: {
+                    pointStart: 0,
+                    pointInterval: 45
+                },
+                column: {
+                    pointPadding: 0,
+                    groupPadding: 0
+                }
+            },
+
+            series: [{
+                type: 'column',
+                name: 'Column',
+                data: [8, 7, 6, 5, 4, 3, 2, 1],
+                pointPlacement: 'between'
+            }, {
+                type: 'line',
+                name: 'Line',
+                data: [1, 2, 3, 4, 5, 6, 7, 8]
+            }, {
+                type: 'area',
+                name: 'Area',
+                data: [1, 8, 2, 7, 3, 6, 4, 5]
+            }]
+        });
+    }
+</script>-->

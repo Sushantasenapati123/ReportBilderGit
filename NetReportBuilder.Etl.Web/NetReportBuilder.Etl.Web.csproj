@@ -1,0 +1,398 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\**" />
+    <Compile Remove="ViewModels\**" />
+    <Compile Remove="Views\DataTransform\**" />
+    <Compile Remove="wwwroot\ReportBuilderUI\**" />
+    <Content Remove="Models\**" />
+    <Content Remove="ViewModels\**" />
+    <Content Remove="Views\DataTransform\**" />
+    <Content Remove="wwwroot\ReportBuilderUI\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <EmbeddedResource Remove="Views\DataTransform\**" />
+    <EmbeddedResource Remove="wwwroot\ReportBuilderUI\**" />
+    <None Remove="Models\**" />
+    <None Remove="ViewModels\**" />
+    <None Remove="Views\DataTransform\**" />
+    <None Remove="wwwroot\ReportBuilderUI\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Class.cs" />
+    <Compile Remove="Controllers\DataTransformController.cs" />
+    <Compile Remove="Extensions.cs" />
+    <Compile Remove="Helper\CommonMethodForExecuteQuery.cs" />
+    <Compile Remove="Services\Jobs\CustomRecurringJobService.cs" />
+    <Compile Remove="Services\Jobs\IRecurringJobService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\APIConnector\ConnectApi.cshtml" />
+    <Content Remove="Views\APIConnector\Privacy.cshtml" />
+    <Content Remove="Views\APIConnector\_ConnectApiPartial.cshtml" />
+    <Content Remove="Views\DataMapping\MappingData.cshtml" />
+    <Content Remove="Views\DataMapping\SaveConfiguration.cshtml" />
+    <Content Remove="Views\DataMapping\_APIResponce.cshtml" />
+    <Content Remove="Views\DataMapping\_DataBaseInputQuery.cshtml" />
+    <Content Remove="Views\DataMapping\_File.cshtml" />
+    <Content Remove="Views\DataMapping\_OutputWindow.cshtml" />
+    <Content Remove="Views\ETLDashboard\Dashboard.cshtml" />
+    <Content Remove="Views\ETLDashboard\Index - Copy.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\scss\custom.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\dashboard.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\error.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\login.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\_common.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\_footer.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\_frame.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\_header.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\_left-menu.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\_mixins.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\scss\_variables.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705133408195.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705150402254.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705151142885.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705153256431.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705165723272.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240706113600868.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240707222840497.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240708155528292.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240709170453307.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240710162448984.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240710165236760.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702133643542.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144724082.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144734269.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144739514.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144749273.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144753231.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144807151.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144810774.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144817350.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144820506.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144828244.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144834352.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144839032.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702144853574.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240702154158318.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240705151142855.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240705162943675.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240710144202932.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240710144414261.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240710164706914.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Image\Project20240715143757586.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\js\chartjs0.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\js\chartjs1.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Theme_0.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\ThemeConfiguartionDetails\Theme_1.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\validation\validation.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\bootstrap-datepicker.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\bootstrap.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\chartist-plugin-tooltip.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\custom - Copy.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\custom.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\custom.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\dashboard.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\dashboard.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\error.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\error.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\font-awesome.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\header.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\icons.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\index.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\layout.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\layoutrender.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\login.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\login.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\printprescription.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\RD_Banner_1537361856.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\site.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\slimscrollbar.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-gray.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-gray.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-orange.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-orange.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-pink.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-pink.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-purple.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-purple.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-sky.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-sky.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-teal.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-teal.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-white.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\css\theme-white.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Datatable\CSS\buttons.dataTables.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Datatable\CSS\jquery.dataTables.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Datatable\JS\buttons.print.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Datatable\JS\dataTables.buttons.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Datatable\JS\jquery.dataTables.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\favicon.ico" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\fontawesome-webfont.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\fontawesome-webfont.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\fontawesome-webfont.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\fontawesome-webfont.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\fontawesome-webfont.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\FontAwesome.otf" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\Helvetica.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\Helvetica.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\Helvetica.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\Helvetica.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\Helvetica.woff2" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\icons.eot" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\icons.svg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\icons.ttf" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\fonts\icons.woff" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\gridstack\css\gridstack.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\gridstack\js\gridstack-all.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\gridstack\js\gridstack-poly.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\bg.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\bigbg.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\clip.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\csm-logo.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\demouser.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\error-2.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\error.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\hospital-Image.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\hospitalimages.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\login1.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\logo.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\logoblack.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\maintenance.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\Odisha_logo_Black.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\Odisha_logo_White.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\user.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\images\watermark.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Area.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Bar.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Bubble.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Column.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Grid.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Line.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Pie.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Scatter.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\Image\Summary.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\bootstrap-datepicker.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\bootstrap.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\chartist-plugin-fill-donut.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\chartist-plugin-tooltip.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\chartist.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\common.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\custom.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\custom2.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\dashboard.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\form_builder.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\jquery-3.3.1.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\popper.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\site.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\slimscrollbar.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\js\sweetalert.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\bootstrap\LICENSE" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery-validation\dist\additional-methods.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery-validation\LICENSE.md" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery\dist\jquery.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery\dist\jquery.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery\dist\jquery.min.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\lib\jquery\LICENSE.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230329.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230330.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230331.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230403.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230404.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230405.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230406.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230407.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230410.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230411.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230412.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230413.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230414.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230417.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230421.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230612.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230719.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20230720.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20231121.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\logs\PathoLab_20231124.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ReportConfiguration.xml" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\custom.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\dashboard.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\error.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\login.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\_common.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\_footer.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\_frame.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\_header.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\_left-menu.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\_mixins.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\scss\_variables.scss" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705133408195.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705150402254.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705151142885.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705153256431.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240705165723272.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240706113600868.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240707222840497.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240708155528292.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240709170453307.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240710162448984.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\BackGroundImage\Project20240710165236760.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702133643542.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144724082.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144734269.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144739514.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144749273.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144753231.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144807151.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144810774.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144817350.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144820506.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144828244.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144834352.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144839032.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702144853574.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240702154158318.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240705151142855.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240705162943675.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240710144202932.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240710144414261.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240710164706914.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Image\Project20240715143757586.jfif" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\js\chartjs0.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\js\chartjs1.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Theme_0.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\ThemeConfiguartionDetails\Theme_1.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\wwwroot\validation\validation.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.8.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.3.2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
+    <PackageReference Include="NPOI" Version="2.7.0" />
+    <PackageReference Include="Oracle.ManagedDataAccess" Version="23.4.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\ExcelFile\" />
+    <Folder Include="wwwroot\Pipelines\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets1\.DS_Store" />
+    <None Include="wwwroot\assets1\action.svg" />
+    <None Include="wwwroot\assets1\actionblue.svg" />
+    <None Include="wwwroot\assets1\actionorange.svg" />
+    <None Include="wwwroot\assets1\arrow.svg" />
+    <None Include="wwwroot\assets1\checkoff.svg" />
+    <None Include="wwwroot\assets1\checkon.svg" />
+    <None Include="wwwroot\assets1\close.svg" />
+    <None Include="wwwroot\assets1\closeleft.svg" />
+    <None Include="wwwroot\assets1\database.svg" />
+    <None Include="wwwroot\assets1\databaseorange.svg" />
+    <None Include="wwwroot\assets1\dropdown.svg" />
+    <None Include="wwwroot\assets1\error.svg" />
+    <None Include="wwwroot\assets1\errorblue.svg" />
+    <None Include="wwwroot\assets1\errorred.svg" />
+    <None Include="wwwroot\assets1\eye.svg" />
+    <None Include="wwwroot\assets1\eyeblue.svg" />
+    <None Include="wwwroot\assets1\grabme.svg" />
+    <None Include="wwwroot\assets1\heart.svg" />
+    <None Include="wwwroot\assets1\log.svg" />
+    <None Include="wwwroot\assets1\logred.svg" />
+    <None Include="wwwroot\assets1\more.svg" />
+    <None Include="wwwroot\assets1\oracle-icon.svg" />
+    <None Include="wwwroot\assets1\oracle.svg" />
+    <None Include="wwwroot\assets1\rest-api-icon.svg" />
+    <None Include="wwwroot\assets1\search.svg" />
+    <None Include="wwwroot\assets1\sql-code-icon.svg" />
+    <None Include="wwwroot\assets1\time.svg" />
+    <None Include="wwwroot\assets1\timeblue.svg" />
+    <None Include="wwwroot\assets1\twitter.svg" />
+    <None Include="wwwroot\assets1\twitterorange.svg" />
+    <None Include="wwwroot\assets1\web-code-icon.svg" />
+    <None Include="wwwroot\assets\.DS_Store" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetReportBuilder.Etl.Business\NetReportBuilder.Etl.Business.csproj" />
+    <ProjectReference Include="..\NetReportBuilder.UI\NetReportBuilder.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\favicon.ico">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\ReportConfiguration.xml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

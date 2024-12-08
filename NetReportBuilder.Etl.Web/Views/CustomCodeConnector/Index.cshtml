@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<head>
+    <link href="~/css/InputQueryPage.css" rel="stylesheet" />
+</head>
+<style>
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    .tabcontent {
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    .schema-content, .viewdata-content {
+        height: 150px;
+        overflow-y: scroll;
+        white-space: pre-wrap;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="compileForm">
+
+            <div class="form-group" style="margin-left:10px;margin-top:-10px">
+                <h4>Execute Code Type</h4>
+                <select class="form-control" id="Code_Type" style="width:200px">
+                    <option value="RDBMS">RDBMS</option>
+                    <option value="API">API</option>
+
+                </select>
+            </div>
+
+
+
+            <div class="containerr">
+                <div class="flex-item">
+                    @*<h2>Input</h2>*@
+
+
+                    <textarea id="Input" placeholder="Wite Code Here.." name="Input" rows="10" cols="70" class="form-control"></textarea>
+                </div>
+                <div class="flex-item" style="margin-top: -35px">
+                    <h2>Output</h2>
+                    <div id="Output" class="form-control" style="height: 240px; width: 650px; overflow-y: scroll; white-space: pre-wrap; background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px;">
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+
+
+            <div class="button-container" style="margin-top:-100px">
+                <div class="form-group">
+                    <input id="compileButton" type="button" value="Compile" class="btn btn-primary" onclick="submitForm()" />
+                </div>
+
+                <div class="form-group">
+                    <input id="ExportButton" type="button" disabled value="Next" class="btn btn-success" onclick="Save()" />
+                </div>
+            </div>
+
+            <br />
+
+
+        </form>
+    </div>
+</div>
+
+
+<input id="InsertButton" type="button" hidden value="Insert" class="btn btn-success" />
+
+<div class="tab">
+
+
+    <button class="tablinks" onclick="openTab(event, 'ViewData')">View Data</button>
+</div>
+
+
+
+
+<div id="ViewTable" class="form-control" style="height: 150px; width: 1020px; overflow-y: scroll; white-space: pre-wrap; background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px;">
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+    // Declare a variable outside any function scope
+    let tableDropdownData = null;
+    function submitForm() {
+
+        if (document.getElementById('Input').value == "") {
+            alert("Please Write Query First");
+            return;
+        }
+
+        document.getElementById("compileButton").disabled = true;
+
+        document.getElementById('Output').innerHTML = ""; // Clear previous output
+
+        document.getElementById('ViewTable').innerHTML = ""; // Clear previous output
+
+        const form = document.getElementById('compileForm');
+        const formData = new FormData(form);
+
+
+        formData.append('input', document.getElementById('Input').value);
+        formData.append('Code_Type', document.getElementById('Code_Type').value);
+
+
+        fetch('/CustomCodeConnector/CompileCode', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+
+
+                const outputMessages = data.messages;
+                outputMessages.forEach(message => {
+                    const outputElement = document.getElementById('Output');
+                    outputElement.innerHTML += message + "<br>"; // Append each message with a line break
+
+                });
+
+
+
+
+
+                //    // Display view table
+                const viewTableElement = document.getElementById('ViewTable');
+                viewTableElement.innerHTML = data.viewTable;
+
+
+
+
+
+
+
+                var IsSuccessful = data.isSuccessfullyCompile;
+                if (IsSuccessful) {
+                    document.getElementById("ExportButton").disabled = false;
+
+                }
+                else {
+                    document.getElementById("ExportButton").disabled = true;
+
+
+                }
+                document.getElementById("compileButton").disabled = false;
+
+            })
+            .catch(error => console.error('Error:', error));
+
+    }
+
+
+
+    function Save() {
+
+
+        document.getElementById('ViewTable').innerHTML = ""; // Clear previous output
+        const form = document.getElementById('compileForm');
+        const formData = new FormData(form);
+        formData.append('input', document.getElementById('Input').value);
+        formData.append('Code_Type', document.getElementById('Code_Type').value);
+
+        document.getElementById('Output').innerHTML = ""; // Clear previous output
+
+        fetch('/CustomCodeConnector/Save', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                parent.ClosePopupFromChild(data.message);
+            })
+            .catch(error => console.error('Error:', error));
+
+    }
+
+
+
+</script>
+
+

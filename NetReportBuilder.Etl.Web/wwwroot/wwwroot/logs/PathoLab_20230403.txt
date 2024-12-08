@@ -1,0 +1,115 @@
+2023-04-03 09:17:41.868 +05:30 [INF] Login Started
+2023-04-03 09:18:01.759 +05:30 [INF] Login Post Started
+2023-04-03 09:18:01.759 +05:30 [INF] Login Post Started
+2023-04-03 09:18:07.388 +05:30 [INF] PathoLabBill Started
+2023-04-03 09:18:08.034 +05:30 [INF] PathoLabBill Started
+2023-04-03 09:21:56.684 +05:30 [INF] PathoLabBill Started
+2023-04-03 09:34:23.798 +05:30 [INF] Login Started
+2023-04-03 09:34:34.200 +05:30 [INF] Login Post Started
+2023-04-03 09:34:34.200 +05:30 [INF] Login Post Started
+2023-04-03 09:34:47.081 +05:30 [INF] Login Post Started
+2023-04-03 09:34:47.082 +05:30 [INF] Login Post Started
+2023-04-03 11:00:30.959 +05:30 [INF] Login Started
+2023-04-03 11:00:39.371 +05:30 [INF] Login Post Started
+2023-04-03 11:00:39.371 +05:30 [INF] Login Post Started
+2023-04-03 11:00:41.338 +05:30 [ERR] A transport-level error has occurred when sending the request to the server. (provider: Session Provider, error: 19 - Physical connection is not usable)
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 11:00:41.338 +05:30 [ERR] Invalid operation. The connection is closed.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 11:00:50.927 +05:30 [INF] Login Post Started
+2023-04-03 11:00:50.927 +05:30 [INF] Login Post Started
+2023-04-03 11:00:51.661 +05:30 [ERR] The connection was not closed. The connection's current state is connecting.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 11:00:51.776 +05:30 [ERR] Invalid operation. The connection is closed.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 11:03:32.521 +05:30 [INF] Login Started
+2023-04-03 11:03:42.449 +05:30 [INF] Login Post Started
+2023-04-03 11:03:42.449 +05:30 [INF] Login Post Started
+2023-04-03 11:15:32.082 +05:30 [INF] Login Started
+2023-04-03 11:15:41.364 +05:30 [INF] Login Post Started
+2023-04-03 11:15:41.364 +05:30 [INF] Login Post Started
+2023-04-03 13:14:14.596 +05:30 [INF] Login Started
+2023-04-03 15:00:32.869 +05:30 [INF] Login Started
+2023-04-03 15:01:45.354 +05:30 [INF] Login Post Started
+2023-04-03 15:01:45.354 +05:30 [INF] Login Post Started
+2023-04-03 15:01:47.310 +05:30 [ERR] A transport-level error has occurred when sending the request to the server. (provider: Session Provider, error: 19 - Physical connection is not usable)
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 15:01:47.316 +05:30 [ERR] Invalid operation. The connection is closed.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 15:01:56.876 +05:30 [INF] Login Post Started
+2023-04-03 15:01:56.876 +05:30 [INF] Login Post Started
+2023-04-03 15:01:57.345 +05:30 [INF] Login Post Started
+2023-04-03 15:01:57.345 +05:30 [INF] Login Post Started
+2023-04-03 15:01:57.526 +05:30 [ERR] Unable to cast object of type 'System.Data.ProviderBase.DbConnectionClosedConnecting' to type 'System.Data.SqlClient.SqlInternalConnectionTds'.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 15:01:57.645 +05:30 [INF] Login Post Started
+2023-04-03 15:01:57.662 +05:30 [INF] Login Post Started
+2023-04-03 15:01:58.120 +05:30 [INF] Login Post Started
+2023-04-03 15:01:58.125 +05:30 [ERR] Unable to cast object of type 'System.Data.ProviderBase.DbConnectionClosedConnecting' to type 'System.Data.SqlClient.SqlInternalConnectionTds'.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 15:01:58.168 +05:30 [INF] Login Post Started
+2023-04-03 15:01:58.393 +05:30 [ERR] A task was canceled.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 15:01:58.712 +05:30 [ERR] Invalid operation. The connection is closed.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 15:02:42.102 +05:30 [INF] Login Started
+2023-04-03 15:02:54.499 +05:30 [INF] Login Post Started
+2023-04-03 15:02:54.499 +05:30 [INF] Login Post Started
+2023-04-03 15:15:03.152 +05:30 [INF] Login Started
+2023-04-03 15:15:13.134 +05:30 [INF] Login Post Started
+2023-04-03 15:15:13.134 +05:30 [INF] Login Post Started
+2023-04-03 15:15:13.140 +05:30 [INF] Login Post Started
+2023-04-03 15:15:13.140 +05:30 [INF] Login Post Started
+2023-04-03 15:17:04.144 +05:30 [INF] Login Started
+2023-04-03 15:17:13.127 +05:30 [INF] Login Post Started
+2023-04-03 15:17:13.128 +05:30 [INF] Login Post Started
+2023-04-03 15:17:13.259 +05:30 [INF] Login Post Started
+2023-04-03 15:17:13.260 +05:30 [INF] Login Post Started
+2023-04-03 15:25:12.685 +05:30 [INF] Login Started
+2023-04-03 15:25:12.685 +05:30 [INF] Login Started
+2023-04-03 15:25:23.167 +05:30 [INF] Login Post Started
+2023-04-03 15:25:23.167 +05:30 [INF] Login Post Started
+2023-04-03 15:25:23.167 +05:30 [INF] Login Post Started
+2023-04-03 15:25:23.167 +05:30 [INF] Login Post Started
+2023-04-03 15:53:12.533 +05:30 [INF] Login Started
+2023-04-03 15:53:21.956 +05:30 [INF] Login Post Started
+2023-04-03 15:53:21.956 +05:30 [INF] Login Post Started
+2023-04-03 15:53:21.956 +05:30 [INF] Login Post Started
+2023-04-03 15:53:21.956 +05:30 [INF] Login Post Started
+2023-04-03 16:37:21.541 +05:30 [INF] Login Started
+2023-04-03 16:37:30.091 +05:30 [INF] Login Post Started
+2023-04-03 16:37:30.091 +05:30 [INF] Login Post Started
+2023-04-03 16:37:30.143 +05:30 [INF] Login Post Started
+2023-04-03 16:37:30.143 +05:30 [INF] Login Post Started
+2023-04-03 17:47:23.223 +05:30 [INF] Login Started
+2023-04-03 17:47:31.515 +05:30 [INF] Login Post Started
+2023-04-03 17:47:31.515 +05:30 [INF] Login Post Started
+2023-04-03 17:53:54.747 +05:30 [INF] Login Started
+2023-04-03 18:00:18.293 +05:30 [INF] Login Started
+2023-04-03 18:00:27.408 +05:30 [INF] Login Post Started
+2023-04-03 18:00:27.408 +05:30 [INF] Login Post Started
+2023-04-03 18:29:22.127 +05:30 [INF] Login Started
+2023-04-03 18:29:31.677 +05:30 [INF] Login Post Started
+2023-04-03 18:29:31.686 +05:30 [INF] Login Post Started
+2023-04-03 18:29:33.060 +05:30 [ERR] Invalid operation. The connection is closed.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 18:29:33.060 +05:30 [ERR] A transport-level error has occurred when sending the request to the server. (provider: Session Provider, error: 19 - Physical connection is not usable)
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 18:29:42.735 +05:30 [INF] Login Post Started
+2023-04-03 18:29:42.735 +05:30 [INF] Login Post Started
+2023-04-03 18:29:43.221 +05:30 [ERR] Unable to cast object of type 'System.Data.ProviderBase.DbConnectionClosedConnecting' to type 'System.Data.SqlClient.SqlInternalConnectionTds'.
+   at PathoLab.Repository.Account.UserRepository.UserGetByUserNamePwd(String UserName, String Password) in D:\Projects\lab\PathoLab.Repository\Account\UserRepository.cs:line 59
+   at PathoLab.Web.Controllers.AccountController.Login(String UserName, String Password) in D:\Projects\lab\PathoLab.Web\Controllers\AccountController.cs:line 37
+2023-04-03 18:39:00.796 +05:30 [INF] Login Started

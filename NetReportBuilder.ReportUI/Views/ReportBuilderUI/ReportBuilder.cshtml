@@ -1,0 +1,810 @@
+﻿@model NetReportBuilder.ReportUI.Models.ReportConfigurationModel.ReportTypes
+@{
+    ViewData["Title"] = "ReportBuilder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ListData = ViewBag.DataTable;
+}
+
+<style>
+    .report-group {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        margin-top: 20px;
+    }
+
+    .report-block {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Ensure maximum 3 blocks per row */
+        gap: 10px;
+    }
+
+    .report-item {
+        border: 1px solid #ddd;
+        border-color: darkslategray;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: #fff;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .report-item img {
+            max-width: 50%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .report-item h3 {
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .report-item:hover {
+            background-color: antiquewhite;
+        }
+
+    .center-text {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    th, td {
+        border-style: solid;
+    }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<div class="page-title">
+    <div class="title-details">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb p-0 mb-0 bg-transparent" id="navigation">
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs nav-fill" role="tablist">
+                    @*<a class="nav-item nav-link active" asp-controller="HospitalMaster" asp-action="AddHospital">Add</a>*@
+                </ul>
+                <div class="indicatorslist">
+                    <a title="" href="javascript:void(0)" id="backIcon" data-toggle="tooltip" data-placement="top" data-original-title="Back"><i class="icon-arrow-left1"></i></a>
+                    <p class="ml-2">(*) Indicates mandatory </p>
+                </div>
+            </div>
+            @*===================================================
+                BASIC FORM ELEMENTS*@
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="error-message">@ViewBag.ErrorMessage</div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="card-body col-md-6">
+                        @*DataSource*@
+                        <div class="w3-panel w3-card">
+                            <p>
+                                <div class="form-group row">
+                                    <div class="col-xs-12 col-md-6 col-xl-6">
+                                        <label class="control-label"><b>Data Source</b><span class="text-danger">*</span></label>
+                                        <select id="ddlDataSource" class="form-control" onchange="GetColumnsByTable()" asp-items="@(new SelectList(ViewBag.DataSource, "order", "name"))">
+                                            <option value="Select">--Select Data Source--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+                        @*ReportType*@
+                        @Html.Partial("_ReportType")
+                        @*ChartType/Grid/Summary*@
+                        <div class="w3-panel w3-card" id="ReportDetailsHideShow">
+                            <span id="ChangeHeader"></span>
+                            <div id="reportDetails" class="form-group row">
+                                <p>
+                                </p>
+                            </div>
+                        </div>
+                        @*ChartConfiguration*@
+                        @Html.Partial("_ChartConfiguration")
+                        @Html.Partial("_GridConfiguiration")
+                        @Html.Partial("_SummaryConfiguiration")
+                        @*Title*@
+                        <div class="w3-panel w3-card">
+                            <p>
+                                <div class="form-group row">
+                                    <div class="col-xs-12 col-md-6 col-xl-6">
+                                        <label class="control-label"><b>Title</b><span class="text-danger">*</span></label>
+                                        <input type="text" id="txtTitle" class="form-control">
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+                        @*BUTTONS*@
+                        <div class="form-group row">
+                            <label class="col-12 col-md-2 col-xl-2 control-label"></label>
+                            <div class="col-12 col-md-4 col-xl-4">
+                                <button class="btn btn-primary mb-1" id="btnApply">Apply</button>
+                                <button class="btn btn-danger mb-1" id="btnSave">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body col-md-6">
+                        <div class="w3-panel w3-card" id="GridReport">
+                            <p>
+                                <div id="GridReport">
+                                    @if (ListData != null)
+                                    {
+                                        @if (ListData.Rows.Count > 0)
+                                        {
+                                            <table data-toggle="table" class="table" id="tblFormView">
+                                                <thead>
+                                                    <tr>
+                                                        @foreach (var Item in ListData.Columns)
+                                                        {
+                                                            <th>@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@Item.ColumnName.ToString().ToLower())</th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (ListData != null)
+                                                    {
+                                                        @if (ListData.Columns.Count == 0)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="3">No Record found.</td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (ListData.Rows.Count > 0)
+                                                            {
+                                                                var count = 1;
+                                                                @for (int i = 0; i < ListData.Rows.Count; i++)
+                                                                {
+                                                                    <tr>
+                                                                        @foreach (var Item in ListData.Columns)
+                                                                        {
+                                                                            <td>
+                                                                                @ListData.Rows[i][Item.ColumnName]
+                                                                            </td>
+                                                                        }
+                                                                    </tr>
+                                                                    count = count + 1;
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="3"> No Record found.</td>
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+                                        else
+                                        {
+                                        }
+                                    }
+                                    else
+                                    {
+                                    }
+                                </div>
+                            </p>
+                        </div>
+                        @Html.Partial("_ChartFinalReport")
+                        @Html.Partial("_GridFinalReport")
+                        @Html.Partial("_SummaryFinalReport")
+                    </div>
+                </div>
+            }
+            @*===================================================
+                END BASIC FORM ELEMENTS*@
+        </div>
+    </div>
+</div>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="~/js/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    //BindTableAndTableColumn
+    function GetColumnsByTable() {
+        $.ajax({
+            url: "/ReportBuilderUI/Get_ColumnsByTable?order=" + $('#ddlDataSource').val(),
+            type: "GET",
+            success: function (result) {
+                data = result;
+                var v = "<option value='0'>--Select--</option>";
+                $.each(data, function (i, item) {
+                    v += "<option value=" + item.order + ">" + item.name + "</option>";
+                });
+                $("#ddlSeries").html(v);
+                $("#ddlX-Axis").html(v);
+                $("#ddlY-Axis").html(v);
+
+                //Selected X-Axis
+                var XAxis = getUrlVars()["XAxis"];
+                $("#ddlX-Axis option").each(function () {
+                    if ($(this).text() == XAxis) {
+                        $(this).attr('selected', 'selected');
+                    }
+                });
+
+                //Selected Y-Axis
+                var YAxis = getUrlVars()["YAxis"];
+                $("#ddlY-Axis option").each(function () {
+                    if ($(this).text() == YAxis) {
+                        $(this).attr('selected', 'selected');
+                    }
+                });
+            },
+            error: function (error) {
+                jsonValue = jQuery.parseJSON(error.responseText);
+                alert("Error : " + jsonValue);
+            }
+        });
+    }
+
+    //Bind Report  Using Report Type
+     document.getElementById("reportType").addEventListener("change", function () {
+         var selectedType = this.value;
+
+            var reportDetailsDiv = document.getElementById("reportDetails");
+            reportDetailsDiv.innerHTML = '';
+            // Change Header Using Report Type
+            var reportChangeHeader = document.getElementById("ChangeHeader");
+            if (selectedType === "Grid") {
+                reportChangeHeader.innerHTML = "Grid";
+                reportChangeHeader.classList.add('center-text');
+            } else if (selectedType === "Summary") {
+                reportChangeHeader.innerHTML = "Summary";
+                reportChangeHeader.classList.add('center-text');
+            } else if (selectedType === "Chart") {
+                reportChangeHeader.innerHTML = "Charts";
+                reportChangeHeader.classList.add('center-text');
+            }
+
+            //// Hide or Show Report Icon Using Report Type
+            //var reportCardHidden = document.getElementById("ReportDetailsHideShow");
+            //if (selectedType === "Select Report Type") {
+            //    reportCardHidden.hidden = true;
+            //} else {
+            //    reportCardHidden.hidden = false;
+            //}
+
+         //// Hide or Show  Final Report Card
+         //var reportfinalHidden = document.getElementById("ChartFinalReport");
+         //if (selectedType === "Select Report Type") {
+         //    reportfinalHidden.hidden = true;
+         //} else {
+         //    reportfinalHidden.hidden = false;
+         //}
+
+            // Assuming reportTypes is already defined and available as a global variable
+            var reportTypes = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportType))');
+            var selectedReportType = reportTypes.find(rt => rt.Name === selectedType);
+            if (selectedReportType) {
+                displayBlocks(selectedReportType);
+            }
+        });
+
+    //Bind Images  Using Report Type
+    function displayBlocks(reportType) {
+            var blockHtml = '<div class="report-group"><div class="report-block">';
+
+            if (reportType.SubReports && reportType.SubReports.SubReport.length > 0) {
+                reportType.SubReports.SubReport.forEach(function (subReport) {
+                    blockHtml += '<div class="report-item" onclick="changeBackgroundColor(this)" id="' + subReport.Name +'" >';
+                    blockHtml += '<img src="/Image/' + subReport.Icon + '" alt="' + subReport.Name + '">';
+                    blockHtml += '<h3>' + subReport.Name + '</h3>';
+                    blockHtml += '</div>';
+                });
+            } else if (reportType.SubReport) {
+                blockHtml += '<div class="report-item" onclick="changeBackgroundColor(this)">';
+                blockHtml += '<img src="/Image/' + reportType.SubReport.Icon + '" alt="' + reportType.SubReport.Name + '">';
+                blockHtml += '<h3>' + reportType.SubReport.Name + '</h3>';
+                blockHtml += '</div>';
+            }
+
+            blockHtml += '</div></div>';
+
+            // Clear previous blocks and add the new ones
+            var reportDetailsDiv = document.getElementById("reportDetails");
+            reportDetailsDiv.innerHTML = blockHtml;
+    }
+
+    // Global variable to store the selected div
+    var selectedDiv = null;
+    // Change Background Color Of Image While Select
+    function changeBackgroundColor(element) {
+            // Reset background color for all report-item divs
+            var reportItems = document.querySelectorAll('.report-item');
+
+            reportItems.forEach(function (item) {
+                item.style.backgroundColor = ''; // Reset to default
+            });
+
+        // Set background color to green for the selected div
+        if (isString(element)) {
+            $("#" + element).css('background-color', 'lightgreen');
+        }
+        else {
+            element.style.backgroundColor = 'lightgreen';
+        }
+
+
+            // Store the selected div reference
+        selectedDiv = element;
+    }
+
+    function isString(variable) {
+        if (Object.prototype.toString.call(variable) === '[object String]') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Apply Button To Show The Report
+    $("#btnApply").click(function () {
+       //if (selectedDiv) {
+       //         var chartType = selectedDiv.querySelector('h3').textContent; // Assuming the h3 contains the chart type
+       //         switch (chartType) {
+       //             case "Line":
+       //                 genericchart('line', document.getElementById("txtTitle").value);
+       //                 break;
+       //             case "Area":
+       //                 genericchart('area', document.getElementById("txtTitle").value);
+       //                 break;
+       //             case "Column":
+       //                 //  genericchart('column', document.getElementById("txtTitle").value);
+       //                 alert("a");
+       //                 DynamicChart();
+       //                 alert("ss");
+       //                 break;
+       //             case "Bar":
+       //                 genericchart('bar', document.getElementById("txtTitle").value);
+       //                 break;
+       //             case "Pie":
+       //                 genericchart('pie', document.getElementById("txtTitle").value);
+       //                 break;
+       //             case "Bubble":
+       //                 genericchart('bubble', document.getElementById("txtTitle").value);
+       //                 break;
+       //             case "Scatter":
+       //                 genericchart('scatter', document.getElementById("txtTitle").value);
+       //                 break;
+       //             default:
+       //                 alert("Unknown chart type");
+       //    }
+
+       //     } else {
+       //    /* alert("Please select a chart type.");*/
+
+       //    // DataSource,ReportType,X-Axis,Y-Axis
+       //   /* location.href = "/ReportBuilderUI/GetTableDetails?DataSource=" + $('#ddlDataSource option:selected').text() + "&ReportType=" + $('#reportType option:selected').text() + "&XAxis=" + $('#ddlX-Axis option:selected').text() + "&YAxis=" + $('#ddlY-Axis option:selected').text() + "";*/
+       //}
+        var chartType = selectedDiv.querySelector('h3').textContent;
+        // DataSource,ReportType,X-Axis,Y-Axis
+        location.href = "/ReportBuilderUI/GetTableDetails?DataSource=" + $('#ddlDataSource option:selected').text() + "&ReportType=" + $('#reportType option:selected').text() + "&XAxis=" + $('#ddlX-Axis option:selected').text() + "&YAxis=" + $('#ddlY-Axis option:selected').text() + "&ChartType=" + chartType +"";
+    });
+
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+    $(document).ready(function () {
+        //Selected DataSource
+        var DataSource = getUrlVars()["DataSource"];
+        if (DataSource != undefined) {
+            $("#ddlDataSource option").each(function () {
+                if ($(this).text() == DataSource) {
+                    $(this).attr('selected', 'selected');
+                    $.ajax({
+                        url: "/ReportBuilderUI/Get_ColumnsByTable?order=" + $('#ddlDataSource').val(),
+                        type: "GET",
+                        success: function (result) {
+                            data = result;
+                            var v = "<option value='0'>--Select--</option>";
+                            $.each(data, function (i, item) {
+                                v += "<option value=" + item.order + ">" + item.name + "</option>";
+                            });
+                            $("#ddlSeries").html(v);
+                            $("#ddlX-Axis").html(v);
+                            $("#ddlY-Axis").html(v);
+
+                            //Selected X-Axis
+                            var XAxis = getUrlVars()["XAxis"];
+                            $("#ddlX-Axis option").each(function () {
+                                if ($(this).text() == XAxis) {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+
+                            //Selected Y-Axis
+                            var YAxis = getUrlVars()["YAxis"];
+                            $("#ddlY-Axis option").each(function () {
+                                if ($(this).text() == YAxis) {
+                                    $(this).attr('selected', 'selected');
+                                }
+                            });
+                        },
+                        error: function (error) {
+                            jsonValue = jQuery.parseJSON(error.responseText);
+                            alert("Error : " + jsonValue);
+                        }
+                    });
+                }
+            });
+
+        }
+
+        //Selected ReportType
+        var ReportType = getUrlVars()["ReportType"];
+        var selectedValue = "";
+        if (ReportType != undefined) {
+            $("#reportType option").each(function () {
+                if ($(this).text() == ReportType) {
+                    $(this).attr('selected', 'selected');
+                       var selectedType = this.value;
+
+                       var reportDetailsDiv = document.getElementById("reportDetails");
+                       reportDetailsDiv.innerHTML = '';
+                       // Change Header Using Report Type
+                       var reportChangeHeader = document.getElementById("ChangeHeader");
+                       if (selectedType === "Grid") {
+                           reportChangeHeader.innerHTML = "Grid";
+                           reportChangeHeader.classList.add('center-text');
+                       } else if (selectedType === "Summary") {
+                           reportChangeHeader.innerHTML = "Summary";
+                           reportChangeHeader.classList.add('center-text');
+                       } else if (selectedType === "Chart") {
+                           reportChangeHeader.innerHTML = "Charts";
+                           reportChangeHeader.classList.add('center-text');
+                       }
+
+                       //// Hide or Show Report Icon Using Report Type
+                       //var reportCardHidden = document.getElementById("ReportDetailsHideShow");
+                       //if (selectedType === "Select Report Type") {
+                       //    reportCardHidden.hidden = true;
+                       //} else {
+                       //    reportCardHidden.hidden = false;
+                       //}
+
+                    //// Hide or Show  Final Report Card
+                    //var reportfinalHidden = document.getElementById("ChartFinalReport");
+                    //if (selectedType === "Select Report Type") {
+                    //    reportfinalHidden.hidden = true;
+                    //} else {
+                    //    reportfinalHidden.hidden = false;
+                    //}
+
+                       // Assuming reportTypes is already defined and available as a global variable
+                       var reportTypes = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportType))');
+                       var selectedReportType = reportTypes.find(rt => rt.Name === selectedType);
+                       if (selectedReportType) {
+                           displayBlocks(selectedReportType);
+                       }
+                }
+
+            });
+            var ChartType = getUrlVars()["ChartType"];
+            var selectedValue = "";
+            if (ChartType != undefined) {
+                changeBackgroundColor(ChartType);
+            }
+            //var selectedValue = ReportType;
+            //var axisConfigElement = document.getElementById("AxisConfiguration");
+            //var gridConfigElement = document.getElementById("GridConfiguiration");
+            //var summaryConfigElement = document.getElementById("SummaryConfiguiration");
+            //var axisReportElement = document.getElementById("ChartFinalReport");
+            //var gridReportElement = document.getElementById("GridFinalReport");
+            //var summaryReportElement = document.getElementById("SummaryFinalReport");
+
+            //if (selectedValue == 'SelectReportType') {
+            //    axisConfigElement.hidden = true;
+            //    gridConfigElement.hidden = true;
+            //    summaryConfigElement.hidden = true;
+            //    axisReportElement.hidden = true;
+            //    gridReportElement.hidden = true;
+            //    summaryReportElement.hidden = true;
+            //}
+            //else if (selectedValue == 'Chart') {
+            //    axisConfigElement.hidden = false;
+            //    gridConfigElement.hidden = true;
+            //    summaryConfigElement.hidden = true;
+            //    axisReportElement.hidden = false;
+            //    gridReportElement.hidden = true;
+            //    summaryReportElement.hidden = true;
+            //}
+            //else if (selectedValue == 'Grid') {
+            //    axisConfigElement.hidden = true;
+            //    gridConfigElement.hidden = false;
+            //    summaryConfigElement.hidden = true;
+            //    axisReportElement.hidden = true;
+            //    axisReportElement.hidden = true;
+            //    gridReportElement.hidden = false;
+            //    summaryReportElement.hidden = true;
+            //}
+            //else if (selectedValue == 'Summary') {
+            //    axisConfigElement.hidden = true;
+            //    gridConfigElement.hidden = true;
+            //    summaryConfigElement.hidden = false;
+            //    axisReportElement.hidden = true;
+            //    axisReportElement.hidden = true;
+            //    gridReportElement.hidden = true;
+            //    summaryReportElement.hidden = false;
+            //}
+        }
+         var chartType = selectedDiv // Assuming the h3 contains the chart type
+         switch (chartType) {
+             case "Line":
+                 genericchart('line', document.getElementById("txtTitle").value);
+                 break;
+             case "Area":
+                 genericchart('area', document.getElementById("txtTitle").value);
+                 break;
+             case "Column":
+                  genericchart('column', document.getElementById("txtTitle").value);
+                 break;
+             case "Bar":
+                 genericchart('bar', document.getElementById("txtTitle").value);
+                 break;
+             case "Pie":
+                 genericchart('pie', document.getElementById("txtTitle").value);
+                 break;
+             case "Bubble":
+                 genericchart('bubble', document.getElementById("txtTitle").value);
+                 break;
+             case "Scatter":
+                 genericchart('scatter', document.getElementById("txtTitle").value);
+                 break;
+             default:
+                alert("Unknown chart type");
+         }
+    });
+</script>
+
+
+
+<script>
+    //Bind Grid
+    function loadTableColumns() {
+        $.ajax({
+            url: "/ReportBuilderUI/Get_ColumnsByTable",
+            type: 'GET',
+            data: { order: $('#ddlDataSource').val() },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data); // Log the data to see its structure
+                var table = $('#dataGrid tbody');
+                table.empty(); // Clear the table
+
+                if (Array.isArray(data)) {
+                    // Data is an array, iterate over columns
+                    data.forEach(function (column, index) {
+                        var slno = index + 1; // Calculate serial number
+                        var rowHtml = '<tr>';
+                        rowHtml += '<td>' + slno + '</td>'; // Add slno. column
+                        rowHtml += '<td>' + column.name + '</td>';
+                        rowHtml += '<td>' + column.name + '</td>';
+                        rowHtml += '<td>' + column.dataType + '</td>';
+                        rowHtml += '<td>' + column.isIdentity + '</td>';
+
+                        // Add more columns as needed
+                        rowHtml += '</tr>';
+                        table.append(rowHtml);
+                    });
+                } else if (data && typeof data === 'object') {
+                    // Data is a single object, handle it accordingly
+                    var rowHtml = '<tr>';
+                    rowHtml += '<td>' + slno + '</td>'; // Add slno. column
+                    rowHtml += '<td>' + data.name + '</td>';
+                    rowHtml += '<td>' + data.name + '</td>';
+                    rowHtml += '<td>' + data.dataType + '</td>';
+                    rowHtml += '<td>' + column.isIdentity + '</td>';
+
+                    // Add more columns as needed
+                    rowHtml += '</tr>';
+                    table.append(rowHtml);
+                } else {
+                    console.error('Unexpected data format:', data);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    //$(document).ready(function () {
+    //    //$('#ddlDataSource,#ddlX-Axis,#ddlY-Axis').on('change', function () {
+    //    //    var data = {
+    //    //        dataSource: $('#ddlDataSource option:selected').text(),
+    //    //        xAxis: $('#ddlX-Axis option:selected').text(),
+    //    //        yAxis: $('#ddlY-Axis option:selected').text()
+    //    //    };
+    //    //    $.ajax({
+    //    //        url: '/ReportBuilderUI/GetTableDetails',
+    //    //        type: 'POST',
+    //    //        contentType: 'application/json',
+    //    //        data: JSON.stringify(data),
+    //    //        success: function (response) {
+    //    //            console.log('Data sent successfully:', response);
+    //    //        },
+    //    //        error: function (error) {
+    //    //            console.log('Error:', error);
+    //    //        }
+    //    //    });
+    //    //});
+    //});
+
+    //function GetColumns() {
+    //    $.ajax({
+    //        url: "/ReportBuilderUI/GetTableDetails",
+    //        type: 'GET',
+    //        data: { order: $('#ddlY-Axis').val() },
+    //        dataType: 'json',
+    //        success: function (data) {
+    //            console.log(data); // Log the data to see its structure
+    //            var table = $('#Grid tbody');
+    //            table.empty(); // Clear the table
+
+    //            if (Array.isArray(data)) {
+    //                // Data is an array, iterate over columns
+    //                data.forEach(function (column, index) {
+    //                    var slno = index + 1; // Calculate serial number
+    //                    var rowHtml = '<tr>';
+    //                    rowHtml += '<td>' + slno + '</td>'; // Add slno. column
+    //                    rowHtml += '<td>' + column.name + '</td>';
+    //                    rowHtml += '<td>' + column.name + '</td>';
+
+    //                    // Add more columns as needed
+    //                    rowHtml += '</tr>';
+    //                    table.append(rowHtml);
+    //                });
+    //            } else if (data && typeof data === 'object') {
+    //                // Data is a single object, handle it accordingly
+    //                var rowHtml = '<tr>';
+    //                rowHtml += '<td>' + slno + '</td>'; // Add slno. column
+    //                rowHtml += '<td>' + data.name + '</td>';
+    //                rowHtml += '<td>' + data.name + '</td>';
+
+    //                // Add more columns as needed
+    //                rowHtml += '</tr>';
+    //                table.append(rowHtml);
+    //            } else {
+    //                console.error('Unexpected data format:', data);
+    //            }
+    //        },
+    //        error: function (xhr, status, error) {
+    //            console.log(error);
+    //        }
+    //    });
+    //}
+
+</script>
+
+<script>
+
+
+    //Validation
+    //function validate() {
+    //    if ($('#txtTitle').val() == 0) {
+    //        alert("Please Enter Title!");
+    //        $('#txtTitle').focus();
+    //        return false;
+    //    }
+    //    else
+    //        return true;
+    //}
+
+
+    //if (validate()) {
+    //    if (confirm("Are you sure you want to Apply ?")) {
+    //        if (selectedDiv) {
+    //            var chartType = selectedDiv.querySelector('h3').textContent; // Assuming the h3 contains the chart type
+    //            switch (chartType) {
+    //                case "Line":
+    //                    linechart();
+    //                    break;
+    //                case "Area":
+    //                    areachart();
+    //                    break;
+    //                case "Column":
+    //                    columnchart();
+    //                    break;
+    //                case "Bar":
+    //                    barchart();
+    //                    break;
+    //                case "Pie":
+    //                    piechart();
+    //                    break;
+    //                case "Bubble":
+    //                    bubblechart();
+    //                    break;
+    //                case "Scatter":
+    //                    scatterchart();
+    //                    break;
+    //                default:
+    //                    alert("Unknown chart type");
+    //            }
+    //        } else {
+    //            alert("Please select a chart type.");
+    //        }
+    //    }
+    //} else {
+    //    alert("Validation failed!"); // Show an error message if validation fails
+    //}
+
+</script>
+
+
+

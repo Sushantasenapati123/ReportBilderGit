@@ -1,0 +1,310 @@
+	/* Scss variable  Created By Bikash on 21-Jan-2019 */
+
+	@import 'variables';
+	@import 'mixins';
+	.top-portlets{
+		margin:$s1 0;
+	}
+	.cyan { background-color: #00bcd4!important}
+	.cyan-dark { background-color: #00acc1!important;}
+	.red{background-color: #ff5252!important;}
+	.red-dark {background-color: #f44336!important;}
+	.orange{background-color: #ffa726!important;}
+	.orange-dark {background-color: #ff9800!important;}
+	.green{ background-color: #66bb6a !important;}
+	.green-dark {background-color: #4caf50 !important;}
+
+	.sea-blue{ background-color: #13c5c2 !important;}
+
+	$chart-color-one:#0288d1;
+	$chart-color-two:#26c6da;
+	$chart-color-three:#f48fb1;
+	$chart-color-four:#9bafd4;
+	$chart-color-five:#f58900;
+	$chart-color-six:#009688;
+	$chart-color-seven:#ff5252;
+	$chart-color-eight:#6b6b6b;
+	$chart-color-nine:#13c5c2;
+	$chart-color-ten:#003ba7;
+
+	$chart-color-white:#ffffff;
+
+	.portlets__card{
+		margin-bottom: $s2;
+		&__content{
+			text-align: $center;
+			padding: $s1 $s2;
+			color: $white;
+			border-radius: 3px 3px 0 0;
+			p{
+				margin-bottom: $s1;
+			}
+			h4{
+
+			}
+
+		}
+
+		&__charts{
+			border-radius:0 0 3px 3px ;
+			padding: $s1 $s2;
+			color: $white;
+			.charts__content{
+				height:45px;
+				
+				.ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {
+					stroke: $white;
+					stroke-width: .6rem;
+				}
+				.ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {
+					stroke: $gray;
+					stroke-width: .6rem;
+				}
+				// .ct-labels{display: none;}
+				// foreignObject{display: none!important}
+			}
+		}
+	}
+	.dashboard-portlet{
+		height: 350px;
+		position: $relative;
+		box-shadow:0 2px 2px 0 rgba(0, 0, 0, 0.03), 0 3px 1px -2px rgba(0, 0, 0, 0.05), 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+		border-radius: 4px;
+		margin-bottom: $s2;
+		padding: $s2;
+		background: $white;
+		&.fixed{
+
+			position: $fixed;
+			left: 0;
+			right: 0;
+			top: 0;
+			z-index: 9999;
+			bottom: 0;
+			height: auto;
+			border-radius: 0;
+		}
+		
+		
+		&__header{
+			position: $relative;
+			h5{
+				font-size: $h6;
+				margin-bottom: $s2;
+				.more-links{
+					font-size: 120%;
+					color: #6b6b6b;
+				}
+			}
+			&.active{
+				.more-links-list{display: $block;}
+			}
+		}
+		&__content{
+			padding: $s1 0;
+			&__chart{
+				height: 260px;
+				.ct-chart-donut{
+					.ct-label{
+						color: $white;
+						fill:$white;
+					}
+				}
+				.ct-series-a{
+
+					.ct-line{stroke: $chart-color-one;}
+					.ct-point { stroke: $chart-color-one;}
+					.ct-bar{ stroke: $chart-color-six;}
+					.ct-slice-donut{ stroke: $chart-color-five;}
+					.ct-area{ stroke: $chart-color-one;fill: $chart-color-one;}
+					.ct-slice-pie{ stroke: $chart-color-five;}
+					.ct-slice-donut-solid{ fill: $chart-color-seven;}
+					
+
+
+				}
+				.ct-series-b
+				{
+					.ct-line{stroke: $chart-color-nine;}
+					.ct-point { stroke: $chart-color-nine;}
+					.ct-bar{ stroke: $chart-color-four;}
+					.ct-slice-donut{ stroke: $chart-color-three;}
+					.ct-area{ stroke: $chart-color-six;fill: $chart-color-six;}
+					.ct-slice-pie{ stroke: $chart-color-seven;}
+					.ct-slice-donut-solid{ fill: $chart-color-nine;}
+					
+
+				}
+				.ct-series-c {
+					.ct-line{stroke: $chart-color-six;}
+					.ct-point { stroke:$chart-color-six;}
+					.ct-bar{ stroke:$chart-color-nine;}
+					.ct-slice-donut{ stroke: $chart-color-six;}
+					.ct-area{ stroke: $chart-color-eight;fill: $chart-color-eight;}
+					.ct-slice-pie{ stroke:$chart-color-two;;}
+					.ct-slice-donut-solid{ fill: $chart-color-two;}
+					
+				}
+				.ct-series-d
+				{
+					.ct-line{stroke:$chart-color-three;}
+					.ct-point { stroke: $chart-color-three;}
+					.ct-bar{ stroke: $chart-color-seven;}
+					.ct-slice-donut{ stroke: $chart-color-seven;}
+					.ct-area{ stroke: $chart-color-ten;fill: $chart-color-ten;}
+					.ct-slice-pie{ stroke: $chart-color-six;;}
+					.ct-slice-donut-solid{ fill: $chart-color-ten;}
+					
+				}
+				.ct-series-e
+				{
+					.ct-line{stroke: $chart-color-two;}
+					.ct-point { stroke: $chart-color-two;}
+					.ct-bar{ stroke: $chart-color-two;}
+					.ct-slice-donut{ stroke: $chart-color-four;}
+					.ct-area{ stroke:$chart-color-nine;fill:$chart-color-nine;}
+					.ct-slice-pie{ stroke:$chart-color-three;;}
+					.ct-slice-donut-solid{ fill: $chart-color-five;}
+					
+				}
+				.ct-series-f
+				{
+					.ct-line{stroke: $chart-color-nine;}
+					.ct-point { stroke:  $chart-color-nine;}
+					.ct-bar{ stroke: $chart-color-six;;}
+					.ct-slice-donut{ stroke: $chart-color-two;}
+					.ct-area{ stroke:$chart-color-seven;fill:$chart-color-seven;}
+					.ct-slice-pie{ stroke: $chart-color-two;;}
+					.ct-slice-donut-solid{ fill: $chart-color-four;}
+
+				}
+			}
+			&__details{
+				height: 260px;
+				overflow: hidden;
+			}
+		}
+	}
+	.filter-section{
+		position: $absolute;
+		left: 0;right: 0;bottom: 0;top:0;
+		background: $white;
+		padding: $s4 $s6;
+		opacity: 0;
+		backface-visibility: hidden;
+		transition: all .2s ease-in-out;
+		z-index: -1;
+		&.show{
+			opacity: 1;
+			z-index: 1;
+
+		}
+		.filter__close{
+			position: $absolute;
+			right: $s2;
+			top: $s2;
+			font-size: 120%;
+		}
+	}
+	.more-links-list{
+		position: $absolute;
+		right: $s4;
+		top: -1px;
+		text-align: $center;
+		
+		transition: all .2s ease-in-out;
+		background: $white;
+		border-radius: 2px;
+		
+		
+		display: none;
+		
+		ul{
+			margin:0;
+			li{
+				display: $inline-block;
+				a{display: $block;padding: .2rem $s1;color: #6b6b6b;}
+			}
+		}
+	}
+
+	.dashboard-portlet{
+		&.filled{
+			color: $white;
+			.dashboard-portlet__header{
+				color: $white;
+				h5{
+					.more-links{
+						
+						color:$white;
+					}
+
+				}
+			}
+			
+			.more-links-list{
+				background: $trans;
+				a{color: $white;}
+			}
+			.dashboard-portlet__content{
+				.dashboard-portlet__content__chart{
+					.ct-label{
+						color: $white;
+						fill:$white;
+					}
+					.ct-series-a{
+						.ct-line,.ct-point,.ct-bar,.ct-area{ stroke: $chart-color-white;}
+					}
+					.ct-series-b{
+						.ct-line,.ct-point,.ct-bar,.ct-area{ stroke: rgba(255, 255, 255, 0.75)}
+					}
+					.ct-series-c{
+						.ct-line,.ct-point,.ct-bar,.ct-area{ stroke:rgba(255, 255, 255, 0.50)}
+					}
+					.ct-series-d{
+						.ct-line,.ct-point,.ct-bar,.ct-area{ stroke: rgba(52, 58, 64, 0.15)}
+					}
+					.ct-series-e{
+						.ct-line,.ct-point,.ct-bar,.ct-area{ stroke: rgba(52, 58, 64, 0.30)}
+					}
+				}
+				.dashboard-portlet__content__details{
+					table{
+						tr{
+							td,th{
+								color: $white;
+								border-top: 1px solid rgba(255, 255, 255, 0.2);
+							}
+							th{
+								background: $trans;
+								border-bottom-color:rgba(255, 255, 255, 0.2);
+							}
+						}
+					}
+				}
+			}	
+		}
+	}
+	@media screen and (min-width:$break-ipad) {
+		.dashboard-portlet{
+			margin-bottom: $s2;
+			&.fixed{
+				left: 275px;
+				top: 85px;
+				right: $s2;
+			}
+
+		}
+	}
+	@media screen and (min-width:$break-width-large) {
+		.dashboard-portlet{
+			margin-bottom: $s3;
+			&.fixed{
+				left: 280px;
+				
+				right: $s3;
+			}
+
+		}
+
+	}

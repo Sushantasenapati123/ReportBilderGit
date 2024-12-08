@@ -1,0 +1,36 @@
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.deps.json
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.dll
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.pdb
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.csproj.AssemblyReference.cache
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.GeneratedMSBuildEditorConfig.editorconfig
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.AssemblyInfoInputs.cache
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.AssemblyInfo.cs
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.csproj.CoreCompileInputs.cache
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.dll
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\refint\NetReportBuilder.UI.dll
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.pdb
+D:\ETLQueryReportBuilderUpdatedProject\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\ref\NetReportBuilder.UI.dll
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.deps.json
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.dll
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.pdb
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.csproj.AssemblyReference.cache
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.GeneratedMSBuildEditorConfig.editorconfig
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.AssemblyInfoInputs.cache
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.AssemblyInfo.cs
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.csproj.CoreCompileInputs.cache
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.dll
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\refint\NetReportBuilder.UI.dll
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.pdb
+D:\FRAMEWORK PROJECT DEV\REPORT BUILD_CLONE\NetReportBuilder.UI\obj\Debug\net6.0\ref\NetReportBuilder.UI.dll
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.deps.json
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.dll
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\bin\Debug\net6.0\NetReportBuilder.UI.pdb
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.csproj.AssemblyReference.cache
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.GeneratedMSBuildEditorConfig.editorconfig
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.AssemblyInfoInputs.cache
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.AssemblyInfo.cs
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.csproj.CoreCompileInputs.cache
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.dll
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\refint\NetReportBuilder.UI.dll
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\NetReportBuilder.UI.pdb
+D:\ReportBuilder\netreportbuilder\NetReportBuilder.UI\obj\Debug\net6.0\ref\NetReportBuilder.UI.dll

@@ -1,0 +1,16 @@
+﻿﻿@using NetReportBuilder.Etl.Model
+
+
+@if(ViewBag.MessageInfo!=null)
+{
+    var messageInfo = (MessageInfo)ViewBag.MessageInfo;
+
+   if(messageInfo.HasIssue)
+    {
+        <p style="color:red;font-family:Verdana;font-size:medium;align-content:center;">@messageInfo.Message</p>
+    }
+    else
+    {
+        <p style="color:green;font-family:Verdana;font-size:medium;align-content:center;">@messageInfo.Message</p>
+    }
+}

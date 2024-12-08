@@ -1,0 +1,79 @@
+
+@import 'variables';
+@import 'mixins';
+@import 'common';
+.error-section{
+
+   margin: 7% auto 1%;
+   text-align: $center;
+   position: $relative;
+   padding: $s2;
+
+   img {
+     width: 100%;
+
+ }
+ &__content{
+   h1{
+       font-size: $h6;
+       color: #9a9a9a;
+       padding: 0px;
+       margin: 8px;
+       font-weight: 600;
+       margin-bottom: 1rem;	
+       span{
+        font-size: 150%;
+        margin-right: $s1;
+    }
+}
+p{
+
+    color: #5f5f5f;
+    line-height: 1.6em;
+    padding: 0;
+    font-weight: 400;
+    margin: 0 auto;
+    margin-bottom:$s1;
+}
+a{
+   
+    text-transform: uppercase;
+    color: $white;
+    padding: $s1 $s3;
+    margin: $s2 0 0;
+    letter-spacing: 1px;
+    display: $inline-block;
+    
+    border-top: 2px solid #FFF;
+    background:#000;
+    transition: 0.5s all ease-in-out;
+    border-radius: 5px;
+    box-shadow: -1px 10px 18px -6px rgba(0,0,0,0.75);
+    &:hover{
+       background:#0cc7d5;
+       border-top: 2px solid #FFF;
+       color: #fff;
+       text-decoration: none;
+   }
+}
+}
+}
+@media screen and (min-width:$break-tab) {
+    .error-section{
+
+     img {
+         width: 50%;
+
+     }
+ }
+}
+
+@media screen and (min-width:$break-ipad) {
+    .error-section{
+
+     img {
+         width: 30%;
+
+     }
+ }
+}

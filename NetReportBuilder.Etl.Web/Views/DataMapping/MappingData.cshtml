@@ -1,0 +1,225 @@
+﻿@{
+    Layout = "~/Views/Shared/_PopupLayout.cshtml";
+
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab-container {
+            margin-top: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .tab-button {
+            padding: 10px 15px;
+            margin-right: 2px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            .tab-button.active {
+                background-color: #063160;
+            }
+
+            .tab-button:disabled {
+                background-color: #6c757d;
+                cursor: not-allowed;
+            }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+
+            .tab-content.active {
+                display: block;
+            }
+    </style>
+</head>
+<body>
+
+    @Html.Partial("_ExpertData")
+
+</body>
+
+
+
+
+</html>
+
+<script>
+
+    function openTab(event, tabName) {
+        var i, tabContent, tabButtons;
+
+        // Hide all tab contents
+        tabContent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+            tabContent[i].classList.remove("active");
+        }
+
+        // Remove the active class from all tab buttons
+        tabButtons = document.getElementsByClassName("tab-button");
+        for (i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].classList.remove("active");
+        }
+
+        // Show the current tab and add an active class to the button
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).classList.add("active");
+        event.currentTarget.classList.add("active");
+    }
+
+    //// Initialize the default active tab
+    //document.addEventListener("DOMContentLoaded", function () {
+    //    document.getElementById("data-fetching").style.display = "block";
+    //});
+
+
+
+</script>
+<script>
+    function populateDestinationGrid(listOfProperty) {
+        const destinationGridBody = document.querySelector("#SourceGrid tbody");
+        destinationGridBody.innerHTML = ""; // Clear previous content
+
+        listOfProperty.forEach(property => {
+            const row = document.createElement("tr");
+
+            // Create cell for field name
+            const fieldNameCell = document.createElement("td");
+            fieldNameCell.textContent = property.column_Name;
+            row.appendChild(fieldNameCell);
+
+            // Create cell for data type
+            const dataTypeCell = document.createElement("td");
+            dataTypeCell.textContent = property.column_Type;
+            row.appendChild(dataTypeCell);
+
+            // Create cell for table name dropdown
+            const tableNameCell = document.createElement("td");
+            const tableDropdown = document.createElement("select");
+            tableDropdown.classList.add("table-dropdown");
+            tableDropdown.classList.add("form-control");
+
+
+
+            tableNameCell.appendChild(tableDropdown);
+
+            // Populate table dropdown options
+            if (tableDropdownData) {
+                tableDropdownData.forEach(table => {
+                    const option = document.createElement("option");
+                    option.value = table.name;
+                    option.textContent = table.name;
+                    tableDropdown.appendChild(option);
+                });
+            } else {
+                console.error('tableDropdownData is not available.');
+            }
+
+            // Append table name cell to the row
+            row.appendChild(tableNameCell);
+
+            // Create cell for column name dropdown
+            const columnNameCell = document.createElement("td");
+            const columnDropdown = document.createElement("select");
+            columnDropdown.classList.add("column-dropdown");
+
+            columnDropdown.classList.add("form-control"); columnNameCell.appendChild(columnDropdown);
+
+            // Append column name cell to the row
+            row.appendChild(columnNameCell);
+
+            // Append row to the destination grid body
+            destinationGridBody.appendChild(row);
+
+            // Event listener for table dropdown change
+            tableDropdown.addEventListener('change', function () {
+                const selectedTable = this.value;
+                fetchColumnsByTable(selectedTable, columnDropdown);
+            });
+        });
+    }
+
+    function populateTableDropdowns(tables) {
+        const tableDropdowns = document.querySelectorAll("#SourceGrid tbody tr td:nth-child(3) select");
+
+        tableDropdowns.forEach(dropdown => {
+            // Clear previous options
+            dropdown.innerHTML = "";
+
+            // Create default 'Select' option
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Select"; // Change text as needed
+            dropdown.appendChild(defaultOption);
+
+            // Populate table options
+            tables.forEach(table => {
+                const option = document.createElement("option");
+                option.value = table.name;
+                option.textContent = table.name;
+                dropdown.appendChild(option);
+            });
+
+            // Add event listener for onchange event
+            dropdown.addEventListener('change', function () {
+                const selectedTable = this.value;
+                fetchColumnsByTable(selectedTable, this);
+            });
+        });
+    }
+
+
+
+
+    function fetchColumnsByTable(order, tableDropdown) {
+        fetch(`/DataMapping/Get_ColumnsByTable?TableName=${order}`)
+            .then(response => response.json())
+            .then(data => {
+                const columns = data;
+                populateColumnDropdown(columns, tableDropdown);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function populateColumnDropdown(columns, tableDropdown) {
+        const columnDropdown = tableDropdown.parentElement.nextElementSibling.querySelector('select');
+        columnDropdown.innerHTML = ""; // Clear previous options
+        columns.forEach(column => {
+            const option = document.createElement("option");
+            option.value = column.name;
+            option.textContent = column.name;
+            columnDropdown.appendChild(option);
+        });
+    }
+
+
+</script>
+

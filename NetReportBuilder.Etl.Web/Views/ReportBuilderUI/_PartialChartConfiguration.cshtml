@@ -1,0 +1,246 @@
+﻿@model NetReportBuilder.ReportUI.Models.ReportConfigurationModel.ReportTypes
+@{
+    var IconList = ViewBag.Icons as List<string>;
+    var gridhtml = ViewBag.GridHTML as string;
+    var ResultData = ViewBag.Result as List<NetReportBuilder.ReportUI.Models.DashboardDetail>;
+
+}
+
+<!-- left side  -->
+<div class="col-xs-2 ScrollStyle">
+    <ul>
+        <li class="grid__list column"   data-chart-type="column">
+            <a class="drawflow__txt form_bal_chart" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Column" onclick="GetColumnChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/column.svg" alt="Column Icon">
+                </div>
+                <label> Column </label>
+            </a>
+        </li>
+        <li class="grid__list bar"  data-chart-type="bar">
+            <a class="drawflow__txt bar_charts" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Bar" onclick="GetBarChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/bar.svg" alt="Column Icon">
+                </div>
+                <label> Bar </label>
+            </a>
+        </li>
+        <li class="grid__list pie"  data-chart-type="pie">
+            <a class="drawflow__txt pie_charts" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Pie" onclick="GetPieChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/pie.svg" alt="Column Icon">
+                </div>
+                <label> Pie </label>
+            </a>
+        </li>
+        <li class="grid__list area" data-chart-type="area">
+            <a class="drawflow__txt area_charts" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Area" onclick="GetAreaChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/area.svg" alt="Column Icon">
+                </div>
+                <label> Area </label>
+            </a>
+        </li>
+        <li class="grid__list scatters" data-chart-type="scatters">
+            <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Scatters" onclick="GetScatterChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/scatter.svg" alt="Column Icon">
+                </div>
+                <label> Scatters </label>
+            </a>
+        </li>
+        <li class="grid__list bubble"  data-chart-type="bubble">
+            <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Bubble" onclick="GetBubbleChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/bubbles.svg" alt="Column Icon">
+                </div>
+                <label> Bubble </label>
+            </a>
+        </li>
+        <li class="grid__list line"  data-chart-type="line">
+            <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Line" onclick="GetLineChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/line2.svg" alt="Column Icon">
+                </div>
+                <label> Line </label>
+            </a>
+        </li>
+        <li class="grid__list ">
+            <a class="drawflow__txt " href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Column" onclick="GetStackedColumnChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/stacked-column.svg" alt="Column Icon">
+                </div>
+                <label> Stacked Column </label>
+            </a>
+        </li>
+        <li class="grid__list">
+            <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Bar" onclick="GetStackedBarChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/stacked-bar.svg" alt="Column Icon">
+                </div>
+                <label> Stacked Bar </label>
+            </a>
+        </li>
+        <li class="grid__list">
+            <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Range Column" onclick="GetRangeColumnChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/range-column.svg" alt="Column Icon">
+                </div>
+                <label> Range Column </label>
+            </a>
+        </li>
+        <li class="grid__list">
+            <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Doughnut Chart" onclick="GetDonutChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/doughnut.svg" alt="Column Icon">
+                </div>
+                <label> Doughnut Chart </label>
+            </a>
+        </li>
+        <li class="grid__list">
+            <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Pyramid" onclick="GetPyramidChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/pramid.svg" alt="Column Icon">
+                </div>
+                <label> Pyramid </label>
+            </a>
+        </li>
+        <li class="grid__list">
+            <a class="drawflow__txt" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Funnel" onclick="GetFunnelChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/exploded-pie.svg" alt="Column Icon">
+                </div>
+                <label> Funnel </label>
+            </a>
+        </li>
+        <li class="grid__list">
+            <a class="drawflow__txt stacked_areachart" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Stacked Ared" onclick="GetStackedAreaChart()">
+                <div class="icon__graph">
+                    <img src="../images/svg/stacked-area.svg" alt="Column Icon">
+                </div>
+                <label> Stacked Area </label>
+            </a>
+        </li>
+    </ul>
+</div>
+<!--  left side  -->
+<!--  middle -->
+<div class="card-body row">
+    <div class="col-lg-5 col-md-5 col-12">
+        <h3><b>Chart  Configuration</b></h3>
+        <input type="hidden" id="hdnConfigurationId" />
+        <input type="hidden" id="hdnDivId" value="1" />
+        <input type="hidden" id="hdnDivModifyId" value="1" />
+        <input id="hdncolordivjson" value="@ViewBag.colordivjson" type="hidden" />
+        <div class="form-group">
+            @*TableName*@
+            <div id="TableData" class="form-group">
+                <label class="control-label">Data Source<span class="text-danger">*</span></label>
+
+                @*<select id="ddlDataSource" class="form-select" onchange="GetColumnsByTable()" asp-items="@(new SelectList(ViewBag.DataSource, "order", "name"))">
+            <option value="0">Select Data Source</option>
+        </select>*@
+
+                <select id="ddlDataSource" class="form-select" onchange="GetColumnsByDatasource()">
+                    <option value="0">Select Data Source</option>
+                </select>
+
+            </div>
+            @*Title*@
+            <div class="form-group ">
+                <label class="control-label">Title<span class="text-danger">*</span></label>
+                <input type="text" id="txtTitle" class="form-control">
+            </div>
+            @*X-Axis(Table Column Name)*@
+            <div class="form-group row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+                    <label class="control-label">X-Axis<span class="text-danger">*</span></label>
+                    <select id="ddlXAxis" class="form-select">
+                        <option value="0" selected>Select X-Axis</option>
+                    </select>
+                </div>
+                @*X-Axis  Title*@
+                <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+                    <label class="control-label">X-Axis Title<span class="text-danger">*</span></label>
+                    <input type="text" id="txtXAxisTitle" class="form-control">
+                </div>
+            </div>
+            @*Y-Axis(Table Column Name)*@
+            <div class="form-group row">
+                <input type="hidden" id="hdnYaxiscount" value="0" />
+                <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+                    <label class="control-label">Y-Axis<span class="text-danger">*</span></label>
+                    <select id="ddlYAxis" class="form-select">
+                        <option value="0" selected>Select Y-Axis</option>
+                    </select>
+                </div>
+                @*X-Axis Title*@
+                <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+                    <label class="control-label">Y-Axis Title<span class="text-danger">*</span></label>
+                    <input type="text" id="txtYAxisTitle" class="form-control">
+                </div>
+            </div>
+            @* Hidden Potlate  Height Width*@
+            <div class="form-group row" style="display:none;">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+                    <label class="control-label" for="portletHeight">Portlet Height:</label>
+                    <input type="text" id="portletHeight" readonly />
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-12">
+                    <label class="control-label" for="portletWidth">Portlet Width:</label>
+                    <input type="text" id="portletWidth" readonly />
+                </div>
+            </div>
+            @*BUTTONS*@
+            <div class="form-group row">
+                <div class="col-xl-12 col-lg-12  mt-3">
+                    <button class="btn btn-primary mb-1 me-2" id="btnApply">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  right -->
+    <div class="col-lg-7 col-md-7 col-12">
+        <center><h3><b>Preview</b></h3></center>
+        <figure class="highcharts-figure">
+            <div id="container" class="chart_fix"></div>
+        </figure>
+    </div>
+    <!--  right -->
+</div>
+<!--  middle -->
+<!-- Add Select2 CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#ddlDataSource').select2({
+            placeholder: "Select Data Source",
+            allowClear: true
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        
+        // Call your GetDataSource action via AJAX
+        $.ajax({
+            url: '@Url.Action("GetDataSource", "ReportBuilderUI")', // Update the URL if necessary
+            type: 'GET',
+            success: function (data) {
+                // Loop through the returned data and append options to the dropdown
+                var ddlDataSource = $('#ddlDataSource');
+                $.each(data, function (i, item) {
+                    ddlDataSource.append($('<option>', {
+                        value: item.id, // Set the value attribute
+                        text: item.name // Set the text for display
+                    }));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log("Error loading data sources: " + error);
+            }
+        });
+    });
+</script>
+

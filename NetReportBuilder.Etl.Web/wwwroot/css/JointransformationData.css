@@ -1,0 +1,172 @@
+
+.highlight {
+    border: 2px solid red;
+}
+
+.label_heading {
+    color: #5693cc;
+    font-weight: 600;
+    font-size: 20px;
+    margin-left: 24px;
+}
+
+.report-group {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+}
+
+.report-block {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Ensure maximum 3 blocks per row */
+    gap: 10px;
+}
+
+.report-item {
+    border: 1px solid #ddd;
+    border-color: darkslategray;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    text-align: center;
+    cursor: pointer;
+}
+
+    .report-item img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .report-item h3 {
+        margin: 0;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .report-item:hover {
+        background-color: antiquewhite;
+    }
+
+table td {
+    border: 1px solid black;
+    padding: 4px 12px;
+}
+
+.scrollable-textarea {
+    width: 100%;
+    height: 200px;
+    overflow: auto;
+    resize: none;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.control-label {
+    display: inline-block;
+    margin-bottom: .5rem;
+    font-weight: 600;
+}
+
+.text-danger {
+    color: red;
+}
+
+.btn-primary {
+    background-color: green;
+    border-color: green;
+}
+
+.btn-danger {
+    background-color: blue;
+    border-color: blue;
+}
+
+#dataGridViewContainer {
+    width: 100%; /* Adjust as needed */
+    height: 200px; /* Adjust as needed */
+    overflow: auto;
+    border: 1px solid #252525;
+    /* Optional: add a border */
+}
+
+#dataGridview {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    #dataGridview th, #dataGridview td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+
+.hidden {
+    display: none;
+}
+
+.TextLeft {
+    text-align: left;
+}
+
+.BasicControlSettings {
+    font-family: Verdana;
+    font-size: medium;
+    text-align: left;
+    vertical-align: middle;
+    padding: 5px;
+    margin: 5px;
+}
+
+.BoldSetting {
+    font-weight: bold;
+}
+
+.NormalSetting {
+    font-weight: normal;
+}
+
+
+
+div.DivBorderStyle {
+    border-style: solid;
+    border-color: lightgray;
+    border-width: 2px;
+}
+
+
+#tblParameters {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    padding: 5px;
+}
+
+#tblParameters td, #tblParameters th {
+    border: 1px solid #ddd;
+    padding: 5px;
+    width: 33%;
+}
+
+#tblParameters tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#tblParameters tr:hover {
+    background-color: #ddd;
+}
+
+#tblParameters th {
+    padding: 5px;
+    text-align: left;
+    background-color: gray;
+    color: white;
+    width: auto;
+    height: auto;
+}
+
+
